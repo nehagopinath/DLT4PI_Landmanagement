@@ -8,10 +8,12 @@ const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '..', '..', 'basic-network', 'connection.json');
+const ccpPath = path.resolve(__dirname, '../../first-network');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
+//same as transact land and changing Land Owner
+//add methods to get approvals 
 async function main() {
     try {
 
@@ -20,28 +22,29 @@ async function main() {
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
-        // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists('user1');
+        //familyHead is the only person who can sell the land
+        // Check to see if we've already enrolled the familyHead.
+        const userExists = await wallet.exists('familyHead');
         if (!userExists) {
-            console.log('An identity for the user "user1" does not exist in the wallet');
+            console.log('An identity for the user "familyHead" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'user1', discovery: { enabled: false } });
+        await gateway.connect(ccp, { wallet, identity: 'familyHead', discovery: { enabled: false } });
 
         // Get the network (channel) our contract is deployed to.
-        const network = await gateway.getNetwork('mychannel');
+        const network = await gateway.getNetwork('fit4ghana');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar');
+        const contract = network.getContract('fit4ghana');
 
         // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
+        // transactLand transaction - requires 3 argument, ex: ('seller', 'buyer', 'price')
+       
+        await contract.submitTransaction('transactLand', 'seller', 'buyer', 'price');  //This takes literal values. Should find out a way for it to take values from console
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
