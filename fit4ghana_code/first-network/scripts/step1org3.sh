@@ -25,10 +25,10 @@ LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
 COUNTER=1
 MAX_RETRY=5
 
-CC_SRC_PATH="github.com/chaincode/chaincode_example02/go/"
 if [ "$LANGUAGE" = "node" ]; then
-	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/chaincode_example02/node/"
+	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/fit4ghana/"
 fi
+
 
 # import utils
 . scripts/utils.sh

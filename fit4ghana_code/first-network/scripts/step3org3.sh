@@ -29,10 +29,10 @@ LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
 COUNTER=1
 MAX_RETRY=5
 
-CC_SRC_PATH="github.com/chaincode/chaincode_example02/go/"
 if [ "$LANGUAGE" = "node" ]; then
-	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/chaincode_example02/node/"
+	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/fit4ghana/"
 fi
+
 
 # import utils
 . scripts/utils.sh
@@ -42,8 +42,8 @@ installChaincode 0 1 2.0
 echo "===================== Installing chaincode 2.0 on peer0.org2 ===================== "
 installChaincode 0 2 2.0
 
-echo "===================== Upgrading chaincode on peer0.org1 ===================== "
-upgradeChaincode 0 1
+#echo "===================== Upgrading chaincode on peer0.org1 ===================== "
+#upgradeChaincode 0 1
 
 echo
 echo "========= Finished adding Org3 to your first network! ========= "

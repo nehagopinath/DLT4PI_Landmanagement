@@ -23,14 +23,10 @@ LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
 COUNTER=1
 MAX_RETRY=10
 
-CC_SRC_PATH="github.com/chaincode/chaincode_example02/go/"
 if [ "$LANGUAGE" = "node" ]; then
-	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/chaincode_example02/node/"
+	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/fit4ghana/"
 fi
 
-if [ "$LANGUAGE" = "java" ]; then
-	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/chaincode_example02/java/"
-fi
 
 echo "Channel name : "$CHANNEL_NAME
 
@@ -89,24 +85,27 @@ echo "Install chaincode on peer0.org2..."
 installChaincode 0 2
 
 # Instantiate chaincode on peer0.org2
-echo "Instantiating chaincode on peer0.org2..."
-instantiateChaincode 0 2
+#echo "Instantiating chaincode on peer0.org2..."
+#instantiateChaincode 0 2
 
 # Query chaincode on peer0.org1
-echo "Querying chaincode on peer0.org1..."
-chaincodeQuery 0 1 100
+#echo "Querying chaincode on peer0.org1..."
+#chaincodeQuery 0 1 100
 
 # Invoke chaincode on peer0.org1 and peer0.org2
-echo "Sending invoke transaction on peer0.org1 peer0.org2..."
-chaincodeInvoke 0 1 0 2
+#echo "Sending invoke transaction on peer0.org1 peer0.org2..."
+#chaincodeInvoke 0 1 0 2
 
 ## Install chaincode on peer1.org2
 echo "Installing chaincode on peer1.org2..."
 installChaincode 1 2
 
+echo "Installing chaincode on peer1.org2..."
+installChaincode 1 1
+
 # Query on chaincode on peer1.org2, check if the result is 90
-echo "Querying chaincode on peer1.org2..."
-chaincodeQuery 1 2 90
+#echo "Querying chaincode on peer1.org2..."
+#chaincodeQuery 1 2 90
 
 echo
 echo "========= All GOOD, BYFN execution completed =========== "
