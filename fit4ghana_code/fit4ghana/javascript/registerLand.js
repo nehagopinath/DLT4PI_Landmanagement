@@ -49,7 +49,7 @@ async function main() {
         // 1. Create RegistrationRequest (100) (statutory) for land 999
         // 2. Approve statutory request by land commission
         // 3. Above automatically calls registerLand Transaction
-        // 4. Get status of Land 999 Asset now
+        // 4. Get status of Land 999 Asset now : owner should be familyMember
 
         // Step 1
         // ctx, requestNumber, claimer,
