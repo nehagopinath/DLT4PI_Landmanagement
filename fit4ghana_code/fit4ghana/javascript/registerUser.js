@@ -131,7 +131,7 @@ async function main() {
     }
 
     try {
-
+        
         // Check to see if we've already enrolled the Family Head.
         const userExists = await wallet.exists('familyHead');
         if (userExists) {
@@ -168,6 +168,7 @@ async function main() {
     }
 
     try {
+        
         // Check to see if we've already enrolled the Buyer.
         const userExists = await wallet.exists('buyer');
         if (userExists) {
