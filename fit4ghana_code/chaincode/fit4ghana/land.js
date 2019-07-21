@@ -12,6 +12,7 @@ class Land extends Contract {
         console.info('============= START : Initialize Ledger ===========');
         const lands = [
             {
+                landNumber: 123,
                 owner: 'person1',
                 ownershipType: 'statutory',
                 coords: '1.1.2.4',
@@ -19,6 +20,7 @@ class Land extends Contract {
                 price: 20000
             },
             {
+                landNumber: 456,
                 owner: 'person2',
                 ownershipType: 'statutory',
                 coords: '3.1.2.4',
@@ -26,16 +28,10 @@ class Land extends Contract {
                 price: 20000
             },
             {
+                landNumber: 789,
                 owner: 'person3',
                 ownershipType: 'customary',
                 coords: '2.1.2.4',
-                isForSale: false,
-                price: 20000
-            },
-            {
-                owner: 'person4',
-                ownershipType: 'customary',
-                coords: '1.3.2.4',
                 isForSale: false,
                 price: 20000
             }
@@ -148,7 +144,7 @@ class Land extends Contract {
         console.info('============= END : Land not anymore for sale ===========');
     }
 
-    async registerLand(ctx, claimer, registrationType) {
+    async registerLand(ctx, landNumber, claimer, registrationType) {
         console.info('============= START : registerLand ===========');
 
         const landAsBytes = await ctx.stub.getState(landNumber); // get the land from chaincode state
@@ -163,7 +159,7 @@ class Land extends Contract {
         console.info('============= END : registerLand ===========');
     }
 
-    async transactLand(ctx, seller, buyer, price) {
+    async transactLand(ctx, landNumber, seller, buyer, price) {
         console.info('============= START : registerLand ===========');
 
         const landAsBytes = await ctx.stub.getState(landNumber); // get the land from chaincode state

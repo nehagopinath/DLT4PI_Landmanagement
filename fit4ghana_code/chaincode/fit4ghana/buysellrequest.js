@@ -12,21 +12,10 @@ class BuySellRequest extends Contract {
         console.info('============= START : Initialize Ledger ===========');
         const requests = [
             {
-                seller: 'person1',
-                buyer: 'person2',
-                price: 40000,
-                registrationType: 'statutory',
-                currentlyAwaitingResponseFrom: 'LAND COMMISSION',
-                landCommission: lc,
-                responseFromLandCommission: null,
-                status: 'pending',
-                land: land // another asset -- need to figure out how to refer to this
-            },
-            {
                 seller: 'person3',
                 buyer: 'person4',
                 price: 40000,
-                registrationType: 'customary',
+                registrationType: 'statutory',
                 currentlyAwaitingResponseFrom: 'CLS',
                 landCommission: lc,
                 responseFromLandCommission: null,
@@ -35,7 +24,7 @@ class BuySellRequest extends Contract {
                 responseFromFamilyHead: 'approved',
                 cls: cls,
                 responseFromCLS: null,
-                land: land // another asset -- need to figure out how to refer to this
+                landNumber: 456
             }
         ];
 
@@ -57,7 +46,7 @@ class BuySellRequest extends Contract {
     }
 
     async createBuySellRequest(ctx, requestNumber, seller, buyer, price,
-        registrationType, cls, landCommission, land) {
+        registrationType, familyHead, cls, landCommission, landNumber) {
         console.info('============= START : Create BuySellRequest ===========');
         let request;
         if (registrationType === 'statutory') {
@@ -71,7 +60,7 @@ class BuySellRequest extends Contract {
                 landCommission,
                 responseFromLandCommission: null,
                 status: 'pending',
-                land
+                landNumber
             };
         } else if (registrationType === 'customary') {
             request = {
@@ -86,7 +75,7 @@ class BuySellRequest extends Contract {
                 cls,
                 responseFromCLS: null,
                 status: 'pending',
-                land
+                landNumber
             };
         }
 
@@ -154,7 +143,7 @@ class BuySellRequest extends Contract {
         }
 
         if (request.status === 'approved') {
-            land.transactLand(request.seller, request.buyer, request.price);
+            land.submitTransaction('transactLand', landNumber, request.seller, request.buyer, request.price);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeBuySellRequestOwner ===========');

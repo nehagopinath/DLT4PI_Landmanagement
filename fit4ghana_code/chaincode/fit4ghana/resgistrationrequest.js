@@ -12,32 +12,13 @@ class RegistrationRequest extends Contract {
         console.info('============= START : Initialize Ledger ===========');
         const requests = [
             {
-                owner: 'person1',
-                ownershipType: 'statutory',
-                coords: '1.1.2.4',
-                isForSale: false,
-                price: 20000
-            },
-            {
-                owner: 'person2',
-                ownershipType: 'statutory',
-                coords: '3.1.2.4',
-                isForSale: false,
-                price: 20000
-            },
-            {
-                owner: 'person3',
-                ownershipType: 'customary',
-                coords: '2.1.2.4',
-                isForSale: false,
-                price: 20000
-            },
-            {
-                owner: 'person4',
-                ownershipType: 'customary',
-                coords: '1.3.2.4',
-                isForSale: false,
-                price: 20000
+                requestNumber: '111',
+                claimer: 'person1',
+                registrationType: 'statutory', 
+                cls: null, 
+                chief: null,
+                landCommission: lc, 
+                landNumber: 123
             }
         ];
 
@@ -59,7 +40,7 @@ class RegistrationRequest extends Contract {
     }
 
     async createRegistrationRequest(ctx, requestNumber, claimer,
-        registrationType, cls, landCommission, land) {
+        registrationType, chief, cls, landCommission, landNumber) {
         console.info('============= START : Create RegistrationRequest ===========');
         let request;
         if (registrationType === 'statutory') {
@@ -71,7 +52,7 @@ class RegistrationRequest extends Contract {
                 landCommission,
                 responseFromLandCommission: null,
                 status: 'pending',
-                land
+                landNumber
             };
         } else if (registrationType === 'customary') {
             request = {
@@ -84,7 +65,7 @@ class RegistrationRequest extends Contract {
                 cls,
                 responseFromCLS: null,
                 status: 'pending',
-                land
+                landNumber
             };
         }
 
@@ -152,7 +133,8 @@ class RegistrationRequest extends Contract {
         }
 
         if (request.status === 'approved') {
-            land.registerLand(request.claimer, request.registrationType);
+            Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
+            // land.registerLand(request.claimer, request.registrationType);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeRegistrationRequestOwner ===========');
