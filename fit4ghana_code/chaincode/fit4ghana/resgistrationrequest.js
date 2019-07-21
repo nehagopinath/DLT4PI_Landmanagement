@@ -117,7 +117,7 @@ class RegistrationRequest extends Contract {
         // this means we allow somebody to approve only when the request 
         // is currently waiting his/her approval
         if (request.currentlyAwaitingResponseFrom === 'CHIEF'
-        && request.cls === approver) {
+        && request.chief === approver) {
            request.responseFromChief = 'approved';
            request.currentlyAwaitingResponseFrom = 'CLS';
         } else if (request.currentlyAwaitingResponseFrom === 'CLS'

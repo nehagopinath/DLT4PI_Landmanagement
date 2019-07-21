@@ -20,8 +20,6 @@ class BuySellRequest extends Contract {
                 landCommission: lc,
                 responseFromLandCommission: null,
                 status: 'pending',
-                familyHead: fh,
-                responseFromFamilyHead: 'approved',
                 cls: cls,
                 responseFromCLS: null,
                 landNumber: 456
@@ -69,9 +67,7 @@ class BuySellRequest extends Contract {
                 buyer,
                 price,
                 registrationType,
-                currentlyAwaitingResponseFrom: 'FAMILY HEAD',
-                familyHead,
-                responseFromFamilyHead: null,
+                currentlyAwaitingResponseFrom: 'CLS',
                 cls,
                 responseFromCLS: null,
                 status: 'pending',
@@ -126,11 +122,13 @@ class BuySellRequest extends Contract {
 
         // this means we allow somebody to approve only when the request 
         // is currently waiting his/her approval
-        if (request.currentlyAwaitingResponseFrom === 'FAMILY HEAD'
-        && request.familyHead === approver) {
-            request.responseFromFamilyHead = 'approved';
-            request.currentlyAwaitingResponseFrom = 'CLS';
-        } else if (request.currentlyAwaitingResponseFrom === 'CLS'
+        // ignoring this now as family head is not existing right now
+        // if (request.currentlyAwaitingResponseFrom === 'FAMILY HEAD'
+        // && request.familyHead === approver) {
+        //     request.responseFromFamilyHead = 'approved';
+        //     request.currentlyAwaitingResponseFrom = 'CLS';
+        // } else 
+        if (request.currentlyAwaitingResponseFrom === 'CLS'
         && request.cls === approver) {
             request.responseFromCLS = 'approved';
             request.currentlyAwaitingResponseFrom = null;
