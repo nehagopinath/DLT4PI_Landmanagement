@@ -115,7 +115,7 @@ class BuySellRequest extends Contract {
         }
     }
 
-    async approveBuySellRequest(ctx, approver) {
+    async approveBuySellRequest(ctx, requestNumber, approver) {
         console.info('============= START : approveBuySellRequest ===========');
 
         const requestAsBytes = await ctx.stub.getState(requestNumber); // get the request from chaincode state

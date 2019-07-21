@@ -105,7 +105,7 @@ class RegistrationRequest extends Contract {
         }
     }
 
-    async approveRegistrationRequest(ctx, approver) {
+    async approveRegistrationRequest(ctx, requestNumber, approver) {
         console.info('============= START : approveRegistrationRequest ===========');
 
         const requestAsBytes = await ctx.stub.getState(requestNumber); // get the request from chaincode state
@@ -133,7 +133,7 @@ class RegistrationRequest extends Contract {
         }
 
         if (request.status === 'approved') {
-            Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
+            await Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
             // land.registerLand(request.claimer, request.registrationType);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
