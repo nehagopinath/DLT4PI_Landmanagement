@@ -8,7 +8,7 @@ const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network')
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '../../first-network');
+const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-org1.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
@@ -42,22 +42,27 @@ async function main() {
 
         // Get the CA client object from the gateway for interacting with the CA.
         const ca = gateway.getClient().getCertificateAuthority();
+        console.log(ca);
         const adminIdentity = gateway.getCurrentIdentity();
+        console.log(adminIdentity);
 
         // Register the user, enroll the user, and import the new identity into the wallet.
+        console.log("ABC");
         const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'cls', role: 'client' }, adminIdentity); //TO Check : department1?
+        console.log("BLA");
         const enrollment = await ca.enroll({ enrollmentID: 'cls', enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
+
         wallet.import('cls', userIdentity);
         console.log('Successfully registered and enrolled admin user "CLS" and imported it into the wallet');
 
+        
     } catch (error) {
         console.error(`Failed to register user "CLS": ${error}`);
         process.exit(1);
     }
 
     try {
-
         // Check to see if we've already enrolled the LC.
         const userExists = await wallet.exists('lc');
         if (userExists) {
@@ -119,9 +124,9 @@ async function main() {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org3.department1', enrollmentID: 'chief', role: 'client' }, adminIdentity);
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'chief', role: 'client' }, adminIdentity);
         const enrollment = await ca.enroll({ enrollmentID: 'chief', enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org3MSP', enrollment.certificate, enrollment.key.toBytes());
+        const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
         wallet.import('chief', userIdentity);
         console.log('Successfully registered and enrolled admin user "CHIEF" and imported it into the wallet');
 
@@ -132,10 +137,10 @@ async function main() {
 
     try {
         
-        // Check to see if we've already enrolled the Family Head.
-        const userExists = await wallet.exists('familyHead');
+        // Check to see if we've already enrolled the Family Member.
+        const userExists = await wallet.exists('familyMember');
         if (userExists) {
-            console.log('An identity for the user "familyHead" already exists in the wallet');
+            console.log('An identity for the user "familyMember" already exists in the wallet');
             return;
         }
 
@@ -156,14 +161,14 @@ async function main() {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org4.department1', enrollmentID: 'familyHead', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'familyHead', enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org4MSP', enrollment.certificate, enrollment.key.toBytes());
-        wallet.import('familyHead', userIdentity);
-        console.log('Successfully registered and enrolled admin user "familyHead" and imported it into the wallet');
+        const secret = await ca.register({ affiliation: 'org3.department1', enrollmentID: 'familyMember', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'familyMember', enrollmentSecret: secret });
+        const userIdentity = X509WalletMixin.createIdentity('Org3MSP', enrollment.certificate, enrollment.key.toBytes());
+        wallet.import('familyMember', userIdentity);
+        console.log('Successfully registered and enrolled admin user "familyMember" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to register user "familyHead": ${error}`);
+        console.error(`Failed to register user "familyMember": ${error}`);
         process.exit(1);
     }
 
