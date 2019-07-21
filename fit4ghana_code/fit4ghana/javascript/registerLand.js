@@ -76,9 +76,9 @@ async function main() {
         console.log('Registering the second land - 998 as a customary land');
 
         // Steps
-        // 1. Create RegistrationRequest (100) (statutory) for land 999
-        // 2. Approve statutory request by chief
-        // 3. Approve statutory request by CLS
+        // 1. Create RegistrationRequest (100) (customary) for land 999
+        // 2. Approve customary request by chief
+        // 3. Approve customary request by CLS
         // 4. Above automatically calls registerLand Transaction
         // 5. Get status of Land 998 Asset now : owner should be familyMember
 
@@ -86,7 +86,7 @@ async function main() {
         // ctx, requestNumber, claimer,
         // registrationType, chief, cls, landCommission, landNumber
         await contract.submitTransaction('createRegistrationRequest', 101, 'familyMember',
-        'statutory', 'chief', 'cls', null, 998);  //This takes literal values. Should find out a way for it to take values from console
+        'customary', 'chief', 'cls', null, 998);  //This takes literal values. Should find out a way for it to take values from console
         console.log('Transaction for creating Registration Request has been created.');
 
         // Step 2
