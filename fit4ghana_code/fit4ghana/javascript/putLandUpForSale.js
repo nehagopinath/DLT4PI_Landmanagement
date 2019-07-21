@@ -15,6 +15,12 @@ const ccp = JSON.parse(ccpJSON);
 //putting land up for sale can be done only be the familyHead
 async function main() {
     try {
+        try{
+            var landnumber =  process.argv[2];
+        } catch(error) {
+            console.error('Add landnumber to execution command. e.g.: node putLandUpForSale.js 123')
+        }
+
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -43,7 +49,7 @@ async function main() {
         // Submit the specified transaction.
         // putLandUpForSale transaction - requires 1 argument, ex: ('landNumber')
        
-        await contract.submitTransaction('putLandUpForSale', 'landNumber');  //This takes literal values. Should find out a way for it to take values from console
+        await contract.submitTransaction('putLandUpForSale', landnumber);  
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
