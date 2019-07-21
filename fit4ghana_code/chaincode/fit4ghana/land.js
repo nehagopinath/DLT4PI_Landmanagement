@@ -14,7 +14,7 @@ class Land extends Contract {
             {
                 landNumber: 123,
                 owner: 'person1',
-                ownershipType: 'statutory',
+                registrationType: 'statutory',
                 coords: '1.1.2.4',
                 isForSale: false,
                 price: 20000
@@ -22,7 +22,7 @@ class Land extends Contract {
             {
                 landNumber: 456,
                 owner: 'person2',
-                ownershipType: 'statutory',
+                registrationType: 'statutory',
                 coords: '3.1.2.4',
                 isForSale: false,
                 price: 20000
@@ -30,7 +30,7 @@ class Land extends Contract {
             {
                 landNumber: 789,
                 owner: 'person3',
-                ownershipType: 'customary',
+                registrationType: 'customary',
                 coords: '2.1.2.4',
                 isForSale: false,
                 price: 20000
@@ -54,13 +54,12 @@ class Land extends Contract {
         return landAsBytes.toString();
     }
 
-    async createLand(ctx, landNumber, ownershipType, owner, coords, isForSale=false, price) {
+    // only creates land - no owner or registration type set yet
+    async createLand(ctx, landNumber, coords, isForSale=false, price) {
         console.info('============= START : Create Land ===========');
 
         const land = {
             docType: 'land',
-            owner,
-            ownershipType,
             coords,
             isForSale,
             price
@@ -144,6 +143,7 @@ class Land extends Contract {
         console.info('============= END : Land not anymore for sale ===========');
     }
 
+    // registers land to a particular person with a registration type (customary / statutory)
     async registerLand(ctx, landNumber, claimer, registrationType) {
         console.info('============= START : registerLand ===========');
 
