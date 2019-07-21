@@ -44,8 +44,17 @@ async function main() {
         // Submit the specified transaction.
         // createLand transaction - requires 6 argument, ex: ('landNumber', 'coords', 'isForSale=false', 'price')
        
-        await contract.submitTransaction('createLand', 999, 'coords' , 'sForSale=false' , 'price');  //This takes literal values. Should find out a way for it to take values from console
-        console.log('Transaction has been submitted');
+        console.log('We will create two lands here - 999 and 998.');
+
+        // land 1 : 999 : statutory
+
+        await contract.submitTransaction('createLand', 999, 'coords1' , 'sForSale=false' , 'price');  //This takes literal values. Should find out a way for it to take values from console
+        console.log('Transaction createLand has been submitted for land 999');
+
+        // land 2 : 998 : customary
+
+        await contract.submitTransaction('createLand', 998, 'coords2' , 'sForSale=false' , 'price');  //This takes literal values. Should find out a way for it to take values from console
+        console.log('Transaction createLand has been submitted for land 998');
 
         // Disconnect from the gateway.
         await gateway.disconnect();

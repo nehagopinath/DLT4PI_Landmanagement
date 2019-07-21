@@ -42,8 +42,9 @@ async function main() {
         const contract = network.getContract('fit4ghana');
 
         // Submit the specified transaction.
-        // createLand transaction - requires 6 argument, ex: ('landNumber', 'coords', 'isForSale=false', 'price')
        
+
+        console.log('Registering the first land - 999 as a statutory land');
 
         // Steps
         // 1. Create RegistrationRequest (100) (statutory) for land 999
@@ -67,6 +68,40 @@ async function main() {
 
         // Step 4
         const land = await contract.evaluateTransaction('queryLand', 999);
+        console.log(`Current state of land: ${land.toString()}`);
+
+
+        
+
+        console.log('Registering the second land - 998 as a customary land');
+
+        // Steps
+        // 1. Create RegistrationRequest (100) (statutory) for land 999
+        // 2. Approve statutory request by chief
+        // 3. Approve statutory request by CLS
+        // 4. Above automatically calls registerLand Transaction
+        // 5. Get status of Land 998 Asset now : owner should be familyMember
+
+        // Step 1
+        // ctx, requestNumber, claimer,
+        // registrationType, chief, cls, landCommission, landNumber
+        await contract.submitTransaction('createRegistrationRequest', 101, 'familyMember',
+        'statutory', 'chief', 'cls', null, 998);  //This takes literal values. Should find out a way for it to take values from console
+        console.log('Transaction for creating Registration Request has been created.');
+
+        // Step 2
+        await contract.submitTransaction('approveRegistrationRequest', 101, 'chief');
+        console.log('Transaction for approving registration request by land commission.');
+        
+        // Step 3
+        await contract.submitTransaction('approveRegistrationRequest', 101, 'cls');
+        console.log('Transaction for approving registration request by land commission.');
+
+        // Step 4
+        // Automatically done by Step 3
+
+        // Step 5
+        const land = await contract.evaluateTransaction('queryLand', 998);
         console.log(`Current state of land: ${land.toString()}`);
 
         console.log('All transactions successful');

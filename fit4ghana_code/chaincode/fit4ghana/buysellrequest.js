@@ -44,7 +44,7 @@ class BuySellRequest extends Contract {
     }
 
     async createBuySellRequest(ctx, requestNumber, seller, buyer, price,
-        registrationType, familyHead, cls, landCommission, landNumber) {
+        registrationType, cls, landCommission, landNumber) {
         console.info('============= START : Create BuySellRequest ===========');
         let request;
         if (registrationType === 'statutory') {

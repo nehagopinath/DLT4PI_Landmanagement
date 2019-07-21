@@ -50,7 +50,10 @@ async function main() {
         // putLandUpForSale transaction - requires 1 argument, ex: ('landNumber')
        
         await contract.submitTransaction('putLandUpForSale', 999);  
-        console.log('Transaction has been submitted');
+        console.log('Transaction putLandUpForSale has been submitted for land 999');
+
+        await contract.submitTransaction('putLandUpForSale', 998);  
+        console.log('Transaction putLandUpForSale has been submitted for land 998');
 
         // Disconnect from the gateway.
         await gateway.disconnect();

@@ -44,6 +44,9 @@ async function main() {
         // Submit the specified transaction.
         // transactLand transaction - requires 3 argument, ex: ('seller', 'buyer', 'price')
 
+        
+        console.log('Transacting the first land - 999 which is a statutory land');
+
         // Steps
         // 1. Create BuysellRequest (100) (statutory) for land 999
         // 2. Approve statutory buy sell request by land commission
@@ -52,13 +55,13 @@ async function main() {
 
         // Step 1
         // ctx, requestNumber, seller, buyer, price,
-        // registrationType, familyMember, cls, landCommission, landNumber
-        await contract.submitTransaction('createBuySellRequest', 101, 'familyMember', 'externalMember',
-        'statutory', null, null, 'lc', 999);  //This takes literal values. Should find out a way for it to take values from console
+        // registrationType, cls, landCommission, landNumber
+        await contract.submitTransaction('createBuySellRequest', 102, 'familyMember', 'externalMember',
+        'statutory', null, 'lc', 999);  //This takes literal values. Should find out a way for it to take values from console
         console.log('Transaction for creating Buy Sell Request has been created.');
 
         // Step 2
-        await contract.submitTransaction('approveBuySellRequest', 101, 'lc');
+        await contract.submitTransaction('approveBuySellRequest', 102, 'lc');
         console.log('Transaction for approving buy sell request by land commission.');
 
         // Step 3
@@ -66,6 +69,35 @@ async function main() {
 
         // Step 4
         const land = await contract.evaluateTransaction('queryLand', 999);
+        console.log(`Current state of land: ${land.toString()}`);
+
+
+        
+        console.log('Transacting the first land - 998 which is a customary land');
+
+        
+        // Steps
+        // 1. Create BuysellRequest (100) (statutory) for land 998
+        // 2. Approve statutory buy sell request by cls
+        // 3. Above automatically calls transactLand Transaction
+        // 4. Get status of Land 998 Asset now : owner should be externalMember
+
+        // Step 1
+        // ctx, requestNumber, seller, buyer, price,
+        // registrationType, cls, landCommission, landNumber
+        await contract.submitTransaction('createBuySellRequest', 103, 'familyMember', 'externalMember',
+        'customary', 'cls', null, 998);  //This takes literal values. Should find out a way for it to take values from console
+        console.log('Transaction for creating Buy Sell Request has been created.');
+
+        // Step 2
+        await contract.submitTransaction('approveBuySellRequest', 103, 'cls');
+        console.log('Transaction for approving buy sell request by cls.');
+
+        // Step 3
+        // Automatically done by Step 2
+
+        // Step 4
+        const land = await contract.evaluateTransaction('queryLand', 998);
         console.log(`Current state of land: ${land.toString()}`);
 
        
