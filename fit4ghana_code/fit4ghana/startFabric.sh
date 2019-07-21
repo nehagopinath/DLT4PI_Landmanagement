@@ -40,7 +40,7 @@ rm -rf ./hfc-key-store
 # launch network; create channel and join peer to channel
 cd ../first-network
 ./byfn.sh up -l node -c fit4ghana -s couchdb -a
-./eyfn.sh up -l node -c fit4ghana -s couchdb
+./eyfn.sh up -l node -c fit4ghana -s couchdb -a
 
 # Now launch the CLI container in order to install, instantiate chaincode
 # and prime the ledger with our 10 cars
