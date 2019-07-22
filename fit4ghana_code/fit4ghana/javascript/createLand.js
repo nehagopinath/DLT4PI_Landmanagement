@@ -8,7 +8,7 @@ const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '../../first-network');
+const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-org1.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
@@ -24,16 +24,16 @@ async function main() {
 
         //Family Head is the only person who can register the land
         // Check to see if we've already enrolled the Family Head.
-        const userExists = await wallet.exists('familyHead');
+        const userExists = await wallet.exists('familyMember');
         if (!userExists) {
-            console.log('An identity for the user "familyHead" does not exist in the wallet');
+            console.log('An identity for the user "familyMember" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'familyHead', discovery: { enabled: false } });
+        await gateway.connect(ccp, { wallet, identity: 'familyMember', discovery: { enabled: false } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('fit4ghana');

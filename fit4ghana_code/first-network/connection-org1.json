@@ -11,6 +11,17 @@
             }
         }
     },
+    "channels": {
+        "fit4ghana": {
+            "orderers":  [
+                "orderer.example.com"
+            ],
+            "peers": [
+                "peer0.org1.example.com",
+                "peer1.org1.example.com"
+            ]
+        }
+    },
     "organizations": {
         "Org1": {
             "mspid": "Org1MSP",
@@ -60,5 +71,8 @@
                 }
             ]
         }
-    }
+    },
+    "discovery" : {
+        "enabled": true,
+        "asLocalhost": false }
 }

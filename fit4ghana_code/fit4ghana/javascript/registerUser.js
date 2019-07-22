@@ -8,102 +8,20 @@ const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network')
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-org1.json');
-const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
-const ccp = JSON.parse(ccpJSON);
+const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org1.json');
 
 async function main() {
-
-    // Create a new file system based wallet for managing identities.
-    const walletPath = path.join(process.cwd(), 'wallet');
-    const wallet = new FileSystemWallet(walletPath);
-    console.log(`Wallet path: ${walletPath}`);
-
-    try {
-        //Registering CLS Client to the system
-        // Check to see if we've already enrolled the CLS.
-        const userExists = await wallet.exists('cls');
-        if (userExists) {
-            console.log('An identity for the user "CLS" already exists in the wallet');
-            return;
-        }
-
-        // Check to see if we've already enrolled the admin user.
-        const adminExists = await wallet.exists('admin');
-        if (!adminExists) {
-            console.log('An identity for the admin user "admin" does not exist in the wallet');
-            console.log('Run the enrollAdmin.js application before retrying');
-            return;
-        }
-
-        // Create a new gateway for connecting to our peer node.
-        const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false } });
-
-        // Get the CA client object from the gateway for interacting with the CA.
-        const ca = gateway.getClient().getCertificateAuthority();
-        console.log(ca);
-        const adminIdentity = gateway.getCurrentIdentity();
-        console.log(adminIdentity);
-
-        // Register the user, enroll the user, and import the new identity into the wallet.
-        console.log("ABC");
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'cls', role: 'client' }, adminIdentity); //TO Check : department1?
-        console.log("BLA");
-        const enrollment = await ca.enroll({ enrollmentID: 'cls', enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-
-        wallet.import('cls', userIdentity);
-        console.log('Successfully registered and enrolled admin user "CLS" and imported it into the wallet');
-
-        
-    } catch (error) {
-        console.error(`Failed to register user "CLS": ${error}`);
-        process.exit(1);
-    }
-
-    try {
-        // Check to see if we've already enrolled the LC.
-        const userExists = await wallet.exists('lc');
-        if (userExists) {
-            console.log('An identity for the user "LC" already exists in the wallet');
-            return;
-        }
-
-        // Check to see if we've already enrolled the admin user.
-        const adminExists = await wallet.exists('admin');
-        if (!adminExists) {
-            console.log('An identity for the admin user "admin" does not exist in the wallet');
-            console.log('Run the enrollAdmin.js application before retrying');
-            return;
-        }
-
-        // Create a new gateway for connecting to our peer node.
-        const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false } });
-
-        // Get the CA client object from the gateway for interacting with the CA.
-        const ca = gateway.getClient().getCertificateAuthority();
-        const adminIdentity = gateway.getCurrentIdentity();
-
-        // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org2.department1', enrollmentID: 'lc', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'lc', enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org2MSP', enrollment.certificate, enrollment.key.toBytes());
-        wallet.import('lc', userIdentity);
-        console.log('Successfully registered and enrolled admin user "LC" and imported it into the wallet');
-
-    } catch (error) {
-        console.error(`Failed to register user "LC": ${error}`);
-        process.exit(1);
-    }
-
     try {
 
-        // Check to see if we've already enrolled the chief.
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
         const userExists = await wallet.exists('chief');
         if (userExists) {
-            console.log('An identity for the user "CHIEF" already exists in the wallet');
+            console.log('An identity for the user "chief" already exists in the wallet');
             return;
         }
 
@@ -117,7 +35,7 @@ async function main() {
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'admin', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the CA client object from the gateway for interacting with the CA.
         const ca = gateway.getClient().getCertificateAuthority();
@@ -128,16 +46,105 @@ async function main() {
         const enrollment = await ca.enroll({ enrollmentID: 'chief', enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
         wallet.import('chief', userIdentity);
-        console.log('Successfully registered and enrolled admin user "CHIEF" and imported it into the wallet');
+        console.log('Successfully registered and enrolled admin user "chief" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to register user "CHIEF": ${error}`);
+        console.error(`Failed to register user "chief": ${error}`);
         process.exit(1);
-    }
+    } 
 
     try {
-        
-        // Check to see if we've already enrolled the Family Member.
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists('cls');
+        if (userExists) {
+            console.log('An identity for the user "cls" already exists in the wallet');
+            return;
+        }
+
+        // Check to see if we've already enrolled the admin user.
+        const adminExists = await wallet.exists('admin');
+        if (!adminExists) {
+            console.log('An identity for the admin user "admin" does not exist in the wallet');
+            console.log('Run the enrollAdmin.js application before retrying');
+            return;
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccpPath, { wallet, identity: 'admin', discovery: { enabled: true, asLocalhost: true } });
+
+        // Get the CA client object from the gateway for interacting with the CA.
+        const ca = gateway.getClient().getCertificateAuthority();
+        const adminIdentity = gateway.getCurrentIdentity();
+
+        // Register the user, enroll the user, and import the new identity into the wallet.
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'cls', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'cls', enrollmentSecret: secret });
+        const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
+        wallet.import('cls', userIdentity);
+        console.log('Successfully registered and enrolled admin user "cls" and imported it into the wallet');
+
+    } catch (error) {
+        console.error(`Failed to register user "cls": ${error}`);
+        process.exit(1);
+    } 
+
+    try {
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists('lc');
+        if (userExists) {
+            console.log('An identity for the user "lc" already exists in the wallet');
+            return;
+        }
+
+        // Check to see if we've already enrolled the admin user.
+        const adminExists = await wallet.exists('admin');
+        if (!adminExists) {
+            console.log('An identity for the admin user "admin" does not exist in the wallet');
+            console.log('Run the enrollAdmin.js application before retrying');
+            return;
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccpPath, { wallet, identity: 'admin', discovery: { enabled: true, asLocalhost: true } });
+
+        // Get the CA client object from the gateway for interacting with the CA.
+        const ca = gateway.getClient().getCertificateAuthority();
+        const adminIdentity = gateway.getCurrentIdentity();
+
+        // Register the user, enroll the user, and import the new identity into the wallet.
+        const secret = await ca.register({ affiliation: 'org2.department1', enrollmentID: 'lc', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'lc', enrollmentSecret: secret });
+        const userIdentity = X509WalletMixin.createIdentity('Org2MSP', enrollment.certificate, enrollment.key.toBytes());
+        wallet.import('lc', userIdentity);
+        console.log('Successfully registered and enrolled admin user "lc" and imported it into the wallet');
+
+    } catch (error) {
+        console.error(`Failed to register user "lc": ${error}`);
+        process.exit(1);
+    } 
+
+    try {
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
         const userExists = await wallet.exists('familyMember');
         if (userExists) {
             console.log('An identity for the user "familyMember" already exists in the wallet');
@@ -154,30 +161,35 @@ async function main() {
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'admin', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the CA client object from the gateway for interacting with the CA.
         const ca = gateway.getClient().getCertificateAuthority();
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org3.department1', enrollmentID: 'familyMember', role: 'client' }, adminIdentity);
+        const secret = await ca.register({ affiliation: 'org2.department1', enrollmentID: 'familyMember', role: 'client' }, adminIdentity);
         const enrollment = await ca.enroll({ enrollmentID: 'familyMember', enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org3MSP', enrollment.certificate, enrollment.key.toBytes());
+        const userIdentity = X509WalletMixin.createIdentity('Org2MSP', enrollment.certificate, enrollment.key.toBytes());
         wallet.import('familyMember', userIdentity);
         console.log('Successfully registered and enrolled admin user "familyMember" and imported it into the wallet');
 
     } catch (error) {
         console.error(`Failed to register user "familyMember": ${error}`);
         process.exit(1);
-    }
+    } 
 
     try {
-        
-        // Check to see if we've already enrolled the Buyer.
-        const userExists = await wallet.exists('buyer');
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists('ExternalMember');
         if (userExists) {
-            console.log('An identity for the user "buyer" already exists in the wallet');
+            console.log('An identity for the user "ExternalMember" already exists in the wallet');
             return;
         }
 
@@ -191,21 +203,21 @@ async function main() {
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'admin', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the CA client object from the gateway for interacting with the CA.
         const ca = gateway.getClient().getCertificateAuthority();
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org4.department1', enrollmentID: 'buyer', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'buyer', enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org4MSP', enrollment.certificate, enrollment.key.toBytes());
-        wallet.import('buyer', userIdentity);
-        console.log('Successfully registered and enrolled admin user "buyer" and imported it into the wallet');
+        const secret = await ca.register({ affiliation: 'org2.department1', enrollmentID: 'ExternalMember', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'ExternalMember', enrollmentSecret: secret });
+        const userIdentity = X509WalletMixin.createIdentity('Org2MSP', enrollment.certificate, enrollment.key.toBytes());
+        wallet.import('ExternalMember', userIdentity);
+        console.log('Successfully registered and enrolled admin user "ExternalMember" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to register user "buyer": ${error}`);
+        console.error(`Failed to register user "ExternalMember": ${error}`);
         process.exit(1);
     }
 }

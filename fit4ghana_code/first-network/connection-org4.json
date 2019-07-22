@@ -2,7 +2,7 @@
     "name": "first-network-org4",
     "version": "1.0.0",
     "client": {
-        "organization": "Org4",
+        "organization": "Org2",
         "connection": {
             "timeout": {
                 "peer": {
@@ -11,33 +11,68 @@
             }
         }
     },
-    "organizations": {
-        "Org4": {
-            "mspid": "Org4MSP",
+    "channels": {
+        "fit4ghana": {
+            "orderers":  [
+                "orderer.example.com"
+            ],
             "peers": [
-                "peer0.org4.example.com",
-                "peer1.org4.example.com"
+                "peer0.org2.example.com",
+                "peer1.org2.example.com"
+            ]
+        }
+    },
+    "organizations": {
+        "Org2": {
+            "mspid": "Org2MSP",
+            "peers": [
+                "peer0.org2.example.com",
+                "peer1.org2.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca_peerOrg2"
             ]
         }
     },
     "peers": {
-        "peer0.org4.example.com": {
+        "peer0.org2.example.com": {
             "url": "grpcs://localhost:6051",
             "tlsCACerts": {
-                "path": "org4-artifacts/crypto-config/peerOrganizations/org4.example.com/tlsca/tlsca.org4.example.com-cert.pem"
+                "path": "../../first-network/crypto-config/peerOrganizations/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem"
             },
             "grpcOptions": {
-                "ssl-target-name-override": "peer0.org4.example.com"
+                "ssl-target-name-override": "peer0.org2.example.com"
             }
         },
-        "peer1.org4.example.com": {
+        "peer1.org2.example.com": {
             "url": "grpcs://localhost:5051",
             "tlsCACerts": {
-                "path": "org4-artifacts/crypto-config/peerOrganizations/org4.example.com/tlsca/tlsca.org4.example.com-cert.pem"
+                "path": "../../first-network/crypto-config/peerOrganizations/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem"
             },
             "grpcOptions": {
-                "ssl-target-name-override": "peer1.org4.example.com"
+                "ssl-target-name-override": "peer1.org2.example.com"
             }
         }
-    }
+    },
+    "certificateAuthorities": {
+        "ca_peerOrg2": {
+            "url": "https://localhost:7054",
+            "caName": "ca-org2",
+            "tlsCACerts": {
+                "path": "../../first-network/crypto-config/peerOrganizations/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem"
+            },
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ]
+        }
+    },
+    "discovery" : {
+        "enabled": true,
+        "asLocalhost": false }
 }
