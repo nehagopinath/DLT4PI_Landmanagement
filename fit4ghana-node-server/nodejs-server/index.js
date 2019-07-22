@@ -1,7 +1,6 @@
 "use strict";
 
 const http       = require('http');
-const logger     = require('heroku-logger')
 
 const api        = require('./src/api');
 const config     = require('./src/config');
@@ -12,6 +11,7 @@ api.set('port', config.port);
 //Create a http server based on Express
 const server = http.createServer(api);
 
+server.listen(config.port);
 
 server.on('listening', () => {
     console.log(`API is running in port ${config.port}`);
