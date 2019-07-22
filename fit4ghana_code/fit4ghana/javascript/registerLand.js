@@ -8,7 +8,7 @@ const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '../../first-network');
+const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-org1.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
@@ -101,7 +101,7 @@ async function main() {
         // Automatically done by Step 3
 
         // Step 5
-        const land = await contract.evaluateTransaction('queryLand', 998);
+        land = await contract.evaluateTransaction('queryLand', 998);
         console.log(`Current state of land: ${land.toString()}`);
 
         console.log('All transactions successful');
