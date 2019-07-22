@@ -7,5 +7,6 @@ const LandRegisterController = require('../controllers/registerLand');
 
 
 router.post('/create', LandRegisterController.create);
+router.get('/query', LandRegisterController.query);
 
 module.exports = router;
