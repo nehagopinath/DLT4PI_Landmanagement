@@ -614,7 +614,7 @@ if [ "${IF_CAS}" == "1" ]; then
   ADDITIONS="${ADDITIONS} and using Fabric CAs"
 fi
 # ask for confirmation to proceed
-askProceed
+#askProceed
 
 #Create the network using docker compose
 if [ "${MODE}" == "up" ]; then

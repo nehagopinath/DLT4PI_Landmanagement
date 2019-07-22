@@ -22,7 +22,6 @@ async function main() {
         const userExists = await wallet.exists('chief');
         if (userExists) {
             console.log('An identity for the user "chief" already exists in the wallet');
-            return;
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -50,7 +49,6 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "chief": ${error}`);
-        process.exit(1);
     } 
 
     try {
@@ -64,7 +62,6 @@ async function main() {
         const userExists = await wallet.exists('cls');
         if (userExists) {
             console.log('An identity for the user "cls" already exists in the wallet');
-            return;
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -92,7 +89,6 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "cls": ${error}`);
-        process.exit(1);
     } 
 
     try {
@@ -106,7 +102,6 @@ async function main() {
         const userExists = await wallet.exists('lc');
         if (userExists) {
             console.log('An identity for the user "lc" already exists in the wallet');
-            return;
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -134,7 +129,6 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "lc": ${error}`);
-        process.exit(1);
     } 
 
     try {
@@ -148,7 +142,6 @@ async function main() {
         const userExists = await wallet.exists('familyMember');
         if (userExists) {
             console.log('An identity for the user "familyMember" already exists in the wallet');
-            return;
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -176,7 +169,6 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "familyMember": ${error}`);
-        process.exit(1);
     } 
 
     try {
@@ -190,7 +182,6 @@ async function main() {
         const userExists = await wallet.exists('ExternalMember');
         if (userExists) {
             console.log('An identity for the user "ExternalMember" already exists in the wallet');
-            return;
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -218,7 +209,6 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "ExternalMember": ${error}`);
-        process.exit(1);
     }
 }
 
