@@ -66,9 +66,9 @@ export const exampleLand3: Land = {
 
 export const exampleFamilyMember: FamilyMember = {
     id: 1,
-    firstName: 'abc',
-    lastName: 'def',
-    familyName: 'ABC',
+    firstName: 'Akwasi',
+    lastName: 'Mawasi',
+    familyName: 'Mawasi',
     lands: [
         exampleLand1,
         exampleLand2,

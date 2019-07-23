@@ -10,7 +10,7 @@ import { exampleFamilyMember } from 'src/consts/example';
 export class FamilyMemberComponent implements OnInit {
 
   familyMember: FamilyMember = exampleFamilyMember;
-  displayedColumns: string[] = ['id', 'coords', 'registrationType', 'register', 'putUpForSale'];
+  displayedColumns: string[] = ['id', 'coords', 'registrationType', 'actions'];
 
   // id: 1,
   // coords: '1.2.3',
