@@ -11,13 +11,13 @@ export class Land {
     isForSale: boolean;
 
     constructor({
-        id,
-        coords,
-        community,
-        registered,
-        registrationType,
-        price,
-        isForSale
+        id = -1,
+        coords = '0.0.0',
+        community = null,
+        registered = false,
+        registrationType = RegistrationType.UNDEFINED,
+        price = 0,
+        isForSale = false
     }) {
         this.id = id;
         this.coords = coords;

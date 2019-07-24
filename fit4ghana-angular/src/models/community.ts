@@ -8,4 +8,18 @@ export class Community {
     chief: Chief;
     cls: CLS;
     landCommission: LandCommission;
+
+    constructor({
+        id = -1,
+        name = '',
+        chief = null,
+        cls = null,
+        landCommission = null
+    }) {
+        this.id = id;
+        this.name = name;
+        this.chief = chief;
+        this.cls = cls;
+        this.landCommission = landCommission;
+    }
 }

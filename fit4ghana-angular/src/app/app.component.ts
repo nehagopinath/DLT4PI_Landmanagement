@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UserService } from 'src/services/user.service';
+import { exampleFamilyMember } from 'src/consts/example';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'fit4ghana-angular';
+
+  user;
+
+  constructor(public userService: UserService) {
+    this.user = this.userService.setUser({
+      id: exampleFamilyMember.id,
+      email: '',
+      lands: exampleFamilyMember.lands
+    });
+  }
 }
