@@ -3,6 +3,7 @@ import { FamilyMember } from 'src/models/family-member';
 import { exampleFamilyMember } from 'src/consts/example';
 import { FamilyMemberService } from 'src/services/family-member.service';
 import { LandService } from 'src/services/land.service';
+import { RegistrationType } from 'src/models/registration-type';
 import { Land } from 'src/models/land';
 
 @Component({
@@ -26,6 +27,12 @@ export class FamilyMemberComponent implements OnInit {
   constructor(public familyMemberService: FamilyMemberService, public landService: LandService) { }
 
   ngOnInit() {
+  }
+
+  registerLand(land: Land, registrationType: RegistrationType = RegistrationType.STATUTORY) {
+    this.landService.requestLandRegistration(land, this.familyMember, registrationType).then(r => {
+      console.log(r);
+    });
   }
 
 }
