@@ -1,21 +1,23 @@
 import { LandRequest } from './land-request';
+import { RegistrationRequest } from './registration-request';
+import { BuySellRequest } from './buy-sell-request';
 
 export class Chief {
     id: number;
     firstName: string;
     lastName: string;
-    incomingRequests: LandRequest[];
+    incomingRegistrationRequests: RegistrationRequest[];
 
     constructor({
         id = -1,
         firstName = '',
         lastName = '',
-        incomingRequests = []
+        incomingRegistrationRequests = []
     }) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.incomingRequests = incomingRequests;
+        this.incomingRegistrationRequests = incomingRegistrationRequests;
     }
 
     getDisplayName() {

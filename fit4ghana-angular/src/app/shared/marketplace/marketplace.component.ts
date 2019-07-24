@@ -10,21 +10,30 @@ import { Land } from 'src/models/land';
 })
 export class MarketplaceComponent implements OnInit {
 
-  @Input() currentMember: Member;
+  @Input() currentMember: Member = null;
+  @Input() userType: 'member' | 'chief' | 'cls' | 'lc';
 
   landsForSale = [];
-  marketplaceColumns: string[] = ['id', 'coords', 'ownerName', 'registrationType', 'price', 'actions'];
+  marketplaceColumns: string[] = [];
 
   constructor(public landService: LandService) {
     this.landsForSale = this.landService.getAllLandsForSale();
   }
 
   isLandOwnedByCurrentMember(land: Land) {
+    if (!this.currentMember) {
+      return false;
+    }
     return (this.currentMember.lands.map(l => l.id)
     .includes(land.id));
   }
 
   ngOnInit() {
+    if (this.userType === 'member') {
+      this.marketplaceColumns = ['id', 'coords', 'ownerName', 'registrationType', 'price', 'actions'];
+    } else {
+      this.marketplaceColumns = ['id', 'coords', 'ownerName', 'registrationType', 'price'];
+    }
   }
 
 }

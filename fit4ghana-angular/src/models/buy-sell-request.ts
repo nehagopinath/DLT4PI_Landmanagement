@@ -12,16 +12,18 @@ export class BuySellRequest extends LandRequest {
     constructor({
         id = -1,
         status = null,
-        land = null,
+        landNumber = -1,
         seller = null,
         buyer = null,
+        price = 0,
         responseFromCLS = RequestStatus.PENDING,
         responseFromLandCommission = RequestStatus.PENDING
     }) {
-        super({id, status, land});
+        super({id, status, landNumber});
         this.seller = seller;
         this.buyer = buyer;
         this.responseFromCLS = responseFromCLS;
         this.responseFromLandCommission = responseFromLandCommission;
+        this.price = price;
     }
 }

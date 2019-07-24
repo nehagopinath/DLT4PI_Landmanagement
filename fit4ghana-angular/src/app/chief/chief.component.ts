@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { exampleChief } from 'src/consts/example';
+import { Chief } from 'src/models/chief';
+import { ChiefService } from 'src/services/chief.service';
 
 @Component({
   selector: 'app-chief',
@@ -7,7 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChiefComponent implements OnInit {
 
-  constructor() { }
+  chief: Chief;
+  registrationRequestColumns: string[] = ['id', 'claimer', 'registrationType', 'actions'];
+
+  constructor(public chiefService: ChiefService) {
+    this.chief = this.chiefService.getChief();
+  }
 
   ngOnInit() {
   }

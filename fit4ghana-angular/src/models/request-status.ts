@@ -1,5 +1,6 @@
 export enum RequestStatus {
     APPROVED,
     PENDING,
-    REJECTED
+    REJECTED,
+    UNDEFINED
 }

@@ -34,11 +34,11 @@
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let element">
                 <button type="button" class="btn btn-success land-action" 
-                *ngIf="!isLandOwnedByCurrentMember(element)">
+                *ngIf="userType=='member' && !isLandOwnedByCurrentMember(element)">
                     Buy Land
                 </button>
                 <button type="button" class="btn btn-danger land-action" 
-                *ngIf="isLandOwnedByCurrentMember(element)">
+                *ngIf="userType=='member' && isLandOwnedByCurrentMember(element)">
                     Withdraw from Sale
                 </button>
             </td>

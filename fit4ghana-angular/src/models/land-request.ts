@@ -4,15 +4,15 @@ import { RequestStatus } from './request-status';
 export class LandRequest {
     id: number;
     status: RequestStatus;
-    land: Land;
+    landNumber: number;
 
     constructor({
         id = -1,
         status = RequestStatus.PENDING,
-        land = null
+        landNumber = -1
     }) {
         this.id = id;
         this.status = status;
-        this.land = land;
+        this.landNumber = landNumber;
     }
 }

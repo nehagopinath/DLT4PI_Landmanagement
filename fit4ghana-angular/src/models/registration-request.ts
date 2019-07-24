@@ -11,16 +11,16 @@ export class RegistrationRequest extends LandRequest {
     responseFromLandCommission: RequestStatus;
 
     constructor({
-        id = 0,
+        id = -1,
         status = null,
-        land = null,
+        landNumber = -1,
         claimer = null,
         registrationType = RegistrationType.STATUTORY,
         responseFromChief = RequestStatus.PENDING,
         responseFromCLS = RequestStatus.PENDING,
         responseFromLandCommission = RequestStatus.PENDING
     }) {
-        super({id, status, land});
+        super({id, status, landNumber});
         this.claimer = claimer;
         this.registrationType = registrationType;
         this.responseFromChief = responseFromChief;
