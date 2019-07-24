@@ -30,36 +30,18 @@ const asyncMiddleware = fn =>
     };
 
 
-// Register LAND
-const create = asyncMiddleware(async (req, res) => {
-    var user = req.params.user;
-    var landtype = req.params.landtype;
-    var chief = req.params.chief;
+// Get Request
+const query = asyncMiddleware(async (req, res) => {
     var approver = req.params.approver;
-    var requestNumber = parseInt(Math.random().toString(36).substr(2, 9));
-    var landNumber = parseInt(Math.random().toString(36).substr(2, 9));
-
-    const userExists = await wallet.exists(user);
-    if (!userExists) {
-        console.log('An identity for the user' + user + 'does not exist in the wallet');
-        console.log('Register user before retrying');
-    }
-
+    
     const userExists = await wallet.exists(approver);
     if (!userExists) {
         console.log('An identity for the user' + approver + 'does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
-    const userExists = await wallet.exists(chief);
-    if (!userExists) {
-        console.log('An identity for the user' + chief + 'does not exist in the wallet');
-        console.log('Register user before retrying');
-    }
-
-    let id = req.params.id;
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('fit4ghana');
@@ -67,16 +49,14 @@ const create = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('fit4ghana');
 
-    if (landtype == 'statutory') {
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        landtype, null, null, approver, landNumber);
+    if (approver == 'cls') {
+        const result = await contract.evaluateTransaction('queryLand', approver); 
     }
-    else if (landtype == 'customary') {
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        landtype, chief, approver, null, landNumber);
+    else if (approver == 'ls') {
+        const result = await contract.evaluateTransaction('queryLand', approver); 
     }
-    else {
-        console.log('Land needs to be either statutory or customary')
+    else if (approver == 'chief') {
+        const result = await contract.evaluateTransaction('queryLand', approver); 
     }
     
     // Disconnect from the gateway.
