@@ -6,6 +6,7 @@ import { CLS } from 'src/models/cls';
 import { LandCommission } from 'src/models/landCommission';
 import { RegistrationType } from 'src/models/registration-type';
 import { FamilyMember } from 'src/models/family-member';
+import { ExternalMember } from 'src/models/external-member';
 
 
 export const exampleChief: Chief = new Chief({
@@ -55,11 +56,44 @@ export const exampleLand2: Land = new Land({
 
 export const exampleLand3: Land = new Land({
     id: 3,
-    coords: '4.5.6',
+    coords: '7.8.9',
     community: trede,
     registered: true,
     registrationType: RegistrationType.STATUTORY,
     price: 30000000,
+    isForSale: true,
+    ownerName: 'Akwasi'
+});
+
+export const exampleLand4: Land = new Land({
+    id: 4,
+    coords: '1.1.1',
+    community: trede,
+    registered: true,
+    registrationType: RegistrationType.CUSTOMARY,
+    price: 10000000,
+    isForSale: true,
+    ownerName: 'Kamusi'
+});
+
+export const exampleLand5: Land = new Land({
+    id: 5,
+    coords: '3.3.3',
+    community: trede,
+    registered: true,
+    registrationType: RegistrationType.STATUTORY,
+    price: 30000000,
+    isForSale: true,
+    ownerName: 'Uchendu'
+});
+
+export const exampleLand6: Land = new Land({
+    id: 6,
+    coords: '2.2.2',
+    community: trede,
+    registered: true,
+    registrationType: RegistrationType.STATUTORY,
+    price: 50000000,
     isForSale: false
 });
 
@@ -75,3 +109,43 @@ export const exampleFamilyMember: FamilyMember = new FamilyMember({
         exampleLand3
     ]
 });
+
+
+export const exampleFamilyMember2: FamilyMember = new FamilyMember({
+    id: 1,
+    firstName: 'Akwasi',
+    lastName: 'Mawasi',
+    familyName: 'Mawasi',
+    lands: [
+        exampleLand4
+    ]
+});
+
+
+export const exampleFamilyMember3: FamilyMember = new FamilyMember({
+    id: 1,
+    firstName: 'Akwasi',
+    lastName: 'Mawasi',
+    familyName: 'Mawasi',
+    lands: [
+        exampleLand5
+    ]
+});
+
+
+export const exampleExternalMember1: ExternalMember = new ExternalMember({
+    id: 1,
+    firstName: 'Peter',
+    lastName: 'Keating',
+    originCountry: 'United States',
+    lands: [
+        exampleLand6
+    ]
+});
+
+export const landsForSale = [
+    exampleLand3,
+    exampleLand4,
+    exampleLand5
+];
+

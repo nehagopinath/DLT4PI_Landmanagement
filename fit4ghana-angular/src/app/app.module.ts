@@ -12,6 +12,7 @@ import { LandCommissionComponent } from './land-commission/land-commission.compo
 import { ExternalMemberComponent } from './external-member/external-member.component';
 import { LandComponent } from './shared/land/land.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { MarketplaceComponent } from './shared/marketplace/marketplace.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     LandCommissionComponent,
     ExternalMemberComponent,
     LandComponent,
-    NavbarComponent
+    NavbarComponent,
+    MarketplaceComponent
   ],
   imports: [
     BrowserModule,

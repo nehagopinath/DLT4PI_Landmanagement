@@ -9,6 +9,7 @@ export class Land {
     registrationType: RegistrationType;
     price: number;
     isForSale: boolean;
+    ownerName: string;
 
     constructor({
         id = -1,
@@ -17,7 +18,8 @@ export class Land {
         registered = false,
         registrationType = RegistrationType.UNDEFINED,
         price = 0,
-        isForSale = false
+        isForSale = false,
+        ownerName = ''
     }) {
         this.id = id;
         this.coords = coords;
@@ -26,5 +28,6 @@ export class Land {
         this.registrationType = registrationType;
         this.price = price;
         this.isForSale = isForSale;
+        this.ownerName = ownerName;
     }
 }
