@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FamilyMember } from 'src/models/family-member';
 import { exampleFamilyMember } from 'src/consts/example';
+import { FamilyMemberService } from 'src/services/family-member.service';
+import { LandService } from 'src/services/land.service';
+import { Land } from 'src/models/land';
 
 @Component({
   selector: 'app-family-member',
@@ -20,7 +23,7 @@ export class FamilyMemberComponent implements OnInit {
   // price: 10000000,
   // isForSale: false
 
-  constructor() { }
+  constructor(public familyMemberService: FamilyMemberService, public landService: LandService) { }
 
   ngOnInit() {
   }
