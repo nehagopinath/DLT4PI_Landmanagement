@@ -30,8 +30,15 @@ const asyncMiddleware = fn =>
     };
 
 
-// CREATE LAND
+// Register LAND
 const create = asyncMiddleware(async (req, res) => {
+    var user = req.params.user;
+    var landtype = req.params.landtype;
+    var chief = req.params.chief;
+    var approver = req.params.approver;
+    var requestNumber = parseInt(Math.random().toString(36).substr(2, 9));
+    var landNumber = parseInt(Math.random().toString(36).substr(2, 9));
+
     const userExists = await wallet.exists('familyMember');
     if (!userExists) {
         console.log('An identity for the user "familyMember" does not exist in the wallet');
@@ -40,7 +47,7 @@ const create = asyncMiddleware(async (req, res) => {
 
     let id = req.params.id;
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: 'familyMember', discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('fit4ghana');
@@ -48,66 +55,18 @@ const create = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('fit4ghana');
 
-    console.log('Registering the first land - 999 as a statutory land');
-
-    // Steps
-    // 1. Create RegistrationRequest (100) (statutory) for land 999
-    // 2. Approve statutory request by land commission
-    // 3. Above automatically calls registerLand Transaction
-    // 4. Get status of Land 999 Asset now : owner should be familyMember
-
-    // Step 1
-    // ctx, requestNumber, claimer,
-    // registrationType, chief, cls, landCommission, landNumber
-    await contract.submitTransaction('createRegistrationRequest', 100, 'familyMember',
-        'statutory', null, null, 'lc', 999);  //This takes literal values. Should find out a way for it to take values from console
-    console.log('Transaction for creating Registration Request has been created.');
-
-    // Step 2
-    await contract.submitTransaction('approveRegistrationRequest', 100, 'lc');
-    console.log('Transaction for approving registration request by land commission.');
-
-    // Step 3
-    // Automatically done by Step 2
-
-    // Step 4
-    const land = await contract.evaluateTransaction('queryLand', 999);
-    console.log(`Current state of land: ${land.toString()}`);
-
-
-    console.log('Registering the second land - 998 as a customary land');
-
-    // Steps
-    // 1. Create RegistrationRequest (100) (customary) for land 999
-    // 2. Approve customary request by chief
-    // 3. Approve customary request by CLS
-    // 4. Above automatically calls registerLand Transaction
-    // 5. Get status of Land 998 Asset now : owner should be familyMember
-
-    // Step 1
-    // ctx, requestNumber, claimer,
-    // registrationType, chief, cls, landCommission, landNumber
-    await contract.submitTransaction('createRegistrationRequest', 101, 'familyMember',
-        'customary', 'chief', 'cls', null, 998);  //This takes literal values. Should find out a way for it to take values from console
-    console.log('Transaction for creating Registration Request has been created.');
-
-    // Step 2
-    await contract.submitTransaction('approveRegistrationRequest', 101, 'chief');
-    console.log('Transaction for approving registration request by land commission.');
-
-    // Step 3
-    await contract.submitTransaction('approveRegistrationRequest', 101, 'cls');
-    console.log('Transaction for approving registration request by land commission.');
-
-    // Step 4
-    // Automatically done by Step 3
-
-    // Step 5
-    const land1 = await contract.evaluateTransaction('queryLand', 998);
-    console.log(`Current state of land: ${land1.toString()}`);
-
-    console.log('All transactions successful');
-
+    if (landtype == 'statutory') {
+        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
+        landtype, null, null, approver, landNumber);
+    }
+    else if (landtype == 'customary') {
+        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
+        landtype, chief, approver, null, landNumber);
+    }
+    else {
+        console.log('Land needs to be either statutory or customary')
+    }
+    
     // Disconnect from the gateway.
     await gateway.disconnect();
 });
