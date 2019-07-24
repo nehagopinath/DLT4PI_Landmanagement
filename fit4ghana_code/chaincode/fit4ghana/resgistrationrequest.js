@@ -105,7 +105,7 @@ class RegistrationRequest extends Contract {
         }
     }
 
-    async queryAllRegistrationRequests(ctx, approver) {
+    async queryRegistrationRequests(ctx, approver) {
 
         const iterator = await ctx.stub.getStateByRange(startKey, endKey);
 
