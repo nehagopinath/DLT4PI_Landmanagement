@@ -18,6 +18,6 @@ router.get('/queryLandForSale/:user', LandController.queryForSale);
 router.post('/putForSale/:landnumber', LandController.putForSale);
 router.post('/withDrawLandFromSale/:landnumber', LandController.withdrawFromSale);
 router.post('/requestLandRegistration/:landnumber/:registrationType/:user', LandController.register);
-router.post('requestLandTransaction/:landnumber/:seller/:buyer/:price', LandController.transact);
+router.post('/requestLandTransaction/:landnumber/:seller/:buyer/:price', LandController.transact);
 
 module.exports = router;
