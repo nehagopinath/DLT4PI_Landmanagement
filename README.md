@@ -24,5 +24,7 @@ A Blockchain-based application for solving land conflicts in developing areas an
 
 **6. Assumptions made for Development**
 
+Tested on MacOS
+
 **7. Errors / Bugs**
 
