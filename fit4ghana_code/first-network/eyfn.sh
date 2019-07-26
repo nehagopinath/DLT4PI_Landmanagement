@@ -21,7 +21,6 @@ function printHelp () {
   echo "Usage: "
   echo "  eyfn.sh up|down|restart|generate [-c <channel name>] [-t <timeout>] [-d <delay>] [-f <docker-compose-file>] [-s <dbtype>]"
   echo "  eyfn.sh -h|--help (print this message)"
-  echo "  -a - specify if you want to start Fabric CAs as well"
   echo "    <mode> - one of 'up', 'down', 'restart' or 'generate'"
   echo "      - 'up' - bring up the network with docker-compose up"
   echo "      - 'down' - clear the network with docker-compose down"
@@ -43,7 +42,6 @@ function printHelp () {
   echo "	eyfn.sh up -c mychannel -s couchdb"
   echo "	eyfn.sh up -l node"
   echo "	eyfn.sh down -c mychannel"
-  echo "  byfn.sh -m up -a"
   echo
   echo "Taking all defaults:"
   echo "	eyfn.sh generate"
@@ -97,48 +95,17 @@ function networkUp () {
   # generate artifacts if they don't exist
   if [ ! -d "org3-artifacts/crypto-config" ]; then
     generateCerts
-    replacePrivateKey
     generateChannelArtifacts
     createConfigTx
   fi
-    if [ ! -d "org4-artifacts/crypto-config" ]; then
-    generateCerts
-    replacePrivateKey
-    generateChannelArtifacts
-    createConfigTx
-  fi
-
-  COMPOSE_FILE_ADDITIONS=""
   # start org3 peers
   if [ "${IF_COUCHDB}" == "couchdb" ]; then
-      COMPOSE_FILE_ADDITIONS="${COMPOSE_FILE_ADDITIONS} -f $COMPOSE_FILE_COUCH"
       IMAGE_TAG=${IMAGETAG} docker-compose -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH_ORG3 up -d 2>&1
   else
       IMAGE_TAG=$IMAGETAG docker-compose -f $COMPOSE_FILE_ORG3 up -d 2>&1
   fi
-  if [ "${IF_CAS}" == "1" ]; then
-    COMPOSE_FILE_ADDITIONS="${COMPOSE_FILE_ADDITIONS} -f $COMPOSE_FILE_CAS"
-  fi
-  CHANNEL_NAME=$CHANNEL_NAME TIMEOUT=$CLI_TIMEOUT DELAY=$CLI_DELAY LANG=$LANGUAGE docker-compose -f ${COMPOSE_FILE}${COMPOSE_FILE_ADDITIONS} up -d 2>&1
-
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to start Org3 network"
-    exit 1
-  fi
-  # start org4 peers
-  if [ "${IF_COUCHDB}" == "couchdb" ]; then
-      COMPOSE_FILE_ADDITIONS="${COMPOSE_FILE_ADDITIONS} -f $COMPOSE_FILE_COUCH"
-      IMAGE_TAG=${IMAGETAG} docker-compose -f $COMPOSE_FILE_ORG4 -f $COMPOSE_FILE_COUCH_ORG4 up -d 2>&1
-  else
-      IMAGE_TAG=$IMAGETAG docker-compose -f $COMPOSE_FILE_ORG4 up -d 2>&1
-  fi
-  if [ "${IF_CAS}" == "1" ]; then
-    COMPOSE_FILE_ADDITIONS="${COMPOSE_FILE_ADDITIONS} -f $COMPOSE_FILE_CAS"
-  fi
-  CHANNEL_NAME=$CHANNEL_NAME TIMEOUT=$CLI_TIMEOUT DELAY=$CLI_DELAY LANG=$LANGUAGE docker-compose -f ${COMPOSE_FILE}${COMPOSE_FILE_ADDITIONS} up -d 2>&1
-
-  if [ $? -ne 0 ]; then
-    echo "ERROR !!!! Unable to start Org4 network"
     exit 1
   fi
   echo
@@ -152,15 +119,6 @@ function networkUp () {
   fi
   echo
   echo "###############################################################"
-  echo "############### Have Org4 peers join network ##################"
-  echo "###############################################################"
-  docker exec Org4cli ./scripts/step2org4.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
-  if [ $? -ne 0 ]; then
-    echo "ERROR !!!! Unable to have Org4 peers join network"
-    exit 1
-  fi
-  echo
-  echo "###############################################################"
   echo "##### Upgrade chaincode to have Org3 peers on the network #####"
   echo "###############################################################"
   docker exec cli ./scripts/step3org3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
@@ -168,23 +126,8 @@ function networkUp () {
     echo "ERROR !!!! Unable to add Org3 peers on network"
     exit 1
   fi
-  echo
-  echo "###############################################################"
-  echo "##### Upgrade chaincode to have Org4 peers on the network #####"
-  echo "###############################################################"
-  docker exec cli ./scripts/step3org4.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
-  if [ $? -ne 0 ]; then
-    echo "ERROR !!!! Unable to add Org4 peers on network"
-    exit 1
-  fi
   # finish by running the test
   docker exec Org3cli ./scripts/testorg3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
-  if [ $? -ne 0 ]; then
-    echo "ERROR !!!! Unable to run test"
-    exit 1
-  fi
-   # finish by running the test
-  docker exec Org4cli ./scripts/testorg4.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to run test"
     exit 1
@@ -194,12 +137,6 @@ function networkUp () {
 # Tear down running network
 function networkDown () {
   docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_KAFKA -f $COMPOSE_FILE_RAFT2 -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH down --volumes --remove-orphans
-  docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_KAFKA -f $COMPOSE_FILE_RAFT2 -f $COMPOSE_FILE_ORG4 -f $COMPOSE_FILE_COUCH down --volumes --remove-orphans
-
-  if [ -f ${COMPOSE_FILE_CAS} ]; then
-    docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_CAS down
-  fi
-
   # Don't remove containers, images, etc if restarting
   if [ "$MODE" != "restart" ]; then
     #Cleanup the chaincode containers
@@ -208,40 +145,8 @@ function networkDown () {
     removeUnwantedImages
     # remove orderer block and other channel configuration transactions and certs
     rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config ./org3-artifacts/crypto-config/ channel-artifacts/org3.json
-    rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config ./org4-artifacts/crypto-config/ channel-artifacts/org4.json
     # remove the docker-compose yaml file that was customized to the example
-    rm -f docker-compose-e2e.yaml docker-compose-cas-org34.yaml
-  fi
-}
-
-function replacePrivateKey() {
-  # sed on MacOSX does not support -i flag with a null extension. We will use
-  # 't' for our back-up's extension and delete it at the end of the function
-  ARCH=$(uname -s | grep Darwin)
-  if [ "$ARCH" == "Darwin" ]; then
-    OPTS="-it"
-  else
-    OPTS="-i"
-  fi
-
-  # Copy the template to the file that will be modified to add the private key
-  cp docker-compose-e2e-template.yaml docker-compose-e2e.yaml
-  cp docker-compose-cas-template-org34.yaml docker-compose-cas-org34.yaml
-
-  # The next steps will replace the template's contents with the
-  # actual values of the private key file names for the two CAs.
-  CURRENT_DIR=$PWD
-  cd crypto-config/peerOrganizations/org3.example.com/ca/
-  PRIV_KEY=$(ls *_sk)
-  cd "$CURRENT_DIR"
-  sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml docker-compose-cas-org34.yaml
-  cd crypto-config/peerOrganizations/org4.example.com/ca/
-  PRIV_KEY=$(ls *_sk)
-  cd "$CURRENT_DIR"
-  sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml docker-compose-cas-org34.yaml
-  # If MacOSX, remove the temporary backup of the docker-compose file
-  if [ "$ARCH" == "Darwin" ]; then
-    rm docker-compose-e2e.yamlt docker-compose-cas-org34.yamlt
+    rm -f docker-compose-e2e.yaml
   fi
 }
 
@@ -253,15 +158,6 @@ function createConfigTx () {
   echo "####### Generate and submit config tx to add Org3 #############"
   echo "###############################################################"
   docker exec cli scripts/step1org3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
-  if [ $? -ne 0 ]; then
-    echo "ERROR !!!! Unable to create config tx"
-    exit 1
-  fi
-   echo
-  echo "###############################################################"
-  echo "####### Generate and submit config tx to add Org4 #############"
-  echo "###############################################################"
-  docker exec cli scripts/step1org4.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to create config tx"
     exit 1
@@ -295,27 +191,6 @@ function generateCerts (){
    fi
   )
   echo
-  which cryptogen
-  if [ "$?" -ne 0 ]; then
-    echo "cryptogen tool not found. exiting"
-    exit 1
-  fi
-  echo
-  echo "###############################################################"
-  echo "##### Generate Org4 certificates using cryptogen tool #########"
-  echo "###############################################################"
-
-  (cd org4-artifacts
-   set -x
-   cryptogen generate --config=./org4-crypto.yaml
-   res=$?
-   set +x
-   if [ $res -ne 0 ]; then
-     echo "Failed to generate certificates..."
-     exit 1
-   fi
-  )
-  echo
 }
 
 # Generate channel configuration transaction
@@ -340,27 +215,6 @@ function generateChannelArtifacts() {
    fi
   )
   cp -r crypto-config/ordererOrganizations org3-artifacts/crypto-config/
-  echo
-   which configtxgen
-  if [ "$?" -ne 0 ]; then
-    echo "configtxgen tool not found. exiting"
-    exit 1
-  fi
-  echo "##########################################################"
-  echo "#########  Generating Org4 config material ###############"
-  echo "##########################################################"
-  (cd org4-artifacts
-   export FABRIC_CFG_PATH=$PWD
-   set -x
-   configtxgen -printOrg Org4MSP > ../channel-artifacts/org4.json
-   res=$?
-   set +x
-   if [ $res -ne 0 ]; then
-     echo "Failed to generate Org4 config material..."
-     exit 1
-   fi
-  )
-  cp -r crypto-config/ordererOrganizations org4-artifacts/crypto-config/
   echo
 }
 
@@ -389,11 +243,8 @@ COMPOSE_FILE=docker-compose-cli.yaml
 COMPOSE_FILE_COUCH=docker-compose-couch.yaml
 # use this as the default docker-compose yaml definition
 COMPOSE_FILE_ORG3=docker-compose-org3.yaml
-COMPOSE_FILE_ORG4=docker-compose-org4.yaml
 #
 COMPOSE_FILE_COUCH_ORG3=docker-compose-couch-org3.yaml
-COMPOSE_FILE_COUCH_ORG4=docker-compose-couch-org4.yaml
-COMPOSE_FILE_CAS=docker-compose-cas-org34.yaml
 # kafka and zookeeper compose file
 COMPOSE_FILE_KAFKA=docker-compose-kafka.yaml
 # two additional etcd/raft orderers
@@ -421,7 +272,7 @@ else
   printHelp
   exit 1
 fi
-while getopts "h?c:t:d:f:s:l:i:o:v:a?" opt; do
+while getopts "h?c:t:d:f:s:l:i:v" opt; do
   case "$opt" in
     h|\?)
       printHelp
@@ -443,24 +294,19 @@ while getopts "h?c:t:d:f:s:l:i:o:v:a?" opt; do
     ;;
     v)  VERBOSE=true
     ;;
-    a)  IF_CAS=1
-    ;;
-
   esac
 done
 
 # Announce what was requested
 
-ADDITIONS=""
   if [ "${IF_COUCHDB}" == "couchdb" ]; then
-        ADDITIONS="${ADDITIONS} and using database '${IF_COUCHDB}'"
         echo
         echo "${EXPMODE} with channel '${CHANNEL_NAME}' and CLI timeout of '${CLI_TIMEOUT}' seconds and CLI delay of '${CLI_DELAY}' seconds and using database '${IF_COUCHDB}'"
   else
         echo "${EXPMODE} with channel '${CHANNEL_NAME}' and CLI timeout of '${CLI_TIMEOUT}' seconds and CLI delay of '${CLI_DELAY}' seconds"
   fi
 # ask for confirmation to proceed
-#askProceed
+askProceed
 
 #Create the network using docker compose
 if [ "${MODE}" == "up" ]; then

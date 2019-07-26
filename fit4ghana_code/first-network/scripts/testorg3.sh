@@ -33,10 +33,10 @@ LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
 COUNTER=1
 MAX_RETRY=5
 
+CC_SRC_PATH="github.com/chaincode/chaincode_example02/go/"
 if [ "$LANGUAGE" = "node" ]; then
-	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/fit4ghana/"
+	CC_SRC_PATH="/opt/gopath/src/github.com/chaincode/chaincode_example02/node/"
 fi
-
 
 echo "Channel name : "$CHANNEL_NAME
 
@@ -44,24 +44,24 @@ echo "Channel name : "$CHANNEL_NAME
 . scripts/utils.sh
 
 # Query chaincode on peer0.org3, check if the result is 90
-#echo "Querying chaincode on peer0.org3..."
-#chaincodeQuery 0 3 90
+echo "Querying chaincode on peer0.org3..."
+chaincodeQuery 0 3 90
 
 # Invoke chaincode on peer0.org1, peer0.org2, and peer0.org3
-#echo "Sending invoke transaction on peer0.org1 peer0.org2 peer0.org3..."
-#chaincodeInvoke 0 1 0 2 0 3
+echo "Sending invoke transaction on peer0.org1 peer0.org2 peer0.org3..."
+chaincodeInvoke 0 1 0 2 0 3
 
 # Query on chaincode on peer0.org3, peer0.org2, peer0.org1 check if the result is 80
 # We query a peer in each organization, to ensure peers from all organizations are in sync
 # and there is no state fork between organizations.
-#echo "Querying chaincode on peer0.org3..."
-#chaincodeQuery 0 3 90
+echo "Querying chaincode on peer0.org3..."
+chaincodeQuery 0 3 80
 
-#echo "Querying chaincode on peer0.org2..."
-#chaincodeQuery 0 2 90
+echo "Querying chaincode on peer0.org2..."
+chaincodeQuery 0 2 80
 
-#echo "Querying chaincode on peer0.org1..."
-#chaincodeQuery 0 1 90
+echo "Querying chaincode on peer0.org1..."
+chaincodeQuery 0 1 80
 
 
 echo

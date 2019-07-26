@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 */
-//todo: Modify this file for fit4ghana contract (Refer fabCar contract)
+
 const shim = require('fabric-shim');
 const util = require('util');
 

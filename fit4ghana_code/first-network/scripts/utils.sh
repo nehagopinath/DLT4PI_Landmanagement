@@ -10,7 +10,6 @@ ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrga
 PEER0_ORG1_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
 PEER0_ORG2_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
 PEER0_ORG3_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
-PEER0_ORG4_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/tls/ca.crt
 
 # verify the result of the end-to-end test
 verifyResult() {
@@ -59,15 +58,6 @@ setGlobals() {
       CORE_PEER_ADDRESS=peer0.org3.example.com:11051
     else
       CORE_PEER_ADDRESS=peer1.org3.example.com:12051
-    fi
-  elif [ $ORG -eq 4 ]; then
-    CORE_PEER_LOCALMSPID="Org4MSP"
-    CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG4_CA
-    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org4.example.com/users/Admin@org4.example.com/msp
-    if [ $PEER -eq 0 ]; then
-      CORE_PEER_ADDRESS=peer0.org4.example.com:6051
-    else
-      CORE_PEER_ADDRESS=peer1.org4.example.com:5051
     fi
   else
     echo "================== ERROR !!! ORG Unknown =================="
@@ -129,7 +119,7 @@ installChaincode() {
   setGlobals $PEER $ORG
   VERSION=${3:-1.0}
   set -x
-  peer chaincode install -n land -v ${VERSION} -l ${LANGUAGE} -p ${CC_SRC_PATH} >&log.txt
+  peer chaincode install -n mycc -v ${VERSION} -l ${LANGUAGE} -p ${CC_SRC_PATH} >&log.txt
   res=$?
   set +x
   cat log.txt
@@ -149,12 +139,12 @@ instantiateChaincode() {
   # the "-o" option
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer chaincode instantiate -o orderer.example.com:7050 -C $CHANNEL_NAME -n land -l ${LANGUAGE} -v ${VERSION} -P "OR ('Org1MSP.member','Org2MSP.member')" >&log.txt
+    peer chaincode instantiate -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -l ${LANGUAGE} -v ${VERSION} -c '{"Args":["init","a","100","b","200"]}' -P "AND ('Org1MSP.peer','Org2MSP.peer')" >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer chaincode instantiate -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n land -l ${LANGUAGE} -v ${VERSION} -c '{"Args":["initLedger"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" >&log.txt
+    peer chaincode instantiate -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc -l ${LANGUAGE} -v 1.0 -c '{"Args":["init","a","100","b","200"]}' -P "AND ('Org1MSP.peer','Org2MSP.peer')" >&log.txt
     res=$?
     set +x
   fi
@@ -170,7 +160,7 @@ upgradeChaincode() {
   setGlobals $PEER $ORG
 
   set -x
-  peer chaincode upgrade -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n fit4ghana -v 2.0 -c '{"Args":["init","a","90","b","210"]}' -P "AND ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer')"
+  peer chaincode upgrade -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc -v 2.0 -c '{"Args":["init","a","90","b","210"]}' -P "AND ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
   res=$?
   set +x
   cat log.txt
@@ -196,7 +186,7 @@ chaincodeQuery() {
     sleep $DELAY
     echo "Attempting to Query peer${PEER}.org${ORG} ...$(($(date +%s) - starttime)) secs"
     set -x
-    peer chaincode query -C $CHANNEL_NAME -n fit4ghana -c '{"Args":["query","a"]}' >&log.txt
+    peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}' >&log.txt
     res=$?
     set +x
     test $res -eq 0 && VALUE=$(cat log.txt | awk '/Query Result/ {print $NF}')
@@ -315,12 +305,12 @@ chaincodeInvoke() {
   # it using the "-o" option
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n fit4ghana $PEER_CONN_PARMS -c '{"function":"initLedger","Args":[]}' >&log.txt
+    peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc $PEER_CONN_PARMS -c '{"Args":["invoke","a","b","10"]}' >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer chaincode invoke -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n fit4ghana $PEER_CONN_PARMS -c '{"function":"initLedger","Args":[]}' >&log.txt
+    peer chaincode invoke -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc $PEER_CONN_PARMS -c '{"Args":["invoke","a","b","10"]}' >&log.txt
     res=$?
     set +x
   fi

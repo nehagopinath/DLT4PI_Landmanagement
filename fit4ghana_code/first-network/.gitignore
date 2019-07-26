@@ -6,5 +6,3 @@
 /ledgers-backup
 /channel-artifacts/*.json
 /org3-artifacts/crypto-config/*
-/docker-compose-cas.yaml
-/docker-compose-cas-org34.yaml
