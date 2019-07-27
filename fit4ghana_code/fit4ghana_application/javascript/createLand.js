@@ -9,10 +9,17 @@ const path = require('path');
 
 const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org1.json');
 
-//creating Land same as registering land?
-//add methods to get approvals
 async function main() {
     try {
+
+        try{
+            var landnumber =  process.argv[2];
+            var coords =  process.argv[3];
+            var isForSale =  process.argv[4];
+            var price =  process.argv[5];
+        } catch(error) {
+            console.error("Add landnumber,coords,isForSale,price to execution command. e.g.: node createLand.js 'LAND0' 'coords2' 'false' '2000'");
+        } 
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -41,17 +48,10 @@ async function main() {
         // Submit the specified transaction.
         // createLand transaction - requires 4 argument, ex: ('landNumber', 'coords', 'isForSale=false', 'price')
        
-        console.log('We will create two lands here LAND0 and LAND1');
+        console.log('Creating Lands');
 
-        // land 1 : statutory
-
-        await contract.submitTransaction('createLand', 'LAND0', 'coords2' , 'false' , '2000');  //This takes literal values. Should find out a way for it to take values from console
-        console.log('Transaction createLand has been submitted for land0');
-
-        // land 1 : customary
-
-        await contract.submitTransaction('createLand', 'LAND1', 'coords1' , 'false' , '1000');  //This takes literal values. Should find out a way for it to take values from console
-        console.log('Transaction createLand has been submitted for land1');
+        await contract.submitTransaction('createLand', landnumber, coords , isForSale ,price );
+        console.log('Transaction createLand has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();

@@ -12,12 +12,11 @@ const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-or
 //putting land up for sale can be done only be the familyMember
 async function main() {
     try {
-        /*try{
+        try{
             var landnumber =  process.argv[2];
         } catch(error) {
-            console.error('Add landnumber to execution command. e.g.: node putLandUpForSale.js 123')
-        } */
-
+            console.error('Add landnumber to execution command. e.g.: node putLandUpForSale.js LAND10')
+        } 
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -41,16 +40,13 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar1');
+        const contract = network.getContract('land');
 
         // Submit the specified transaction.
         // putLandUpForSale transaction - requires 1 argument, ex: ('landNumber')
        
-        await contract.submitTransaction('putLandUpForSale', 'LAND0');  
+        await contract.submitTransaction('putLandUpForSale', landnumber);  
         console.log('Transaction putLandUpForSale has been submitted for land LAND0');
-
-        await contract.submitTransaction('putLandUpForSale', 'LAND1');  
-        console.log('Transaction putLandUpForSale has been submitted for land LAND1');
 
         // Disconnect from the gateway.
         await gateway.disconnect();

@@ -11,6 +11,11 @@ const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-or
 
 //putting land up for sale can be done only be the familyMember
 async function main() {
+    try{
+        var landnumber =  process.argv[2];
+    } catch(error) {
+        console.error('Add landnumber to execution command. e.g.: node withdrawLandFromSale.js LAND10')
+    } 
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -35,12 +40,12 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar1');
+        const contract = network.getContract('land');
 
         // Submit the specified transaction.
         // withdrawLandFromSale transaction - requires 1 argument, ex: ('landNumber')
        
-        await contract.submitTransaction('withdrawLandFromSale', 'LAND0');  //This takes literal values. Should find out a way for it to take values from console
+        await contract.submitTransaction('withdrawLandFromSale', landnumber);  
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.

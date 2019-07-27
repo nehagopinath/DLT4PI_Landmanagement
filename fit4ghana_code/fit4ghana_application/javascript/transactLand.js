@@ -13,6 +13,20 @@ const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-or
 //same as transact land and changing Land Owner
 //add methods to get approvals 
 async function main() {
+
+    try{
+        var requestNumber =  process.argv[2];
+        var seller =  process.argv[3];
+        var buyer =  process.argv[4];
+        var price =  process.argv[5];
+        var registrationType =  process.argv[6];
+        var cls =  process.argv[7];
+        var landCommission =  process.argv[8];
+        var landNumber =  process.argv[9];
+
+    } catch(error) {
+        console.error("Add landnumber,coords,isForSale,price to execution command. e.g.: node transactLand.js 'REQUEST11' 'familyMember' 'externalMember' '2000' 'customary' 'cls' 'null' 'LAND10' ");
+    } 
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -37,75 +51,38 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar1');
+        const contract = network.getContract('land');
 
         // Submit the specified transaction.
         // transactLand transaction - requires 3 argument, ex: ('seller', 'buyer', 'price')
-
         
-        console.log('Transacting the first land - 999 which is a statutory land');
-
-        // Steps
-        // 1. Create BuysellRequest (100) (statutory) for land 999
-        // 2. Approve statutory buy sell request by land commission
-        // 3. Above automatically calls transactLand Transaction
-        // 4. Get status of Land 999 Asset now : owner should be externalMember
-
-        // Step 1
-        // ctx, requestNumber, seller, buyer, price,
-        // registrationType, cls, landCommission, landNumber
-        await contract.submitTransaction('transactLand', 'LAND0', 'familyMember', 'externalMember','1000');
-        
-       /* await contract.submitTransaction('createBuySellRequest', 102, 'familyMember', 'externalMember',
-        'statutory', null, 'lc', 999);  //This takes literal values. Should find out a way for it to take values from console
-        console.log('Transaction for creating Buy Sell Request has been created.');
-
-        // Step 2
-        await contract.submitTransaction('approveBuySellRequest', 102, 'lc');
-        console.log('Transaction for approving buy sell request by land commission.');
-
-        // Step 3
-        // Automatically done by Step 2
-
-        // Step 4
-        const land = await contract.evaluateTransaction('queryLand', 999);
-        console.log(`Current state of land: ${land.toString()}`);
-
-
-        
-        console.log('Transacting the first land - 998 which is a customary land');
-
+        console.log('Transacting the land');
         
         // Steps
-        // 1. Create BuysellRequest (100) (statutory) for land 998
+        // 1. Create BuysellRequest
         // 2. Approve statutory buy sell request by cls
         // 3. Above automatically calls transactLand Transaction
-        // 4. Get status of Land 998 Asset now : owner should be externalMember
+        // 4. Get status of Land Asset now : owner should be externalMember
 
         // Step 1
         // ctx, requestNumber, seller, buyer, price,
         // registrationType, cls, landCommission, landNumber
-        await contract.submitTransaction('createBuySellRequest', 103, 'familyMember', 'externalMember',
-        'customary', 'cls', null, 998);  //This takes literal values. Should find out a way for it to take values from console
+        await contract.submitTransaction('createBuySellRequest', requestNumber, seller, buyer,price, registrationType, cls, landCommission,landNumber);  
         console.log('Transaction for creating Buy Sell Request has been created.');
 
         // Step 2
-        await contract.submitTransaction('approveBuySellRequest', 103, 'cls');
+        await contract.submitTransaction('approveBuySellRequest', requestNumber, cls);
         console.log('Transaction for approving buy sell request by cls.');
 
         // Step 3
         // Automatically done by Step 2
 
         // Step 4
-        const land = await contract.evaluateTransaction('queryLand', 998);
+        /*const land = await contract.evaluateTransaction('queryLand', 998);
         console.log(`Current state of land: ${land.toString()}`); */
 
        
         console.log('All transactions successful');
-
-
-        // await contract.submitTransaction('transactLand', 'seller', 'buyer', 'price');  //This takes literal values. Should find out a way for it to take values from console
-        // console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();

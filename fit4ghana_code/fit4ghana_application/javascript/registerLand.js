@@ -8,9 +8,21 @@ const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
 
 const ccpPath = path.resolve(__dirname, '..','..','first-network','connection-org1.json');
-//creating Land same as registering land?
-//add methods to get approvals
+
 async function main() {
+    try{
+        var requestNumber =  process.argv[2];
+        var claimer =  process.argv[3];
+        var registrationType =  process.argv[4];
+        var chief =  process.argv[5];
+        var cls =  process.argv[6];
+        var landCommission =  process.argv[7];
+        var landNumber =  process.argv[8];
+
+    } catch(error) {
+        console.error("Add landnumber,coords,isForSale,price to execution command. e.g.: node registerLand.js 'REQUEST10' 'familyMember' 'customary' 'chief' 'cls' 'null' 'LAND10' ");
+    } 
+
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -35,78 +47,44 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar1');
+        const contract = network.getContract('land');
 
         // Submit the specified transaction.
-       
+        console.log('Registering the land');
 
-        console.log('Registering the first land - LAND0 as a statutory land');
-
-        // Steps
-        // 1. Create RegistrationRequest (100) (statutory) for land 999
-        // 2. Approve statutory request by land commission
-        // 3. Above automatically calls registerLand Transaction
-        // 4. Get status of Land 999 Asset now : owner should be familyMember
+       /* Steps
+        1. Create RegistrationRequest (Customary)
+        2. Approve customary request by chief
+        3. Approve customary request by CLS
+        4. Above automatically calls registerLand Transaction
+        5. Get status of Land Asset now : owner should be familyMember */
 
         // Step 1
-        // ctx, requestNumber, claimer,
-        // registrationType, chief, cls, landCommission, landNumber
-        await contract.submitTransaction('registerLand', 'LAND0', 'Neha','customary');  //This takes literal values. Should find out a way for it to take values from console
+       
+        await contract.submitTransaction('createRegistrationRequest', requestNumber, claimer,registrationType, chief,cls, landCommission, landNumber);  
         console.log('Transaction for creating Registration Request has been created.');
 
         // Step 2
-        //await contract.submitTransaction('approveRegistrationRequest', 100, 'lc');
-        //console.log('Transaction for approving registration request by land commission.');
-
-        // Step 3
-        // Automatically done by Step 2
-
-        // Step 4
-        //const land = await contract.evaluateTransaction('queryLand', 999);
-        //console.log(`Current state of land: ${land.toString()}`);
-
-
-        
-
-        //console.log('Registering the second land - 998 as a customary land');
-
-        // Steps
-        // 1. Create RegistrationRequest (100) (customary) for land 999
-        // 2. Approve customary request by chief
-        // 3. Approve customary request by CLS
-        // 4. Above automatically calls registerLand Transaction
-        // 5. Get status of Land 998 Asset now : owner should be familyMember
-
-        // Step 1
-        // ctx, requestNumber, claimer,
-        // registrationType, chief, cls, landCommission, landNumber
-        //await contract.submitTransaction('createRegistrationRequest', 101, 'familyMember',
-        //'customary', 'chief', 'cls', null, 998);  //This takes literal values. Should find out a way for it to take values from console
-        //console.log('Transaction for creating Registration Request has been created.');
-
-        // Step 2
-        //await contract.submitTransaction('approveRegistrationRequest', 101, 'chief');
-        //console.log('Transaction for approving registration request by land commission.');
+        await contract.submitTransaction('approveRegistrationRequest', requestNumber, chief);
+        console.log('Transaction for approving registration request by chief');
         
         // Step 3
-        //await contract.submitTransaction('approveRegistrationRequest', 101, 'cls');
-        //console.log('Transaction for approving registration request by land commission.');
+        await contract.submitTransaction('approveRegistrationRequest', requestNumber, cls);
+        console.log('Transaction for approving registration request by cls'); 
 
         // Step 4
-        // Automatically done by Step 3
+        //await contract.submitTransaction('registerLand', landNumber, claimer, registrationType);
+        console.log('Registering the land'); 
 
         // Step 5
-        //land = await contract.evaluateTransaction('queryLand', 998);
+        //land = await contract.evaluateTransaction('queryLand',landNumber);
         //console.log(`Current state of land: ${land.toString()}`);
 
-        //console.log('All transactions successful');
-
-
-
-
+        console.log('All transactions successful');
 
         // Disconnect from the gateway.
         await gateway.disconnect();
+
 
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);
