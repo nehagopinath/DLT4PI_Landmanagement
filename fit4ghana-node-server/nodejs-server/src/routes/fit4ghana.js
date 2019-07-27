@@ -10,7 +10,7 @@ const UserController = require('../controllers/userController.js')
 
 //e.g.: create/familymember/statutory/chief/cls
 //Endpoint - Create Landregistrationrequest for landtype; Send to chief and approver 
-router.post('/create/:user/:landtype/:chief/:approver/:coords/:price', LandRegisterController.create);
+router.post('/create/:user/:registrationType/:chief/:approver/:coords/:price', LandRegisterController.create);
 //Endpoint - Approve Landregistationrequest with Requestnumber by approver
 router.post('/approveregistrationrequest/:requestnumber/:approver',LandRegisterController.approve);
 //Endpoint - Reject Landregistationrequest with Requestnumber by approver

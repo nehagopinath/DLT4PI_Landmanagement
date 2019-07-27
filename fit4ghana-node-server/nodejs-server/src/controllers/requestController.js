@@ -47,9 +47,9 @@ const query = asyncMiddleware(async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('land');
+    const contract = network.getContract('registrationrequest');
 
-    const result = await contract.evaluateTransaction('queryRegistrationRequests', approver); 
+    const result = await contract.evaluateTransaction('queryRegistrationRequestsAwaiting', approver); 
     res.send(result);
     
     // Disconnect from the gateway.
@@ -75,7 +75,7 @@ const queryBuySell = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
-    const result = await contract.evaluateTransaction('queryBuySellRequests', approver); 
+    const result = await contract.evaluateTransaction('queryAllBuySellRequestsAwaiting', approver); 
     res.send(result);
     
     // Disconnect from the gateway.

@@ -186,10 +186,10 @@ const queryForSale = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
-    contract.evaluateTransaction('queryAllLands').then(result => {
+    contract.evaluateTransaction('queryAllLandsForSale').then(result => {
         let lands = [];
 
-        console.log('getting all lands for user ' + user);
+        console.log('getting all lands for user for sale ' + user);
         for(let land of result) {
             if (land.Record.owner === user) {
                 lands.push(land);

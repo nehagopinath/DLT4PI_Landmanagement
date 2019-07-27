@@ -32,22 +32,18 @@ const asyncMiddleware = fn =>
 
 // Register LAND
 const create = asyncMiddleware(async (req, res) => {
-    //var user = req.params.user;
+    var user = req.params.user;
+    var approver = req.params.approver;
     var registrationType = req.params.registrationType;
     var chief = req.params.chief;
-    var cls = req.params.cls;
-    var landCommission = req.params.landCommission;
-    var claimer = req.params.claimer;
-    var approver = req.params.approver;
-    //var coords = req.params.coords;
-    //var price = req.params.price;
+    var coords = req.params.coords;
+    var price = req.params.price;
     var requestNumber = Math.random().toString(36).substr(2, 9).toString();
     var landNumber = Math.random().toString(36).substr(2, 9).toString();
     
-
-    let userExists = await wallet.exists(claimer);
+    let userExists = await wallet.exists(user);
     if (!userExists) {
-        console.log('An identity for the user' + claimer + 'does not exist in the wallet');
+        console.log('An identity for the user' + user + 'does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
@@ -63,18 +59,6 @@ const create = asyncMiddleware(async (req, res) => {
         console.log('Register user before retrying');
     }
 
-    userExists = await wallet.exists(landCommission);
-    if (!userExists) {
-        console.log('An identity for the user' + landCommission + 'does not exist in the wallet');
-        console.log('Register user before retrying');
-    }
-
-    userExists = await wallet.exists(cls);
-    if (!userExists) {
-        console.log('An identity for the user' + cls + 'does not exist in the wallet');
-        console.log('Register user before retrying');
-    }
-
     const gateway = new Gateway();
     await gateway.connect(ccp, {wallet, identity: claimer, discovery: {enabled: true, asLocalhost: true}});
 
@@ -82,18 +66,20 @@ const create = asyncMiddleware(async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('land');
+    contract = network.getContract('land');
 
-    //await contract.submitTransaction('createLand', landNumber, coords, false, price);
-    await contract.submitTransaction('createRegistrationRequest', requestNumber, claimer,registrationType, chief,cls, landCommission, landNumber);
+    await contract.submitTransaction('createLand', landNumber, coords, false, price);
+
+    // Get the contract from the network.
+    contract = network.getContract('registrationrequest');
 
     if (registrationType == 'statutory') {
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, claimer,
-        registrationType, null, null, approver, landNumber);
+        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
+        registrationType, chief, null, approver, landNumber);
     }
     else if (registrationType == 'customary') {
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, claimer,
-        registrationType, approver, null, null, landNumber);
+        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
+        registrationType, chief, approver, null, landNumber);
     }
     else {
         console.log('Land needs to be either statutory or customary')
