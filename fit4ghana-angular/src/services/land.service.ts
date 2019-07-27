@@ -37,7 +37,7 @@ export class LandService {
     // returns api to initiate a registration request
     requestLandRegistration(land: Land, familyMember: FamilyMember, registrationType: RegistrationType) {
         const rT = registrationType.toString().trim();
-        const url = `${this.registerLandEndpoint}/${familyMember.id}/${rT}/${land.community.chief.id}/${land.community.cls.id}`;
+        const url = `${this.registerLandEndpoint}/${familyMember.id}/${rT}/chief/cls`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
