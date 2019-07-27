@@ -6,6 +6,7 @@ const router         = express.Router();
 const LandRegisterController = require('../controllers/registerController');
 const RequestController = require('../controllers/requestController')
 const LandController = require('../controllers/landController')
+const UserController = require('../controllers/userController.js')
 
 //e.g.: create/familymember/statutory/chief/cls
 //Endpoint - Create Landregistrationrequest for landtype; Send to chief and approver 
