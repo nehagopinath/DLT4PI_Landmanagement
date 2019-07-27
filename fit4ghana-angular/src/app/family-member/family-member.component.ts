@@ -35,6 +35,7 @@ export class FamilyMemberComponent implements OnInit {
       console.log('done!');
       console.log(m);
       this.familyMember = m;
+      console.log(this.familyMember);
     });
   }
 

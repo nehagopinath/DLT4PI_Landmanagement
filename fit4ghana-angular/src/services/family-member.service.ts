@@ -34,16 +34,17 @@ export class FamilyMemberService {
         console.log('getting family member...');
         const url = `${this.queryUserEndpoint}/familyMember`;
         console.log(url);
-        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        return this.http.get(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
             console.log(response);
             const familyMember = new FamilyMember({
-                id: response.Identity,
+                id: response['user'],
                 firstName: 'familyMember'
             });
             return this.queryUserLands(familyMember.id).then(lands => {
+                console.log(lands);
                 familyMember.lands = lands;
                 return familyMember;
             }).catch(error => {

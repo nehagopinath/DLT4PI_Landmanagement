@@ -10,7 +10,7 @@ console.log(ccpPath);
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
-const walletPath = path.resolve(__dirname, '../../../../fit4ghana_code/fit4ghana/javascript/wallet');
+const walletPath = path.resolve(__dirname, '../../../../fit4ghana_code/fit4ghana_application/javascript/wallet');
 console.log(walletPath);
 const wallet = new FileSystemWallet(walletPath);
 console.log(`Wallet path: ${walletPath}`);
@@ -120,7 +120,7 @@ const transact = asyncMiddleware(async (req, res) => {
 const register = asyncMiddleware(async (req, res) => {
     var landNumber = req.params.landNumber;
     var registrationType = req.params.registrationType;
-    var user = reg.params.user;
+    var user = req.params.user;
 
     const userExists = await wallet.exists(user);
     if (!userExists) {
@@ -145,7 +145,7 @@ const register = asyncMiddleware(async (req, res) => {
 
 // QUERY LAND
 const query = asyncMiddleware(async (req, res) => {
-    var user = reg.params.user;
+    var user = req.params.user;
 
     const userExists = await wallet.exists(user);
     if (!userExists) {
@@ -162,14 +162,14 @@ const query = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
-    const result = await contract.evaluateTransaction('queryUsersLands', user); 
+    const result = await contract.evaluateTransaction('queryAllLands', user); 
     res.send(result);
     console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 });
 
 // QUERY LAND FOR SALE
 const queryForSale = asyncMiddleware(async (req, res) => {
-    var user = reg.params.user;
+    var user = req.params.user;
 
     const userExists = await wallet.exists(user);
     if (!userExists) {
@@ -186,9 +186,20 @@ const queryForSale = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
-    const result = await contract.evaluateTransaction('queryLandsForSale'); 
-    res.send(result);
-    console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+    contract.evaluateTransaction('queryAllLands').then(result => {
+        let lands = [];
+
+        console.log('getting all lands for user ' + user);
+        for(let land of result) {
+            if (land.Record.owner === user) {
+                lands.push(land);
+            }
+        }
+        console.log(lands);
+        res.send(lands);
+        console.log(`Transaction has been evaluated, result is: ${lands.toString()}`);
+    }); 
+    
 });
 
 // Approve Request 

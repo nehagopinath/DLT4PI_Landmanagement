@@ -10,7 +10,7 @@ console.log(ccpPath);
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
-const walletPath = path.resolve(__dirname, '../../../../fit4ghana_code/fit4ghana/javascript/wallet');
+const walletPath = path.resolve(__dirname, '../../../../fit4ghana_code/fit4ghana_application/javascript/wallet');
 console.log(walletPath);
 const wallet = new FileSystemWallet(walletPath);
 console.log(`Wallet path: ${walletPath}`);
@@ -32,29 +32,41 @@ const asyncMiddleware = fn =>
 
 // Get Identity 
 const get = asyncMiddleware(async (req, res) => {
+
     var name = req.params.user;
-    
-    const userExists = await wallet.exists(user);
+ 
+    const userExists = await wallet.exists(name);
     if (!userExists) {
-        console.log('An identity for the user' + user + 'does not exist in the wallet');
+        console.log('An identity for the user' + name + 'does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
+    await gateway.connect(ccp, {wallet, identity: name, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const client = await gateway.getClient();
 
-    const user = client.getUserContext(name);
+    //console.log(client);
 
-    const result = user.getIdentity();
+    const user = client.getUserContext(name).then(async user => {
 
-    res.send(result);
-    console.log(`User has been evaluated, identity is: ${result.toString()}`);
+        try {
+
+        const result = user.getName();
+
+        console.log(result);
     
-    // Disconnect from the gateway.
-    await gateway.disconnect();
+        res.send({user: result});
+        console.log(`User has been evaluated, identity is: ${result.toString()}`);
+
+        // Disconnect from the gateway.
+        await gateway.disconnect();  }
+
+        catch(error) {console.log(error)}
+        
+
+    });
 });
 
 module.exports = {
