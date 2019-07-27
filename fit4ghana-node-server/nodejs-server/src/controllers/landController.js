@@ -136,7 +136,7 @@ const register = asyncMiddleware(async (req, res) => {
 
     // Get the contract from the network.
     const contract = network.getContract('fit4ghana');
-
+    
     await contract.submitTransaction('registerLand', landNumber, user, registrationType);
     
     // Disconnect from the gateway.
@@ -191,11 +191,65 @@ const queryForSale = asyncMiddleware(async (req, res) => {
     console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 });
 
+// Approve Request 
+const approve = asyncMiddleware(async (req, res) => {
+    var approver = req.params.approver;
+    var requestNumber = req.params.requestnumber
+
+    const userExists = await wallet.exists(approver);
+    if (!userExists) {
+        console.log('An identity for the user ' + approver + ' does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
+
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork('fit4ghana');
+
+    // Get the contract from the network.
+    const contract = network.getContract('fit4ghana');
+
+    await contract.submitTransaction('approveBuySellRequest', requestNumber, approver);
+    
+    // Disconnect from the gateway.
+    await gateway.disconnect();
+});
+
+// Reject Request 
+const reject = asyncMiddleware(async (req, res) => {
+    var approver = req.params.approver;
+    var requestNumber = req.params.requestnumber
+
+    const userExists = await wallet.exists(approver);
+    if (!userExists) {
+        console.log('An identity for the user ' + approver + ' does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
+
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork('fit4ghana');
+
+    // Get the contract from the network.
+    const contract = network.getContract('fit4ghana');
+
+    await contract.submitTransaction('rejectBuySellRequest', requestNumber, approver);
+    
+    // Disconnect from the gateway.
+    await gateway.disconnect();
+});
+
 module.exports = {
     putForSale,
     withdrawFromSale,
     transact,
     register,
     query,
-    queryForSale
+    queryForSale,
+    approve,
+    reject
 };

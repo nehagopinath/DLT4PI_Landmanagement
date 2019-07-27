@@ -181,6 +181,42 @@ class BuySellRequest extends Contract {
         console.info('============= END : changeBuySellRequestOwner ===========');
     }
 
+    async rejectBuySellRequest(ctx, requestNumber, approver) {
+        console.info('============= START : approveBuySellRequest ===========');
+
+        const requestAsBytes = await ctx.stub.getState(requestNumber); // get the request from chaincode state
+        if (!requestAsBytes || requestAsBytes.length === 0) {
+            throw new Error(`${requestNumber} does not exist`);
+        }
+        const request = JSON.parse(requestAsBytes.toString());
+
+        // this means we allow somebody to approve only when the request 
+        // is currently waiting his/her approval
+        // ignoring this now as family head is not existing right now
+        // if (request.currentlyAwaitingResponseFrom === 'FAMILY HEAD'
+        // && request.familyHead === approver) {
+        //     request.responseFromFamilyHead = 'approved';
+        //     request.currentlyAwaitingResponseFrom = 'CLS';
+        // } else 
+        if (request.currentlyAwaitingResponseFrom === 'CLS'
+        && request.cls === approver) {
+            request.responseFromCLS = 'rejected';
+            request.currentlyAwaitingResponseFrom = null;
+            request.status = rejected;  // approved for customary land
+        } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
+        && request.landCommission === approver) {
+            request.responseFromLandCommission = 'rejected';
+            request.currentlyAwaitingResponseFrom = null;
+            request.status = rejected;  // approved for statutory land
+        }
+
+        if (request.status === 'approved') {
+            land.submitTransaction('transactLand', landNumber, request.seller, request.buyer, request.price);
+        }
+        await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
+        console.info('============= END : changeBuySellRequestOwner ===========');
+    }
+
 }
 
 module.exports = BuySellRequest;

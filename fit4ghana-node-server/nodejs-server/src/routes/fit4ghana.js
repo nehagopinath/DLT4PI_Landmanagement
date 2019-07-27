@@ -3,13 +3,17 @@
 const express        = require('express');
 const router         = express.Router();
 
-const LandRegisterController = require('../controllers/registerLand');
+const LandRegisterController = require('../controllers/registerController');
 const RequestController = require('../controllers/requestController')
 const LandController = require('../controllers/landController')
 
 //e.g.: create/familymember/statutory/chief/cls
 //Endpoint - Create Landregistrationrequest for landtype; Send to chief and approver 
 router.post('/create/:user/:landtype/:chief/:approver', LandRegisterController.create);
+//Endpoint - Approve Landregistationrequest with Requestnumber by approver
+router.post('/approveregistrationrequest/:requestnumber/:approver',LandRegisterController.approve);
+//Endpoint - Reject Landregistationrequest with Requestnumber by approver
+router.post('/rejectregistrationrequest/:requestnumber/:approver',LandRegisterController.reject);
 
 //Endpoint - Show all RegistrationRequest awatingi for approve from Approver 
 router.get('/getAllRegistrationRequestAwating/:approver', RequestController.query);
@@ -29,5 +33,14 @@ router.post('/withDrawLandFromSale/:landnumber', LandController.withdrawFromSale
 router.post('/requestLandRegistration/:landnumber/:registrationType/:user', LandController.register);
 //Endpoint - Request Landtransaction of land with landnumber with seller, buyer and price
 router.post('/requestLandTransaction/:landnumber/:seller/:buyer/:price', LandController.transact);
+//Endpoint - Approve Buy - Sell Request by approver
+router.post('/approveBuySellRequest/:requestnumber/:approver', LandController.approve);
+//Endpoint - Reject Buy - Sell Request by approver 
+router.post('/rejectBuySellRequest/:requestnumber/:approver', LandController.reject)
+
+//Endpoint to get user by name
+router.get('/getUser/:user', UserController.get)
+
+//getUser
 
 module.exports = router;
