@@ -35,7 +35,7 @@ const putForSale = asyncMiddleware(async (req, res) => {
     var landNumber = req.params.landNumber;
     var user = req.params.user;
   
-    const userExists = await wallet.exists(user);
+    let userExists = await wallet.exists(user);
     if (!userExists) {
         console.log('An identity for the user' + user + 'does not exist in the wallet');
         console.log('Register user before retrying');
@@ -61,7 +61,7 @@ const withdrawFromSale = asyncMiddleware(async (req, res) => {
     var landNumber = req.params.landNumber;
     var user = req.params.user;
   
-    const userExists = await wallet.exists(user);
+    let userExists = await wallet.exists(user);
     if (!userExists) {
         console.log('An identity for the user' + user + 'does not exist in the wallet');
         console.log('Register user before retrying');
@@ -89,13 +89,13 @@ const transact = asyncMiddleware(async (req, res) => {
     var buyer = req.params.buyer;
     var price = req.params.price;
 
-    const userExists = await wallet.exists(seller);
+    let userExists = await wallet.exists(seller);
     if (!userExists) {
         console.log('An identity for the user' + seller + 'does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
-    const userExists = await wallet.exists(buyer);
+    userExists = await wallet.exists(buyer);
     if (!userExists) {
         console.log('An identity for the user' + buyer + 'does not exist in the wallet');
         console.log('Register user before retrying');
