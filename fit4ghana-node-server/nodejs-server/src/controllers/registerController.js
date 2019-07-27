@@ -70,9 +70,6 @@ const create = asyncMiddleware(async (req, res) => {
     const contract = network.getContract('land');
 
     await contract.submitTransaction('createLand', landNumber, coords, false, price);
-     
-    // Get the contract from the network.
-    const contract = network.getContract('registrationrequest');
 
     if (landtype == 'statutory') {
         await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
@@ -108,7 +105,7 @@ const approve = asyncMiddleware(async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('registrationrequest');
+    const contract = network.getContract('land');
 
     await contract.submitTransaction('approveRegistrationRequest', requestNumber, approver);
     
@@ -134,7 +131,7 @@ const reject = asyncMiddleware(async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('registrationrequest');
+    const contract = network.getContract('land');
 
     await contract.submitTransaction('rejectRegistrationRequest', requestNumber, approver);
     

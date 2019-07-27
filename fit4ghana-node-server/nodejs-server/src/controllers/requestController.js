@@ -47,7 +47,7 @@ const query = asyncMiddleware(async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('registrationrequest');
+    const contract = network.getContract('land');
 
     const result = await contract.evaluateTransaction('queryRegistrationRequests', approver); 
     res.send(result);
@@ -73,7 +73,7 @@ const queryBuySell = asyncMiddleware(async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('buysellrequest');
+    const contract = network.getContract('land');
 
     const result = await contract.evaluateTransaction('queryBuySellRequests', approver); 
     res.send(result);
