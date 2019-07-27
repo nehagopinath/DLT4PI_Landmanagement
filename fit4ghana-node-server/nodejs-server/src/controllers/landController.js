@@ -42,7 +42,7 @@ const putForSale = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -68,7 +68,7 @@ const withdrawFromSale = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -102,7 +102,7 @@ const transact = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -129,7 +129,7 @@ const register = asyncMiddleware(async (req, res) => {
     }
   
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -154,7 +154,7 @@ const query = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false } });
+    await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: true, asLocalhost: true} });
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -178,7 +178,7 @@ const queryForSale = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false } });
+    await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: true, asLocalhost: true } });
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -203,7 +203,7 @@ const approve = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -229,7 +229,7 @@ const reject = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');

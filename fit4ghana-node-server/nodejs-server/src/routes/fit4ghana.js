@@ -40,7 +40,31 @@ router.post('/approveBuySellRequest/:requestnumber/:approver', LandController.ap
 router.post('/rejectBuySellRequest/:requestnumber/:approver', LandController.reject)
 
 //Endpoint to get user by name
-router.get('/getUser/:user', UserController.get)
+router.get('/getUser/:user', async function(req, res) {
+    var name = req.params.user;
+    
+    const userExists = await wallet.exists(user);
+    if (!userExists) {
+        console.log('An identity for the user' + user + 'does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
+
+    // Get the network (channel) our contract is deployed to.
+    const client = await gateway.getClient();
+
+    const user = client.getUserContext(name);
+
+    const result = user.getIdentity();
+
+    res.send(result);
+    console.log(`User has been evaluated, identity is: ${result.toString()}`);
+    
+    // Disconnect from the gateway.
+    await gateway.disconnect();
+})
 
 //getUser
 

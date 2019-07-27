@@ -41,7 +41,7 @@ const get = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const client = await gateway.getClient();

@@ -32,6 +32,8 @@ export class FamilyMemberComponent implements OnInit {
   // get family member
   getFamilyMember() {
     this.familyMemberService.getFamilyMember().then(m => {
+      console.log('done!');
+      console.log(m);
       this.familyMember = m;
     });
   }
