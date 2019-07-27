@@ -1,10 +1,11 @@
 
 import { Injectable } from '@angular/core';
-import { exampleLandCommission, exampleRegistrationRequest3, exampleBuySellRequest2 } from 'src/consts/example';
 import { LandCommission } from 'src/models/landCommission';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Indentity } from 'src/models/identity';
+import { RegistrationRequest } from 'src/models/registration-request';
+import { BuySellRequest } from 'src/models/buy-sell-request';
 
 @Injectable({
     providedIn: 'root'
@@ -46,11 +47,18 @@ export class LandCommissionService {
         .then(response => {
             console.log('response: ');
             console.log(response);
-            let registrationRequests;
-            this.getAllRegistrationRequestsAwatingLC(response.Identity)
+            const landCommission = new LandCommission({
+                id: response.Identity,
+                name: 'landCommission'
+            });
+            return this.getAllRegistrationRequestsAwatingLC(response.Identity)
             .then(requests => {
-                registrationRequests = requests;
-                return requests;
+                landCommission.incomingRegistrationRequests = requests;
+                return this.getAllBuySellRequestsAwatingLC(response.Identity)
+                .then(bsrequests => {
+                    landCommission.incomingBuySellRequests = bsrequests;
+                    return landCommission;
+                });
             });
         }).catch(error => {
             console.log(error);
@@ -59,8 +67,8 @@ export class LandCommissionService {
     }
 
     getAllRegistrationRequestsAwatingLC(identity) {
-        const url = `${this.queryRegistrationRequestsEndpoint}/${exampleLandCommission.id}`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
+        const url = `${this.queryRegistrationRequestsEndpoint}/landCommission`;
+        return this.http.get<RegistrationRequest[]>(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
@@ -72,9 +80,9 @@ export class LandCommissionService {
         });
     }
 
-    getAllBuySellRequestsAwatingLC() {
-        const url = `${this.queryBuySellRequestsEndpoint}/${exampleLandCommission.id}`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
+    getAllBuySellRequestsAwatingLC(identity) {
+        const url = `${this.queryBuySellRequestsEndpoint}/landCommission`;
+        return this.http.get<BuySellRequest[]>(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');

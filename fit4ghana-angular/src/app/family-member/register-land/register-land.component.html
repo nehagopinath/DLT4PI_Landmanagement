@@ -1,0 +1,27 @@
+<div class="register-container">
+    <mat-form-field>
+        <input matInput [(ngModel)]="coords" placeholder="0.0.0">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput type="number" [(ngModel)]="price" placeholder="0">
+    </mat-form-field>
+    
+    <mat-form-field>
+            <mat-select [(ngModel)]="registrationType" placeholder="Registration Type">
+            <mat-option value="statutory">Statutory</mat-option>
+            <mat-option value="customary">Customary</mat-option>
+            </mat-select>
+    </mat-form-field>
+    
+        
+    <mat-form-field>
+        <mat-select placeholder="Select">
+        <mat-option value="option">Option</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+    
+    <button type="button" class="btn btn-info land-action" (click)="registerLand()">
+        Register Land</button>
+</div>

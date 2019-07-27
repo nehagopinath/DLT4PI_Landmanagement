@@ -2,6 +2,8 @@ import { FamilyMember } from 'src/models/family-member';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Indentity } from 'src/models/identity';
+import { Land } from 'src/models/land';
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +15,7 @@ export class FamilyMemberService {
     constructor(public http: HttpClient) {}
 
     queryUserEndpoint = environment.apiEndpoint + '/getUser';
+    queryUserLandsEndpoint = environment.apiEndpoint + '/queryLand';
     familyMember: FamilyMember;
 
     httpHeaders = new HttpHeaders()
@@ -29,7 +32,29 @@ export class FamilyMemberService {
     // returns family Member user
     getFamilyMember() {
         const url = `${this.queryUserEndpoint}/familyMember`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
+        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        .toPromise()
+        .then(response => {
+            console.log('response: ');
+            console.log(response);
+            const familyMember = new FamilyMember({
+                id: response.Identity,
+                firstName: 'familyMember'
+            });
+            return this.queryUserLands(familyMember.id).then(lands => {
+                familyMember.lands = lands;
+                return familyMember;
+            });
+        }).catch(error => {
+            console.log(error);
+            return null;
+        });
+    }
+
+    // returns api to query user lands
+    queryUserLands(identity) {
+        const url = `${this.queryUserLandsEndpoint}/${identity}`;
+        return this.http.get<Land[]>(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
@@ -37,7 +62,7 @@ export class FamilyMemberService {
             return response;
         }).catch(error => {
             console.log(error);
-            return null;
+            return error;
         });
     }
 }

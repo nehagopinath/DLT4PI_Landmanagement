@@ -3,7 +3,6 @@ import { CLS } from 'src/models/cls';
 import { CLSService } from 'src/services/cls.service';
 import { RegistrationRequest } from 'src/models/registration-request';
 import { BuySellRequest } from 'src/models/buy-sell-request';
-import { exampleCLS } from 'src/consts/example';
 
 @Component({
   selector: 'app-cls',
@@ -12,7 +11,7 @@ import { exampleCLS } from 'src/consts/example';
 })
 export class ClsComponent implements OnInit {
 
-  cls: CLS = exampleCLS;
+  cls: CLS;
   registrationRequestColumns: string[] = ['id', 'claimer', 'registrationType', 'actions'];
   buysellRequestColumns: string[] = ['id', 'buyer', 'seller', 'price', 'actions'];
 
@@ -54,6 +53,7 @@ export class ClsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getCLS();
   }
 
 }

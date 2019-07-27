@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { exampleChief } from 'src/consts/example';
 import { Chief } from 'src/models/chief';
 import { ChiefService } from 'src/services/chief.service';
 import { RegistrationRequest } from 'src/models/registration-request';
@@ -11,7 +10,8 @@ import { RegistrationRequest } from 'src/models/registration-request';
 })
 export class ChiefComponent implements OnInit {
 
-  chief: Chief = exampleChief;
+  // chief: Chief = exampleChief;
+  chief: Chief;
   registrationRequestColumns: string[] = ['id', 'claimer', 'registrationType', 'actions'];
 
   constructor(public chiefService: ChiefService) {
@@ -40,6 +40,7 @@ export class ChiefComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getChief();
   }
 
 }

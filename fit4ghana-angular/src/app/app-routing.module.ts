@@ -5,13 +5,15 @@ import { ExternalMemberComponent } from './external-member/external-member.compo
 import { ChiefComponent } from './chief/chief.component';
 import { ClsComponent } from './cls/cls.component';
 import { LandCommissionComponent } from './land-commission/land-commission.component';
+import { RegisterLandComponent } from './family-member/register-land/register-land.component';
 
 const routes: Routes = [
   { path: 'family-member', component: FamilyMemberComponent },
   { path: 'external-member', component: ExternalMemberComponent },
   { path: 'chief', component: ChiefComponent },
   { path: 'cls', component: ClsComponent },
-  { path: 'land-commission', component: LandCommissionComponent }
+  { path: 'land-commission', component: LandCommissionComponent },
+  { path: 'register-land', component: RegisterLandComponent }
 ];
 
 @NgModule({

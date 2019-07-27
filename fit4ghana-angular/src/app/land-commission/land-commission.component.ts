@@ -3,8 +3,6 @@ import { LandCommissionService } from 'src/services/land-commission.service';
 import { LandCommission } from 'src/models/landCommission';
 import { RegistrationRequest } from 'src/models/registration-request';
 import { BuySellRequest } from 'src/models/buy-sell-request';
-import { exampleLandCommission } from 'src/consts/example';
-
 @Component({
   selector: 'app-land-commission',
   templateUrl: './land-commission.component.html',
@@ -12,7 +10,7 @@ import { exampleLandCommission } from 'src/consts/example';
 })
 export class LandCommissionComponent implements OnInit {
 
-  landCommission: LandCommission = exampleLandCommission;
+  landCommission: LandCommission;
   registrationRequestColumns: string[] = ['id', 'claimer', 'registrationType', 'actions'];
   buysellRequestColumns: string[] = ['id', 'buyer', 'seller', 'price', 'actions'];
 
@@ -53,6 +51,7 @@ export class LandCommissionComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getLandCommission();
   }
 
 }
