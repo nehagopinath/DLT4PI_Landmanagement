@@ -22,6 +22,8 @@ A Blockchain-based application for solving land conflicts in developing areas an
 
 **5. System Architecture**
 
+![System Architecture](./01 Documentation/System Architecture/Final_Architecture.png)
+
 **6. Assumptions made for Development**
 
 Tested on MacOS
