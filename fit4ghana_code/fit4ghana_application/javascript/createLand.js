@@ -36,7 +36,7 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar1');
+        const contract = network.getContract('land');
 
         // Submit the specified transaction.
         // createLand transaction - requires 4 argument, ex: ('landNumber', 'coords', 'isForSale=false', 'price')

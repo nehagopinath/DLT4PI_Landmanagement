@@ -44,10 +44,10 @@ const query = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('registrationrequest');
 
     const result = await contract.evaluateTransaction('queryRegistrationRequests', approver); 
     res.send(result);
@@ -70,10 +70,10 @@ const queryBuySell = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('buysellrequest');
 
     const result = await contract.evaluateTransaction('queryBuySellRequests', approver); 
     res.send(result);

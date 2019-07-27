@@ -45,10 +45,10 @@ const putForSale = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
 
     await contract.submitTransaction('putLandUpForSale', landNumber);
     
@@ -71,10 +71,10 @@ const withdrawFromSale = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
 
     await contract.submitTransaction('withdrawLandFromSale', landNumber);
     
@@ -105,10 +105,10 @@ const transact = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
 
     await contract.submitTransaction('transactLand', landNumber, seller, buyer, price);
     
@@ -132,10 +132,10 @@ const register = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
     
     await contract.submitTransaction('registerLand', landNumber, user, registrationType);
     
@@ -157,10 +157,10 @@ const query = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false } });
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
 
     const result = await contract.evaluateTransaction('queryUsersLands', user); 
     res.send(result);
@@ -181,10 +181,10 @@ const queryForSale = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false } });
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
 
     const result = await contract.evaluateTransaction('queryLandsForSale'); 
     res.send(result);
@@ -206,10 +206,10 @@ const approve = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
 
     await contract.submitTransaction('approveBuySellRequest', requestNumber, approver);
     
@@ -232,10 +232,10 @@ const reject = asyncMiddleware(async (req, res) => {
     await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: false}});
 
     // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('fit4ghana');
+    const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('fit4ghana');
+    const contract = network.getContract('land');
 
     await contract.submitTransaction('rejectBuySellRequest', requestNumber, approver);
     
