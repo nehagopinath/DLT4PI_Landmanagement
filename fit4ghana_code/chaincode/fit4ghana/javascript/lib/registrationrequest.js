@@ -139,41 +139,6 @@ class RegistrationRequest extends Contract {
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeRegistrationRequestOwner ===========');
     }
-
-    async rejectRegistrationRequest(ctx, requestNumber, approver) {
-        console.info('============= START : approveRegistrationRequest ===========');
-
-        const requestAsBytes = await ctx.stub.getState(requestNumber); // get the request from chaincode state
-        if (!requestAsBytes || requestAsBytes.length === 0) {
-            throw new Error(`${requestNumber} does not exist`);
-        }
-        const request = JSON.parse(requestAsBytes.toString());
-
-        // this means we allow somebody to approve only when the request 
-        // is currently waiting his/her approval
-        if (request.currentlyAwaitingResponseFrom === 'CHIEF'
-        && request.chief === approver) {
-           request.responseFromChief = 'rejected';
-           request.currentlyAwaitingResponseFrom = 'CLS';
-        } else if (request.currentlyAwaitingResponseFrom === 'CLS'
-        && request.cls === approver) {
-            request.responseFromCLS = 'rejected';
-            request.currentlyAwaitingResponseFrom = null;
-            request.status = rejected;  // approved for customary land
-        } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
-         && request.landCommission === approver) {
-            request.responseFromLandCommission = 'rejected';
-            request.currentlyAwaitingResponseFrom = null;
-            request.status = rejected;
-        }
-
-        if (request.status === 'approved') {
-            await Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
-            // land.registerLand(request.claimer, request.registrationType);
-        }
-        await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
-        console.info('============= END : changeRegistrationRequestOwner ===========');
-    }
     
 
 }
