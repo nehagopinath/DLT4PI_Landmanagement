@@ -35,4 +35,15 @@ export class FamilyMemberComponent implements OnInit {
     });
   }
 
+  putLandForSale(land: Land) {
+    this.landService.putLandForSale(land).then(r => {
+      console.log(r);
+    });
+  }
+
+  withdrawLandFromSale(land: Land) {
+    this.landService.withdrawLandFromSale(land).then(r => {
+      console.log(r);
+    });
+  }
 }

@@ -29,7 +29,7 @@ export const exampleChief: Chief = new Chief({
 });
 export const exampleCLS: CLS = new CLS({
     id: 1,
-    name: 'CLS 1',
+    name: 'cls',
     incomingRegistrationRequests: [],
     incomingBuySellRequests: []
 });

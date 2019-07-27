@@ -1,5 +1,7 @@
 import { Community } from './community';
 import { RegistrationType } from './registration-type';
+import { FamilyMember } from './family-member';
+import { ExternalMember } from './external-member';
 
 export class Land {
     id: number;
@@ -10,6 +12,7 @@ export class Land {
     price: number;
     isForSale: boolean;
     ownerName: string;
+    owner: FamilyMember | ExternalMember;
 
     constructor({
         id = -1,
@@ -19,7 +22,8 @@ export class Land {
         registrationType = RegistrationType.UNDEFINED,
         price = 0,
         isForSale = false,
-        ownerName = ''
+        ownerName = '',
+        owner = null
     }) {
         this.id = id;
         this.coords = coords;
@@ -29,5 +33,6 @@ export class Land {
         this.price = price;
         this.isForSale = isForSale;
         this.ownerName = ownerName;
+        this.owner = owner;
     }
 }

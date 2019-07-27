@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { LandService } from 'src/services/land.service';
 import { Member } from 'src/models/member';
 import { Land } from 'src/models/land';
+import { FamilyMember } from 'src/models/family-member';
+import { ExternalMember } from 'src/models/external-member';
 
 @Component({
   selector: 'app-marketplace',
@@ -10,7 +12,7 @@ import { Land } from 'src/models/land';
 })
 export class MarketplaceComponent implements OnInit {
 
-  @Input() currentMember: Member = null;
+  @Input() currentMember: FamilyMember | ExternalMember = null;
   @Input() userType: 'member' | 'chief' | 'cls' | 'lc';
 
   landsForSale = [];
@@ -26,6 +28,19 @@ export class MarketplaceComponent implements OnInit {
     }
     return (this.currentMember.lands.map(l => l.id)
     .includes(land.id));
+  }
+
+  buyLand(land: Land) {
+    this.landService.requestLandTransaction(land, land.owner, this.currentMember, land.price)
+    .then(request => {
+      console.log(request);
+    });
+  }
+
+  withdrawLandFromSale(land: Land) {
+    this.landService.withdrawLandFromSale(land).then(r => {
+      console.log(r);
+    });
   }
 
   ngOnInit() {

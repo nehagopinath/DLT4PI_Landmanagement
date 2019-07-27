@@ -6,7 +6,7 @@ const helmet      = require('helmet');
 const middlewares = require('./middlewares');
 const busboyBodyParser = require('busboy-body-parser');
 
-const registerLand  = require('./routes/fit4ghana');
+const fit4ghana  = require('./routes/fit4ghana');
 
 const api = express();
 
@@ -27,7 +27,7 @@ api.get('/', (req, res) => {
 });
 
 // API routes
-api.use('/registerLand', registerLand);
+api.use('/fit4ghana', fit4ghana);
 
 
 module.exports = api;

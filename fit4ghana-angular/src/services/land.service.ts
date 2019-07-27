@@ -1,7 +1,7 @@
 import { Land } from 'src/models/land';
 import { Injectable } from '@angular/core';
 import { landsForSale } from 'src/consts/example';
-import { registerLand } from '../../../fit4ghana-node-server/nodejs-server/src/routes/registerLand';
+import { fit4ghana } from '../../../fit4ghana-node-server/nodejs-server/src/routes/fit4ghana';
 import { environment } from 'src/environments/environment';
 import { FamilyMember } from 'src/models/family-member';
 import { RegistrationType } from 'src/models/registration-type';
@@ -14,12 +14,14 @@ import { ExternalMember } from 'src/models/external-member';
 
 export class LandService {
 
-    registerLandEndpoint = environment.apiEndpoint + '/registerLand/create';
-    putForSaleEndpoint = environment.apiEndpoint + '/registerLand/putForSale';
-    withDrawLandFromSaleEndpoint = environment.apiEndpoint + '/registerLand/withDrawLandFromSale';
-    requestLandTransactionEndpoint = environment.apiEndpoint + '/registerLand/requestLandTransaction';
-    queryLandsForSaleEndpoint = environment.apiEndpoint + '/registerLand/queryLandForSale';
-    queryUserLandsSaleEndpoint = environment.apiEndpoint + '/registerLand/queryLand';
+    fit4ghanaEndpoint = environment.apiEndpoint + '/fit4ghana';
+
+    registerLandEndpoint = this.fit4ghanaEndpoint + '/create';
+    putForSaleEndpoint = this.fit4ghanaEndpoint + '/putForSale';
+    withDrawLandFromSaleEndpoint = this.fit4ghanaEndpoint + '/withDrawLandFromSale';
+    requestLandTransactionEndpoint = this.fit4ghanaEndpoint + '/requestLandTransaction';
+    queryLandsForSaleEndpoint = this.fit4ghanaEndpoint + '/queryLandForSale';
+    queryUserLandsEndpoint = this.fit4ghanaEndpoint + '/queryLand';
 
     httpHeaders = new HttpHeaders()
             .append('Content-Type', 'application/json')
@@ -62,7 +64,7 @@ export class LandService {
             return response;
         }).catch(error => {
             console.log(error);
-            return error;
+            return null;
         });
 
     }
@@ -95,8 +97,8 @@ export class LandService {
         });
     }
 
-    queryAllLandsForSale(land: Land) {
-        const url = `${this.queryLandsForSaleEndpoint}`;
+    queryAllLandsForSale(user) {
+        const url = `${this.queryLandsForSaleEndpoint}/${user.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -110,7 +112,7 @@ export class LandService {
     }
 
     queryUserLands(user: FamilyMember | ExternalMember) {
-        const url = `${this.queryUserLandsSaleEndpoint}/${user.id}`;
+        const url = `${this.queryUserLandsEndpoint}/${user.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
