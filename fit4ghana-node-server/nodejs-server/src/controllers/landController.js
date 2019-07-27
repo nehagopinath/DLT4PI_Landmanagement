@@ -205,7 +205,7 @@ const queryForSale = asyncMiddleware(async (req, res) => {
 // Approve Request 
 const approve = asyncMiddleware(async (req, res) => {
     var approver = req.params.approver;
-    var requestNumber = req.params.requestnumber
+    var requestNumber = req.params.requestNumber
 
     const userExists = await wallet.exists(approver);
     if (!userExists) {

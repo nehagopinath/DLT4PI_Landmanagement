@@ -32,19 +32,22 @@ const asyncMiddleware = fn =>
 
 // Register LAND
 const create = asyncMiddleware(async (req, res) => {
-    var user = req.params.user;
-    var landtype = req.params.landtype;
+    //var user = req.params.user;
+    var registrationType = req.params.registrationType;
     var chief = req.params.chief;
+    var cls = req.params.cls;
+    var landCommission = req.params.landCommission;
+    var claimer = req.params.claimer;
     var approver = req.params.approver;
-    var coords = req.params.coords;
-    var price = req.params.price;
+    //var coords = req.params.coords;
+    //var price = req.params.price;
     var requestNumber = Math.random().toString(36).substr(2, 9).toString();
     var landNumber = Math.random().toString(36).substr(2, 9).toString();
     
 
-    let userExists = await wallet.exists(user);
+    let userExists = await wallet.exists(claimer);
     if (!userExists) {
-        console.log('An identity for the user' + user + 'does not exist in the wallet');
+        console.log('An identity for the user' + claimer + 'does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
@@ -60,8 +63,20 @@ const create = asyncMiddleware(async (req, res) => {
         console.log('Register user before retrying');
     }
 
+    userExists = await wallet.exists(landCommission);
+    if (!userExists) {
+        console.log('An identity for the user' + landCommission + 'does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
+    userExists = await wallet.exists(cls);
+    if (!userExists) {
+        console.log('An identity for the user' + cls + 'does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
+    await gateway.connect(ccp, {wallet, identity: claimer, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
@@ -69,15 +84,16 @@ const create = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
-    await contract.submitTransaction('createLand', landNumber, coords, false, price);
+    //await contract.submitTransaction('createLand', landNumber, coords, false, price);
+    await contract.submitTransaction('createRegistrationRequest', requestNumber, claimer,registrationType, chief,cls, landCommission, landNumber);
 
-    if (landtype == 'statutory') {
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        landtype, null, null, approver, landNumber);
+    if (registrationType == 'statutory') {
+        await contract.submitTransaction('createRegistrationRequest', requestNumber, claimer,
+        registrationType, null, null, approver, landNumber);
     }
-    else if (landtype == 'customary') {
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        landtype, chief, approver, null, landNumber);
+    else if (registrationType == 'customary') {
+        await contract.submitTransaction('createRegistrationRequest', requestNumber, claimer,
+        registrationType, approver, null, null, landNumber);
     }
     else {
         console.log('Land needs to be either statutory or customary')
@@ -114,30 +130,30 @@ const approve = asyncMiddleware(async (req, res) => {
 });
 
 // Reject Request 
-const reject = asyncMiddleware(async (req, res) => {
-    var approver = req.params.approver;
-    var requestNumber = req.params.requestnumber
+// const reject = asyncMiddleware(async (req, res) => {
+//     var approver = req.params.approver;
+//     var requestNumber = req.params.requestnumber
 
-    const userExists = await wallet.exists(approver);
-    if (!userExists) {
-        console.log('An identity for the user ' + approver + ' does not exist in the wallet');
-        console.log('Register user before retrying');
-    }
+//     const userExists = await wallet.exists(approver);
+//     if (!userExists) {
+//         console.log('An identity for the user ' + approver + ' does not exist in the wallet');
+//         console.log('Register user before retrying');
+//     }
 
-    const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: true, asLocalhost: true}});
+//     const gateway = new Gateway();
+//     await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: true, asLocalhost: true}});
 
-    // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork('mychannel');
+//     // Get the network (channel) our contract is deployed to.
+//     const network = await gateway.getNetwork('mychannel');
 
-    // Get the contract from the network.
-    const contract = network.getContract('land');
+//     // Get the contract from the network.
+//     const contract = network.getContract('land');
 
-    await contract.submitTransaction('rejectRegistrationRequest', requestNumber, approver);
+//     await contract.submitTransaction('rejectRegistrationRequest', requestNumber, approver);
     
-    // Disconnect from the gateway.
-    await gateway.disconnect();
-});
+//     // Disconnect from the gateway.
+//     await gateway.disconnect();
+// });
 
 module.exports = {
     create,
