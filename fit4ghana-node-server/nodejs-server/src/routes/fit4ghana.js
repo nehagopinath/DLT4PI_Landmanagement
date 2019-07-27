@@ -31,7 +31,7 @@ router.post('/putForSale/:landnumber', LandController.putForSale);
 router.post('/withDrawLandFromSale/:landnumber', LandController.withdrawFromSale);
 //Endpoint -  Finally Register land with landnumber as registrationtype to user
 // this should be called registerLand then and we don't need this here as registerLand transaction is invoked by the chaincode
-router.post('/requestLandRegistration/:landnumber/:registrationType/:user', LandController.register);
+//router.post('/requestLandRegistration/:landnumber/:registrationType/:user', LandController.register);
 //Endpoint - Request Landtransaction of land with landnumber with seller, buyer and price
 router.post('/requestLandTransaction/:landnumber/:seller/:buyer/:price', LandController.transact);
 //Endpoint - Approve Buy - Sell Request by approver
@@ -42,6 +42,5 @@ router.post('/rejectBuySellRequest/:requestnumber/:approver', LandController.rej
 //Endpoint to get user by name
 router.get('/getUser/:user', UserController.get)
 
-//getUser
 
 module.exports = router;

@@ -18,7 +18,6 @@ api.use(bodyParser.urlencoded({ extended: false }));
 api.use(middlewares.allowCrossDomain);
 api.use(busboyBodyParser());
 
-
 // Basic route
 api.get('/', (req, res) => {
     res.json({
@@ -31,3 +30,7 @@ api.use('/fit4ghana', fit4ghana);
 
 
 module.exports = api;
+
+
+
+

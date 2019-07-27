@@ -130,30 +130,30 @@ const approve = asyncMiddleware(async (req, res) => {
 });
 
 // Reject Request 
-// const reject = asyncMiddleware(async (req, res) => {
-//     var approver = req.params.approver;
-//     var requestNumber = req.params.requestnumber
+ const reject = asyncMiddleware(async (req, res) => {
+     var approver = req.params.approver;
+     var requestNumber = req.params.requestnumber
 
-//     const userExists = await wallet.exists(approver);
-//     if (!userExists) {
-//         console.log('An identity for the user ' + approver + ' does not exist in the wallet');
-//         console.log('Register user before retrying');
-//     }
+     const userExists = await wallet.exists(approver);
+     if (!userExists) {
+         console.log('An identity for the user ' + approver + ' does not exist in the wallet');
+         console.log('Register user before retrying');
+     }
 
-//     const gateway = new Gateway();
-//     await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: true, asLocalhost: true}});
+     const gateway = new Gateway();
+     await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: true, asLocalhost: true}});
 
-//     // Get the network (channel) our contract is deployed to.
-//     const network = await gateway.getNetwork('mychannel');
+     // Get the network (channel) our contract is deployed to.
+     const network = await gateway.getNetwork('mychannel');
 
-//     // Get the contract from the network.
-//     const contract = network.getContract('land');
+     // Get the contract from the network.
+     const contract = network.getContract('land');
 
-//     await contract.submitTransaction('rejectRegistrationRequest', requestNumber, approver);
+     await contract.submitTransaction('rejectRegistrationRequest', requestNumber, approver);
     
-//     // Disconnect from the gateway.
-//     await gateway.disconnect();
-// });
+     // Disconnect from the gateway.
+     await gateway.disconnect();
+ });
 
 module.exports = {
     create,
