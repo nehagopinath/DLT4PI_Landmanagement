@@ -4,35 +4,36 @@ import { FamilyMember } from './family-member';
 import { ExternalMember } from './external-member';
 
 export class Land {
-    id: number;
-    coords: string;
-    community: Community;
-    registered: boolean;
-    registrationType: RegistrationType;
-    price: number;
-    isForSale: boolean;
-    ownerName: string;
-    owner: FamilyMember | ExternalMember;
+    Key: string;
+    Record: {
+        coords: string;
+        community: Community;
+        registered: boolean;
+        registrationType: string;
+        price: number;
+        isForSale: boolean;
+        owner: string;
+    };
 
     constructor({
-        id = -1,
-        coords = '0.0.0',
-        community = null,
-        registered = false,
-        registrationType = RegistrationType.UNDEFINED,
-        price = 0,
-        isForSale = false,
-        ownerName = '',
-        owner = null
+        Key = 'land0',
+        Record: {
+            coords = '0.0.0', registered = false,
+            registrationType = 'customary', price = 0,
+            isForSale = false, owner = ''
+        } = { coords: '0.0.0',
+        registered: false,
+        registrationType: '',
+        price: 0,
+        isForSale: false,
+        owner: ''}
     }) {
-        this.id = id;
-        this.coords = coords;
-        this.community = community;
-        this.registered = registered;
-        this.registrationType = registrationType;
-        this.price = price;
-        this.isForSale = isForSale;
-        this.ownerName = ownerName;
-        this.owner = owner;
+        this.Key = Key;
+        this.Record.coords = coords;
+        this.Record.registered = registered;
+        this.Record.registrationType = registrationType;
+        this.Record.price = price;
+        this.Record.isForSale = isForSale;
+        this.Record.owner = owner;
     }
 }

@@ -1,6 +1,7 @@
 import { Land } from './land';
 
 export class Member {
+    Key: number;
     id: number;
     firstName: string;
     lastName: string;
