@@ -19,7 +19,7 @@ export class MarketplaceComponent implements OnInit {
   marketplaceColumns: string[] = [];
 
   constructor(public landService: LandService) {
-    this.landsForSale = this.landService.getAllLandsForSale();
+    // this.landsForSale = this.landService.getAllLandsForSale();
   }
 
   // returns if Land is owned by current member
@@ -29,13 +29,13 @@ export class MarketplaceComponent implements OnInit {
     if (!this.currentMember) {
       return false;
     }
-    return (this.currentMember.lands.map(l => l.id)
-    .includes(land.id));
+    return (this.currentMember.lands.map(l => l.Key)
+    .includes(land.Key));
   }
 
   // request land service to initiate buy land
   buyLand(land: Land) {
-    this.landService.requestLandTransaction(land, land.owner, this.currentMember, land.price)
+    this.landService.requestLandTransaction(land, land.Record.owner, this.currentMember.firstName, land.Record.price)
     .then(request => {
       console.log(request);
     });
@@ -54,6 +54,10 @@ export class MarketplaceComponent implements OnInit {
     } else {
       this.marketplaceColumns = ['id', 'coords', 'ownerName', 'registrationType', 'price'];
     }
+
+    this.landService.queryAllLandsForSale(this.currentMember).then(landsForSale => {
+      this.landsForSale = landsForSale;
+    });
   }
 
 }

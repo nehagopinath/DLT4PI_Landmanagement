@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FamilyMember } from 'src/models/family-member';
-import { exampleFamilyMember } from 'src/consts/example';
 import { FamilyMemberService } from 'src/services/family-member.service';
 import { LandService } from 'src/services/land.service';
 import { RegistrationType } from 'src/models/registration-type';
@@ -13,7 +12,7 @@ import { Land } from 'src/models/land';
 })
 export class FamilyMemberComponent implements OnInit {
 
-  familyMember: FamilyMember = exampleFamilyMember;
+  familyMember: FamilyMember;
   displayedColumns: string[] = ['id', 'coords', 'registrationType', 'actions'];
 
   // id: 1,
@@ -27,19 +26,13 @@ export class FamilyMemberComponent implements OnInit {
   constructor(public familyMemberService: FamilyMemberService, public landService: LandService) { }
 
   ngOnInit() {
+    this.getFamilyMember();
   }
 
   // get family member
   getFamilyMember() {
     this.familyMemberService.getFamilyMember().then(m => {
       this.familyMember = m;
-    });
-  }
-
-  // request LandService to initiate land registration
-  registerLand(land: Land, registrationType: RegistrationType = RegistrationType.STATUTORY) {
-    this.landService.requestLandRegistration(land, this.familyMember, registrationType).then(r => {
-      console.log(r);
     });
   }
 

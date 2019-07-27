@@ -3,14 +3,14 @@ import { CLS } from './cls';
 import { LandCommission } from './landCommission';
 
 export class Community {
-    id: number;
+    id: string;
     name: string;
     chief: Chief;
     cls: CLS;
     landCommission: LandCommission;
 
     constructor({
-        id = -1,
+        id = '',
         name = '',
         chief = null,
         cls = null,

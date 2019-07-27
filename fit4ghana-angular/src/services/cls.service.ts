@@ -1,9 +1,11 @@
 
 import { Injectable } from '@angular/core';
-import { exampleCLS, exampleRegistrationRequest2, exampleBuySellRequest1 } from 'src/consts/example';
 import { CLS } from 'src/models/cls';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Indentity } from 'src/models/identity';
+import { RegistrationRequest } from 'src/models/registration-request';
+import { BuySellRequest } from 'src/models/buy-sell-request';
 
 @Injectable({
     providedIn: 'root'
@@ -37,7 +39,34 @@ export class CLSService {
     // returns cls user
     getCLS() {
         const url = `${this.queryUserEndpoint}/cls`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
+        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        .toPromise()
+        .then(response => {
+            console.log('response: ');
+            console.log(response);
+            const cls = new CLS({
+                id: response.Identity,
+                name: 'cls'
+            });
+            return this.getAllRegistrationRequestsAwatingCLS(response.Identity)
+            .then(requests => {
+                cls.incomingRegistrationRequests = requests;
+                return this.getAllBuySellRequestsAwatingCLS(response.Identity)
+                .then(bsrequests => {
+                    cls.incomingBuySellRequests = bsrequests;
+                    return cls;
+                });
+            });
+        }).catch(error => {
+            console.log(error);
+            return null;
+        });
+    }
+
+
+    getAllRegistrationRequestsAwatingCLS(identity) {
+        const url = `${this.queryRegistrationRequestsEndpoint}/cls`;
+        return this.http.get<RegistrationRequest[]>(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
@@ -49,23 +78,9 @@ export class CLSService {
         });
     }
 
-    getAllRegistrationRequestsAwatingCLS() {
-        const url = `${this.queryRegistrationRequestsEndpoint}/${exampleCLS.id}`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
-        .toPromise()
-        .then(response => {
-            console.log('response: ');
-            console.log(response);
-            return response;
-        }).catch(error => {
-            console.log(error);
-            return null;
-        });
-    }
-
-    getAllBuySellRequestsAwatingCLS() {
-        const url = `${this.queryBuySellRequestsEndpoint}/${exampleCLS.id}`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
+    getAllBuySellRequestsAwatingCLS(identity) {
+        const url = `${this.queryBuySellRequestsEndpoint}/cls`;
+        return this.http.get<BuySellRequest[]>(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');

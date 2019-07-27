@@ -14,6 +14,16 @@ import { ExternalMemberComponent } from './external-member/external-member.compo
 import { LandComponent } from './shared/land/land.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MarketplaceComponent } from './shared/marketplace/marketplace.component';
+import { RegisterLandComponent } from './family-member/register-land/register-land.component';
+import { FormsModule } from '@angular/forms';
+
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatRippleModule,
+  MatSelectModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -25,7 +35,8 @@ import { MarketplaceComponent } from './shared/marketplace/marketplace.component
     ExternalMemberComponent,
     LandComponent,
     NavbarComponent,
-    MarketplaceComponent
+    MarketplaceComponent,
+    RegisterLandComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +44,13 @@ import { MarketplaceComponent } from './shared/marketplace/marketplace.component
     MatTableModule,
     MatTabsModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRippleModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,5 @@
 import { Land } from 'src/models/land';
 import { Injectable } from '@angular/core';
-import { landsForSale } from 'src/consts/example';
 import { environment } from 'src/environments/environment';
 import { FamilyMember } from 'src/models/family-member';
 import { RegistrationType } from 'src/models/registration-type';
@@ -12,7 +11,6 @@ import { ExternalMember } from 'src/models/external-member';
 })
 
 export class LandService {
-
 
     registerLandEndpoint = environment.apiEndpoint + '/create';
     putForSaleEndpoint = environment.apiEndpoint + '/putForSale';
@@ -30,14 +28,16 @@ export class LandService {
     constructor(public http: HttpClient) {}
 
     // returns all family members from the application
-    getAllLandsForSale(): Land[] {
-        return landsForSale;
-    }
 
     // returns api to initiate a registration request
-    requestLandRegistration(land: Land, familyMember: FamilyMember, registrationType: RegistrationType) {
-        const rT = registrationType.toString().trim();
-        const url = `${this.registerLandEndpoint}/${familyMember.id}/${rT}/${land.community.chief.id}/${land.community.cls.id}`;
+    requestLandRegistration(registrationType, coords, price) {
+        let approver;
+        if (registrationType === 'statutory') {
+            approver = 'landCommission';
+        } else {
+            approver = 'cls';
+        }
+        const url = `${this.registerLandEndpoint}/familyMember/chief/${approver}/${coords}/${price}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -52,9 +52,9 @@ export class LandService {
     }
 
     // returns api to initiate a transaction request
-    requestLandTransaction(land: Land, seller: FamilyMember | ExternalMember, buyer: FamilyMember | ExternalMember, price: number) {
-        let url = `${this.requestLandTransactionEndpoint}/${land.id}/${seller.id}`;
-        url = url + `/${buyer.id}/${price}`;
+    requestLandTransaction(land: Land, seller, buyer, price: number) {
+        let url = `${this.requestLandTransactionEndpoint}/${land.Key}/${seller}`;
+        url = url + `/${buyer}/${price}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -70,7 +70,7 @@ export class LandService {
 
     // returns api to put land for sale
     putLandForSale(land: Land) {
-        const url = `${this.putForSaleEndpoint}/${land.id}`;
+        const url = `${this.putForSaleEndpoint}/${land.Key}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -85,7 +85,7 @@ export class LandService {
 
     // returns api to withdraw land from sale
     withdrawLandFromSale(land: Land) {
-        const url = `${this.withDrawLandFromSaleEndpoint}/${land.id}`;
+        const url = `${this.withDrawLandFromSaleEndpoint}/${land.Key}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -101,7 +101,7 @@ export class LandService {
     // returns api to query all lands for sale
     queryAllLandsForSale(user) {
         const url = `${this.queryLandsForSaleEndpoint}/${user.id}`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
+        return this.http.get<Land[]>(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
@@ -112,21 +112,5 @@ export class LandService {
             return error;
         });
     }
-
-    // returns api to query user lands
-    queryUserLands(user: FamilyMember | ExternalMember) {
-        const url = `${this.queryUserLandsEndpoint}/${user.id}`;
-        return this.http.post(url, '', {headers: this.httpHeaders})
-        .toPromise()
-        .then(response => {
-            console.log('response: ');
-            console.log(response);
-            return response;
-        }).catch(error => {
-            console.log(error);
-            return error;
-        });
-    }
-
 
 }

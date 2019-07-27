@@ -171,7 +171,7 @@ async function main() {
         console.error(`Failed to register user "familyMember": ${error}`);
     } 
 
-   try {
+    try {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -210,6 +210,6 @@ async function main() {
     } catch (error) {
         console.error(`Failed to register user "externalMember": ${error}`);
     } 
-} 
+}
 
 main();

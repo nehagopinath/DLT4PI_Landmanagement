@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ExternalMember } from 'src/models/external-member';
-import { exampleExternalMember1 } from 'src/consts/example';
 import { LandService } from 'src/services/land.service';
 import { Land } from 'src/models/land';
 import { ExternalMemberService } from 'src/services/external-member.service';
@@ -12,12 +11,13 @@ import { ExternalMemberService } from 'src/services/external-member.service';
 })
 export class ExternalMemberComponent implements OnInit {
 
-  externalMember: ExternalMember = exampleExternalMember1;
+  externalMember: ExternalMember;
   displayedColumns: string[] = ['id', 'coords', 'registrationType', 'actions'];
 
   constructor(public landService: LandService, public externalMemberService: ExternalMemberService) { }
 
   ngOnInit() {
+    this.getExternalMember();
   }
 
   // get external member

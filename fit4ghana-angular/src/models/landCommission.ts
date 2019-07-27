@@ -3,13 +3,13 @@ import { RegistrationRequest } from './registration-request';
 import { BuySellRequest } from './buy-sell-request';
 
 export class LandCommission {
-    id: number;
+    id: string;
     name: string;
     incomingRegistrationRequests: RegistrationRequest[];
     incomingBuySellRequests: BuySellRequest[];
 
     constructor({
-        id = -1,
+        id = '',
         name = '',
         incomingRegistrationRequests = [],
         incomingBuySellRequests = []

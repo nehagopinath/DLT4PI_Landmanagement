@@ -4,6 +4,10 @@
     <p>Hope <b>{{ familyMember.familyName }}</b> family is doing well.</p>
     <br>
     
+    <button type="button" class="btn btn-info land-action" routerLink='/register-land'>
+    Register New Land</button>
+    
+
     <mat-tab-group>
         <mat-tab label="Your Lands">
             <!-- <h2>Your Lands</h2> -->
@@ -30,12 +34,12 @@
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef>Actions</th>
                     <td mat-cell *matCellDef="let element">
-                        <button *ngIf="!element.registered" type="button" (click)="registerLand(element)"
-                        class="btn btn-success land-action">Register Land</button>
+                        <!-- <button *ngIf="!element.registered" type="button" (click)="registerLand(element)"
+                        class="btn btn-success land-action">Register Land</button> -->
                         
-                        <button *ngIf="element.registered && element.registrationType==='Customary'" 
+                        <!-- <button *ngIf="element.registered && element.registrationType==='Customary'" 
                         type="button" class="btn btn-info land-action">
-                            Make Statutory</button>
+                            Make Statutory</button> -->
                         
                         <button *ngIf="!element.isForSale && element.registered" 
                         (click)="putLandForSale(element)"
