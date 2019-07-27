@@ -4,7 +4,7 @@ export class FamilyMember extends Member {
     familyName: string;
 
     constructor({
-        id = -1,
+        id = '',
         firstName = '',
         lastName = '',
         lands = [],

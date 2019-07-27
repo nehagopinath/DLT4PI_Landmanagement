@@ -3,13 +3,13 @@ import { RegistrationRequest } from './registration-request';
 import { BuySellRequest } from './buy-sell-request';
 
 export class Chief {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
     incomingRegistrationRequests: RegistrationRequest[];
 
     constructor({
-        id = -1,
+        id = '',
         firstName = '',
         lastName = '',
         incomingRegistrationRequests = []

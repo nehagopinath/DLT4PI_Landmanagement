@@ -2,13 +2,13 @@ import { Land } from './land';
 
 export class Member {
     Key: number;
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
     lands: Land[];
 
     constructor({
-        id = -1,
+        id = '',
         firstName = '',
         lastName = '',
         lands = []

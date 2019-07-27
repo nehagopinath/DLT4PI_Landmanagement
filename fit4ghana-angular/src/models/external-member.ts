@@ -4,7 +4,7 @@ export class ExternalMember extends Member {
     originCountry: string;
 
     constructor({
-        id = -1,
+        id = '',
         firstName = '',
         lastName = '',
         lands = [],
