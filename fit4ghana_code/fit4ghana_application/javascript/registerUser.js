@@ -8,9 +8,10 @@ const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network')
 const path = require('path');
 
 const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org1.json');
+const ccpPath2 = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org2.json');
 
 async function main() {
-    try {
+    /*try {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -99,9 +100,9 @@ async function main() {
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists('lc');
+        const userExists = await wallet.exists('landCommission');
         if (userExists) {
-            console.log('An identity for the user "lc" already exists in the wallet');
+            console.log('An identity for the user "landCommission" already exists in the wallet');
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -121,14 +122,14 @@ async function main() {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'lc', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'lc', enrollmentSecret: secret });
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'landCommission', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'landCommission', enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        wallet.import('lc', userIdentity);
-        console.log('Successfully registered and enrolled admin user "lc" and imported it into the wallet');
+        wallet.import('landCommission', userIdentity);
+        console.log('Successfully registered and enrolled admin user "landCommission" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to register user "lc": ${error}`);
+        console.error(`Failed to register user "landCommission": ${error}`);
     } 
 
     try {
@@ -169,7 +170,7 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "familyMember": ${error}`);
-    } 
+    } */
 
     try {
 
@@ -179,9 +180,9 @@ async function main() {
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists('ExternalMember');
+        const userExists = await wallet.exists('externalMember');
         if (userExists) {
-            console.log('An identity for the user "ExternalMember" already exists in the wallet');
+            console.log('An identity for the user "externalMember" already exists in the wallet');
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -201,14 +202,14 @@ async function main() {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'ExternalMember', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'ExternalMember', enrollmentSecret: secret });
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'externalMember', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'externalMember', enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        wallet.import('ExternalMember', userIdentity);
-        console.log('Successfully registered and enrolled admin user "ExternalMember" and imported it into the wallet');
+        wallet.import('externalMember', userIdentity);
+        console.log('Successfully registered and enrolled admin user "externalMember" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to register user "ExternalMember": ${error}`);
+        console.error(`Failed to register user "externalMember": ${error}`);
     }
 }
 
