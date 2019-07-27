@@ -26,9 +26,9 @@ router.get('/queryLand/:user', LandController.query);
 //Endpoint - Query all LAnd which is for sale (don't necessarily belong to user)
 router.get('/queryLandForSale/:user', LandController.queryForSale);
 //Endpoint - Punt Land with given landnumber for sale
-router.post('/putForSale/:landnumber', LandController.putForSale);
+router.post('/putForSale/:landnumber/:user', LandController.putForSale);
 //Endpoint - Withdraw Land with given landnumber from sale
-router.post('/withDrawLandFromSale/:landnumber', LandController.withdrawFromSale);
+router.post('/withDrawLandFromSale/:landnumber/:user', LandController.withdrawFromSale);
 //Endpoint -  Finally Register land with landnumber as registrationtype to user
 // this should be called registerLand then and we don't need this here as registerLand transaction is invoked by the chaincode
 //router.post('/requestLandRegistration/:landnumber/:registrationType/:user', LandController.register);

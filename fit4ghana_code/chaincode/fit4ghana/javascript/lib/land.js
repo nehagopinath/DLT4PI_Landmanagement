@@ -101,6 +101,41 @@ class Land extends Contract {
         }
     }
 
+    async queryAllLandsOwned(ctx, owner) {
+        const startKey = 'LAND0';
+        const endKey = 'LAND999';
+
+        const iterator = await ctx.stub.getStateByRange(startKey, endKey);
+
+        const allResults = [];
+        while (true) {
+            const res = await iterator.next();
+
+            if(res.owner == owner) {
+
+                if (res.value && res.value.value.toString()) {
+                    console.log(res.value.value.toString('utf8'));
+
+                    const Key = res.value.key;
+                    let Record;
+                    try {
+                        Record = JSON.parse(res.value.value.toString('utf8'));
+                    } catch (err) {
+                        console.log(err);
+                        Record = res.value.value.toString('utf8');
+                    }
+                    allResults.push({ Key, Record });
+                }
+                if (res.done) {
+                    console.log('end of data');
+                    await iterator.close();
+                    console.info(allResults);
+                    return JSON.stringify(allResults);
+                }
+            }
+        }
+    }
+
     async queryAllLandsForSale(ctx) {
         const startKey = 'LAND0';
         const endKey = 'LAND999';
@@ -450,7 +485,7 @@ class Land extends Contract {
             }
         }
     }
-    
+
     async approveBuySellRequest(ctx, requestNumber, approver) {
         console.info('============= START : approveBuySellRequest ===========');
 
