@@ -11,10 +11,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class ChiefService {
 
-    fit4ghanaEndpoint = environment.apiEndpoint + '/fit4ghana';
-    queryRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/getAllRegistrationRequestAwating';
-    approveRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/approveRegistrationRequests';
-    rejectRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/rejectRegistrationRequests';
+    queryRegistrationRequestsEndpoint = environment.apiEndpoint + '/getAllRegistrationRequestAwating';
+    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveRegistrationRequests';
+    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectRegistrationRequests';
+    queryUserEndpoint = environment.apiEndpoint + '/getUser';
 
     httpHeaders = new HttpHeaders()
             .append('Content-Type', 'application/json')
@@ -26,10 +26,25 @@ export class ChiefService {
     constructor(public http: HttpClient) {}
 
     // returns chief
-    getChief(): Chief {
-        const chief = exampleChief;
-        chief.incomingRegistrationRequests = [exampleRegistrationRequest1];
-        return chief;
+    // getChief(): Chief {
+    //     const chief = exampleChief;
+    //     chief.incomingRegistrationRequests = [exampleRegistrationRequest1];
+    //     return chief;
+    // }
+
+    // returns chief user
+    getChief() {
+        const url = `${this.queryUserEndpoint}/chief`;
+        return this.http.post(url, '', {headers: this.httpHeaders})
+        .toPromise()
+        .then(response => {
+            console.log('response: ');
+            console.log(response);
+            return response;
+        }).catch(error => {
+            console.log(error);
+            return null;
+        });
     }
 
     getAllRegistrationRequestsAwatingChief(chief) {

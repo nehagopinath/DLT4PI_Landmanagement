@@ -1,19 +1,19 @@
-import { FamilyMember } from 'src/models/family-member';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ExternalMember } from 'src/models/external-member';
 
 @Injectable({
     providedIn: 'root'
 })
 
 
-export class FamilyMemberService {
+export class ExternalMemberService {
 
     constructor(public http: HttpClient) {}
 
     queryUserEndpoint = environment.apiEndpoint + '/getUser';
-    familyMember: FamilyMember;
+    externalMember: ExternalMember;
 
     httpHeaders = new HttpHeaders()
             .append('Content-Type', 'application/json')
@@ -26,9 +26,9 @@ export class FamilyMemberService {
     //     return null;
     // }
 
-    // returns family Member user
-    getFamilyMember() {
-        const url = `${this.queryUserEndpoint}/familyMember`;
+    // returns external Member user
+    getExternalMember() {
+        const url = `${this.queryUserEndpoint}/externalMember`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {

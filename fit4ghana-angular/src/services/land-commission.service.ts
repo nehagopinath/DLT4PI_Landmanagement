@@ -4,6 +4,7 @@ import { exampleLandCommission, exampleRegistrationRequest3, exampleBuySellReque
 import { LandCommission } from 'src/models/landCommission';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Indentity } from 'src/models/identity';
 
 @Injectable({
     providedIn: 'root'
@@ -11,13 +12,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class LandCommissionService {
 
-    fit4ghanaEndpoint = environment.apiEndpoint + '/fit4ghana';
-    queryRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/getAllRegistrationRequestAwating';
-    queryBuySellRequestsEndpoint = this.fit4ghanaEndpoint + '/getAllSellBuyRequestAwating';
-    approveRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/approveRegistrationRequests';
-    rejectRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/rejectRegistrationRequests';
-    approveBuySellRequestsEndpoint = this.fit4ghanaEndpoint + '/approveBuySellRequests';
-    rejectBuySellRequestsEndpoint = this.fit4ghanaEndpoint + '/rejectBuySellRequests';
+    queryRegistrationRequestsEndpoint = environment.apiEndpoint + '/getAllRegistrationRequestAwating';
+    queryBuySellRequestsEndpoint = environment.apiEndpoint + '/getAllSellBuyRequestAwating';
+    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveRegistrationRequests';
+    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectRegistrationRequests';
+    approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequests';
+    rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequests';
+    queryUserEndpoint = environment.apiEndpoint + '/getUser';
+
+
 
     constructor(public http: HttpClient) {}
 
@@ -28,14 +31,34 @@ export class LandCommissionService {
             .append('Access-Control-Allow-Origin', '*');
 
     // returns landCommission
-    getLandCommission(): LandCommission {
-        const landCommission = exampleLandCommission;
-        landCommission.incomingRegistrationRequests = [exampleRegistrationRequest3];
-        landCommission.incomingBuySellRequests = [exampleBuySellRequest2];
-        return landCommission;
+    // getLandCommission(): LandCommission {
+    //     const landCommission = exampleLandCommission;
+    //     landCommission.incomingRegistrationRequests = [exampleRegistrationRequest3];
+    //     landCommission.incomingBuySellRequests = [exampleBuySellRequest2];
+    //     return landCommission;
+    // }
+
+    // returns landCommission user
+    getLandCommission() {
+        const url = `${this.queryUserEndpoint}/landCommission`;
+        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        .toPromise()
+        .then(response => {
+            console.log('response: ');
+            console.log(response);
+            let registrationRequests;
+            this.getAllRegistrationRequestsAwatingLC(response.Identity)
+            .then(requests => {
+                registrationRequests = requests;
+                return requests;
+            });
+        }).catch(error => {
+            console.log(error);
+            return null;
+        });
     }
 
-    getAllRegistrationRequestsAwatingLC() {
+    getAllRegistrationRequestsAwatingLC(identity) {
         const url = `${this.queryRegistrationRequestsEndpoint}/${exampleLandCommission.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()

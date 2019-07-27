@@ -22,6 +22,9 @@ export class MarketplaceComponent implements OnInit {
     this.landsForSale = this.landService.getAllLandsForSale();
   }
 
+  // returns if Land is owned by current member
+  // this can be used to check if current member can/can't buy this land
+  // also to check if land can be withdrawn from sale by current member
   isLandOwnedByCurrentMember(land: Land) {
     if (!this.currentMember) {
       return false;
@@ -30,6 +33,7 @@ export class MarketplaceComponent implements OnInit {
     .includes(land.id));
   }
 
+  // request land service to initiate buy land
   buyLand(land: Land) {
     this.landService.requestLandTransaction(land, land.owner, this.currentMember, land.price)
     .then(request => {
@@ -37,6 +41,7 @@ export class MarketplaceComponent implements OnInit {
     });
   }
 
+  // request land service to withdraw land from sale
   withdrawLandFromSale(land: Land) {
     this.landService.withdrawLandFromSale(land).then(r => {
       console.log(r);

@@ -14,14 +14,13 @@ export class CLSService {
 
     constructor(public http: HttpClient) {}
 
-    fit4ghanaEndpoint = environment.apiEndpoint + '/fit4ghana';
-    queryRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/getAllRegistrationRequestAwating';
-    queryBuySellRequestsEndpoint = this.fit4ghanaEndpoint + '/getAllSellBuyRequestAwating';
-    approveRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/approveRegistrationRequests';
-    rejectRegistrationRequestsEndpoint = this.fit4ghanaEndpoint + '/rejectRegistrationRequests';
-    approveBuySellRequestsEndpoint = this.fit4ghanaEndpoint + '/approveBuySellRequests';
-    rejectBuySellRequestsEndpoint = this.fit4ghanaEndpoint + '/rejectBuySellRequests';
-
+    queryRegistrationRequestsEndpoint = environment.apiEndpoint + '/getAllRegistrationRequestAwating';
+    queryBuySellRequestsEndpoint = environment.apiEndpoint + '/getAllSellBuyRequestAwating';
+    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveRegistrationRequests';
+    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectRegistrationRequests';
+    approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequests';
+    rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequests';
+    queryUserEndpoint = environment.apiEndpoint + '/getUser';
 
     httpHeaders = new HttpHeaders()
             .append('Content-Type', 'application/json')
@@ -29,13 +28,25 @@ export class CLSService {
             .append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
             .append('Access-Control-Allow-Origin', '*');
 
+    // const cls = exampleCLS;
+    // cls.incomingRegistrationRequests = [exampleRegistrationRequest2];
+    // cls.incomingBuySellRequests = [exampleBuySellRequest1];
+    // return cls;
 
-    // returns cls
-    getCLS(): CLS {
-        const cls = exampleCLS;
-        cls.incomingRegistrationRequests = [exampleRegistrationRequest2];
-        cls.incomingBuySellRequests = [exampleBuySellRequest1];
-        return cls;
+
+    // returns cls user
+    getCLS() {
+        const url = `${this.queryUserEndpoint}/cls`;
+        return this.http.post(url, '', {headers: this.httpHeaders})
+        .toPromise()
+        .then(response => {
+            console.log('response: ');
+            console.log(response);
+            return response;
+        }).catch(error => {
+            console.log(error);
+            return null;
+        });
     }
 
     getAllRegistrationRequestsAwatingCLS() {

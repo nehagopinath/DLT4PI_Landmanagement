@@ -29,18 +29,28 @@ export class FamilyMemberComponent implements OnInit {
   ngOnInit() {
   }
 
+  // get family member
+  getFamilyMember() {
+    this.familyMemberService.getFamilyMember().then(m => {
+      this.familyMember = m;
+    });
+  }
+
+  // request LandService to initiate land registration
   registerLand(land: Land, registrationType: RegistrationType = RegistrationType.STATUTORY) {
     this.landService.requestLandRegistration(land, this.familyMember, registrationType).then(r => {
       console.log(r);
     });
   }
 
+  // request LandService to put this land for sale
   putLandForSale(land: Land) {
     this.landService.putLandForSale(land).then(r => {
       console.log(r);
     });
   }
 
+  // request LandService to withdraw this land from sale
   withdrawLandFromSale(land: Land) {
     this.landService.withdrawLandFromSale(land).then(r => {
       console.log(r);
