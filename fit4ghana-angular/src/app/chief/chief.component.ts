@@ -11,21 +11,30 @@ import { RegistrationRequest } from 'src/models/registration-request';
 })
 export class ChiefComponent implements OnInit {
 
-  chief: Chief;
+  chief: Chief = exampleChief;
   registrationRequestColumns: string[] = ['id', 'claimer', 'registrationType', 'actions'];
 
   constructor(public chiefService: ChiefService) {
-    this.chief = this.chiefService.getChief();
+    // this.chief = this.chiefService.getChief();
 
     // this.chiefService.getAllRegistrationRequestsAwatingChief(this.chief).then(requests => {
     //   this.chief.incomingRegistrationRequests = requests;
     // });
   }
 
+  // get chief
+  getChief() {
+    this.chiefService.getChief().then(m => {
+      this.chief = m;
+    });
+  }
+
+  // request ChiefService to approve this registration request
   approveRegistrationRequest(request: RegistrationRequest) {
     this.chiefService.approveRegistrationRequest(this.chief, request);
   }
 
+  // request ChiefService to reject this registration request
   rejectRegistrationRequest(request: RegistrationRequest) {
     this.chiefService.rejectRegistrationRequest(this.chief, request);
   }
