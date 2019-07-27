@@ -105,9 +105,9 @@ class RegistrationRequest extends Contract {
         }
     }
 
-    async approveRegistrationRequest(ctx, requestNumber, approver) {
+    async (ctx, requestNumber, approver) {
         console.info('============= START : approveRegistrationRequest ===========');
-
+approveRegistrationRequest
         const requestAsBytes = await ctx.stub.getState(requestNumber); // get the request from chaincode state
         if (!requestAsBytes || requestAsBytes.length === 0) {
             throw new Error(`${requestNumber} does not exist`);

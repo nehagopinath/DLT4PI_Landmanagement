@@ -36,8 +36,11 @@ const create = asyncMiddleware(async (req, res) => {
     var landtype = req.params.landtype;
     var chief = req.params.chief;
     var approver = req.params.approver;
-    var requestNumber = parseInt(Math.random().toString(36).substr(2, 9));
-    var landNumber = parseInt(Math.random().toString(36).substr(2, 9));
+    var coords = req.params.coords;
+    var price = req.params.price;
+    var requestNumber = Math.random().toString(36).substr(2, 9).toString();
+    var landNumber = Math.random().toString(36).substr(2, 9).toString();
+    
 
     const userExists = await wallet.exists(user);
     if (!userExists) {
@@ -63,6 +66,11 @@ const create = asyncMiddleware(async (req, res) => {
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
 
+    // Get the contract from the network.
+    const contract = network.getContract('land');
+
+    await contract.submitTransaction('createLand', landNumber, coords, false, price);
+     
     // Get the contract from the network.
     const contract = network.getContract('registrationrequest');
 
@@ -102,7 +110,7 @@ const approve = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('registrationrequest');
 
-    await contract.submitTransaction('approveBuySellRequest', requestNumber, approver);
+    await contract.submitTransaction('approveRegistrationRequest', requestNumber, approver);
     
     // Disconnect from the gateway.
     await gateway.disconnect();

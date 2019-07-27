@@ -11,7 +11,7 @@ const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection
 const ccpPath2 = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org2.json');
 
 async function main() {
-    /*try {
+    try {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -170,9 +170,9 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "familyMember": ${error}`);
-    } */
+    } 
 
-    try {
+    /*try {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -210,7 +210,7 @@ async function main() {
 
     } catch (error) {
         console.error(`Failed to register user "externalMember": ${error}`);
-    }
+    } */
 }
 
 main();
