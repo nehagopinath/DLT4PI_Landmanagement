@@ -30,10 +30,10 @@
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef>Actions</th>
                         <td mat-cell *matCellDef="let element">
-                            <button *ngIf="!element.registered" type="button" class="btn btn-success land-action">Register Land</button>
+                            <!-- <button *ngIf="!element.registered" type="button" class="btn btn-success land-action">Register Land</button>
                             <button *ngIf="element.registered && element.registrationType==='Customary'" 
                             type="button" class="btn btn-info land-action">
-                                Make Statutory</button>
+                                Make Statutory</button> -->
                             <button *ngIf="!element.isForSale && element.registered" 
                             (click)="putLandForSale(element)"
                             type="button" class="btn btn-primary land-action">Put up for sale</button>
