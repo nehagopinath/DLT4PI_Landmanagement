@@ -42,19 +42,19 @@ const create = asyncMiddleware(async (req, res) => {
     var landNumber = Math.random().toString(36).substr(2, 9).toString();
     
 
-    const userExists = await wallet.exists(user);
+    let userExists = await wallet.exists(user);
     if (!userExists) {
         console.log('An identity for the user' + user + 'does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
-    const userExists = await wallet.exists(approver);
+    userExists = await wallet.exists(approver);
     if (!userExists) {
         console.log('An identity for the user' + approver + 'does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
-    const userExists = await wallet.exists(chief);
+    userExists = await wallet.exists(chief);
     if (!userExists) {
         console.log('An identity for the user' + chief + 'does not exist in the wallet');
         console.log('Register user before retrying');
