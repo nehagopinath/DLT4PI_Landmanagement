@@ -1,9 +1,11 @@
-<div class="register-container">
+<div class="register-view">
+
+    <h4>Register Land</h4>
     <mat-form-field>
-        <input matInput [(ngModel)]="coords" placeholder="0.0.0">
+        <input matInput [(ngModel)]="coords" placeholder="Coordinates">
     </mat-form-field>
     <mat-form-field>
-        <input matInput type="number" [(ngModel)]="price" placeholder="0">
+        <input matInput type="number" [(ngModel)]="price" placeholder="Price">
     </mat-form-field>
     
     <mat-form-field>
@@ -11,13 +13,6 @@
             <mat-option value="statutory">Statutory</mat-option>
             <mat-option value="customary">Customary</mat-option>
             </mat-select>
-    </mat-form-field>
-    
-        
-    <mat-form-field>
-        <mat-select placeholder="Select">
-        <mat-option value="option">Option</mat-option>
-        </mat-select>
     </mat-form-field>
 
 
