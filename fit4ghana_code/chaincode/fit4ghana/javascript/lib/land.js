@@ -294,7 +294,7 @@ class Land extends Contract {
         const allResults = [];
         while (true) {
             const res = await iterator.next();
-            
+
             if (res.value && res.value.value.toString()) {
                 console.log(res.value.value.toString('utf8'));
 
@@ -335,23 +335,23 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'approved';  // approved for customary land
+            request.status = approved;  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
          && request.landCommission === approver) {
             request.responseFromLandCommission = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'approved';
+            request.status = approved;
         }
 
         if (request.status === 'approved') {
-            await this.registerLand(ctx,request.landNumber, request.claimer, request.registrationType);
+            await Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
             // land.registerLand(request.claimer, request.registrationType);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeRegistrationRequestOwner ===========');
     }
     async rejectRegistrationRequest(ctx, requestNumber, approver) {
-        console.info('============= START : approveRegistrationRequest ===========');
+        console.info('============= START : rejectRegistrationRequest ===========');
 
         const requestAsBytes = await ctx.stub.getState(requestNumber); // get the request from chaincode state
         if (!requestAsBytes || requestAsBytes.length === 0) {
@@ -369,14 +369,18 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'rejected';  // approved for customary land
+            request.status = approved;  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
          && request.landCommission === approver) {
             request.responseFromLandCommission = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'rejected';
+            request.status = approved;
         }
 
+        if (request.status === 'approved') {
+            await Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
+            // land.registerLand(request.claimer, request.registrationType);
+        }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeRegistrationRequestOwner ===========');
     }
@@ -455,6 +459,40 @@ class Land extends Contract {
         }
     }
 
+    async queryRegistrationRequestsAwaiting(ctx, approver) {
+        const startKey = 'REQUEST0';
+        const endKey = 'REQUEST999';
+
+        const iterator = await ctx.stub.getStateByRange(startKey, endKey);
+
+        const allResults = [];
+        while (true) {
+            const res = await iterator.next();
+
+            if (res.approver == approver) {
+                if (res.value && res.value.value.toString()) {
+                    console.log(res.value.value.toString('utf8'));
+    
+                    const Key = res.value.key;
+                    let Record;
+                    try {
+                        Record = JSON.parse(res.value.value.toString('utf8'));
+                    } catch (err) {
+                        console.log(err);
+                        Record = res.value.value.toString('utf8');
+                    }
+                    allResults.push({ Key, Record });
+                }
+                if (res.done) {
+                    console.log('end of data');
+                    await iterator.close();
+                    console.info(allResults);
+                    return JSON.stringify(allResults);
+                }
+            }
+        }
+    }
+
     async queryAllBuySellRequestsAwaiting(ctx, approver) {
         const startKey = 'REQUEST0';
         const endKey = 'REQUEST999';
@@ -510,16 +548,16 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'approved';  // approved for customary land
+            request.status = approved;  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
         && request.landCommission === approver) {
             request.responseFromLandCommission = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'approved';  // approved for statutory land
+            request.status = approved;  // approved for statutory land
         }
 
         if (request.status === 'approved') {
-            this.transactLand(ctx,request.landNumber, request.seller, request.buyer, request.price);
+            land.submitTransaction('transactLand', landNumber, request.seller, request.buyer, request.price);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeBuySellRequestOwner ===========');
@@ -546,14 +584,17 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'rejected';  // approved for customary land
+            request.status = rejected;  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
         && request.landCommission === approver) {
             request.responseFromLandCommission = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'rejected';  // approved for statutory land
+            request.status = rejected;  // approved for statutory land
         }
 
+        if (request.status === 'approved') {
+            land.submitTransaction('transactLand', landNumber, request.seller, request.buyer, request.price);
+        }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeBuySellRequestOwner ===========');
     }

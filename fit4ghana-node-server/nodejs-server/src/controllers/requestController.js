@@ -47,7 +47,7 @@ const query = asyncMiddleware(async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('registrationrequest');
+    const contract = network.getContract('land');
 
     const result = await contract.evaluateTransaction('queryRegistrationRequestsAwaiting', approver); 
     res.send(result);

@@ -60,29 +60,42 @@ const create = asyncMiddleware(async (req, res) => {
     }
 
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: claimer, discovery: {enabled: true, asLocalhost: true}});
+    await gateway.connect(ccp, {wallet, identity: user, discovery: {enabled: true, asLocalhost: true}});
 
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    contract = network.getContract('land');
+    const contract = network.getContract('land');
 
-    await contract.submitTransaction('createLand', landNumber, coords, false, price);
+    console.log('land will be created.');
+    console.log('land Number:' + landNumber);
+    console.log('land coords:' + coords);
+    console.log('land price:' + price.toString());
+    
 
-    // Get the contract from the network.
-    contract = network.getContract('registrationrequest');
+
+    await contract.submitTransaction('createLand', landNumber, coords, 'false', price.toString());
+
+    console.log('land created.');
 
     if (registrationType == 'statutory') {
+        console.log('land is statutory.');
+
         await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        registrationType, chief, null, approver, landNumber);
+        registrationType, chief, 'null', approver, landNumber);
+        console.log('done.');
+
+        // res.end('done');
     }
     else if (registrationType == 'customary') {
+        console.log('land is customary.');
         await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        registrationType, chief, approver, null, landNumber);
+        registrationType, chief, approver, 'null', landNumber);
+        console.log('done.');
     }
     else {
-        console.log('Land needs to be either statutory or customary')
+        console.log('Land needs to be either statutory or customary');
     }
     
     // Disconnect from the gateway.

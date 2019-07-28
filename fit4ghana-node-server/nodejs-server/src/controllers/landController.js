@@ -162,6 +162,8 @@ const query = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
+    console.log('going to get all lands now!');
+
     const result = await contract.evaluateTransaction('queryAllLandsOwned', user); 
     res.send(result);
     console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
