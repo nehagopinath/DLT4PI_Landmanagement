@@ -90,7 +90,7 @@ async function main() {
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'landNumber')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction('queryAllLands');  //This takes literal values. Should find out a way for it to take values from console
+        const result = await contract.evaluateTransaction('queryAllRegistrationRequests');  //This takes literal values. Should find out a way for it to take values from console
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
     } catch (error) {
