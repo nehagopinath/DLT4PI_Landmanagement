@@ -97,6 +97,7 @@ export class CLSService {
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
+            alert('You have approved request number ' + request.Key);
             console.log('response: ');
             console.log(response);
             return response;
@@ -111,6 +112,7 @@ export class CLSService {
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
+            alert('You have rejected request number ' + request.Key);
             console.log('response: ');
             console.log(response);
             return response;

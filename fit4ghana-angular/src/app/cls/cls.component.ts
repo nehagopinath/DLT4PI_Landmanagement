@@ -32,22 +32,38 @@ export class ClsComponent implements OnInit {
 
   // request CLSService to approve this registration request
   approveRegistrationRequest(request: RegistrationRequest) {
-    this.clsService.approveRegistrationRequest(this.cls, request);
+    this.clsService.approveRegistrationRequest(this.cls, request).then(_ => {
+      alert('You have approved request number ' + request.Key);
+      this.getCLS();
+      
+    });
   }
 
   // request CLSService to reject this registration request
   rejectRegistrationRequest(request: RegistrationRequest) {
-    this.clsService.rejectRegistrationRequest(this.cls, request);
+    this.clsService.rejectRegistrationRequest(this.cls, request).then(_ => {
+      alert('You have rejected request number ' + request.Key);
+      this.getCLS();
+      
+    });
   }
 
   // request CLSService to approve this buysell request
   approveBuySellRequest(request: BuySellRequest) {
-    this.clsService.approveBuySellRequest(this.cls, request);
+    this.clsService.approveBuySellRequest(this.cls, request).then(_ => {
+      alert('You have approved request number ' + request.Key);
+      this.getCLS();
+      
+    });
   }
 
   // request CLSService to reject this buysell request
   rejectBuySellRequest(request: BuySellRequest) {
-    this.clsService.rejectBuySellRequest(this.cls, request);
+    this.clsService.rejectBuySellRequest(this.cls, request).then(_ => {
+      alert('You have rejected request number ' + request.Key);
+      this.getCLS();
+      
+    });
   }
 
 

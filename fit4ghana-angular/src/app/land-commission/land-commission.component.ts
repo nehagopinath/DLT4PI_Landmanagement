@@ -31,22 +31,38 @@ export class LandCommissionComponent implements OnInit {
 
   // request LandCommissionService to approve this registration request
   approveRegistrationRequest(request: RegistrationRequest) {
-    this.landCommissionService.approveRegistrationRequest(this.landCommission, request);
+    this.landCommissionService.approveRegistrationRequest(this.landCommission, request).then(_ => {
+      alert('You have approved request number ' + request.Key);
+      this.getLandCommission();
+      
+    });
   }
 
   // request LandCommissionService to reject this registration request
   rejectRegistrationRequest(request: RegistrationRequest) {
-    this.landCommissionService.rejectRegistrationRequest(this.landCommission, request);
+    this.landCommissionService.rejectRegistrationRequest(this.landCommission, request).then(_ => {
+      alert('You have rejected request number ' + request.Key);
+      this.getLandCommission();
+      
+    });
   }
 
   // request LandCommissionService to approve this buysell request
   approveBuySellRequest(request: BuySellRequest) {
-    this.landCommissionService.approveBuySellRequest(this.landCommission, request);
+    this.landCommissionService.approveBuySellRequest(this.landCommission, request).then(_ => {
+      alert('You have approved request number ' + request.Key);
+      this.getLandCommission();
+      
+    });
   }
 
   // request LandCommissionService to reject this buysell request
   rejectBuySellRequest(request: BuySellRequest) {
-    this.landCommissionService.rejectBuySellRequest(this.landCommission, request);
+    this.landCommissionService.rejectBuySellRequest(this.landCommission, request).then(_ => {
+      alert('You have rejected request number ' + request.Key);
+      this.getLandCommission();
+      
+    });
   }
 
 

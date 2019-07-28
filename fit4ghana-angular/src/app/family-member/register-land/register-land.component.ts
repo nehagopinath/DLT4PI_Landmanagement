@@ -23,7 +23,7 @@ export class RegisterLandComponent implements OnInit {
   registerLand() {
     this.landService.requestLandRegistration(this.registrationType, this.coords, this.price).then(r => {
       console.log(r);
-      alert(r);
+      alert('Land has been registered as a ' + this.registrationType + ' land.');
     });
   }
 }

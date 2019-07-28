@@ -364,7 +364,7 @@ class Land extends Contract {
         if (request.currentlyAwaitingResponseFrom === 'chief'
         && request.chief === approver) {
            request.responseFromChief = 'rejected';
-           request.currentlyAwaitingResponseFrom = 'cls';
+           request.currentlyAwaitingResponseFrom = null;
         } else if (request.currentlyAwaitingResponseFrom === 'cls'
         && request.cls === approver) {
             request.responseFromCLS = 'rejected';

@@ -32,12 +32,19 @@ export class ChiefComponent implements OnInit {
 
   // request ChiefService to approve this registration request
   approveRegistrationRequest(request: RegistrationRequest) {
-    this.chiefService.approveRegistrationRequest(this.chief, request);
+    this.chiefService.approveRegistrationRequest(this.chief, request).then(_ => {
+      alert('You have approved request number ' + request.Key);
+      this.getChief();
+      
+    });
   }
 
   // request ChiefService to reject this registration request
   rejectRegistrationRequest(request: RegistrationRequest) {
-    this.chiefService.rejectRegistrationRequest(this.chief, request);
+    this.chiefService.rejectRegistrationRequest(this.chief, request).then(_ => {
+      alert('You have rejected request number ' + request.Key);
+      this.getChief();
+    });
   }
 
   ngOnInit() {
