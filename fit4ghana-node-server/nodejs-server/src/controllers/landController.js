@@ -207,7 +207,7 @@ const queryForSale = asyncMiddleware(async (req, res) => {
 // Approve Request 
 const approve = asyncMiddleware(async (req, res) => {
     var approver = req.params.approver;
-    var requestNumber = req.params.requestNumber
+    var requestNumber = req.params.requestNumber;
 
     const userExists = await wallet.exists(approver);
     if (!userExists) {
@@ -233,7 +233,7 @@ const approve = asyncMiddleware(async (req, res) => {
 // Reject Request 
 const reject = asyncMiddleware(async (req, res) => {
     var approver = req.params.approver;
-    var requestNumber = req.params.requestnumber
+    var requestNumber = req.params.requestnumber;
 
     const userExists = await wallet.exists(approver);
     if (!userExists) {
@@ -256,6 +256,54 @@ const reject = asyncMiddleware(async (req, res) => {
     await gateway.disconnect();
 });
 
+// Create BuySellRequest 
+const createBuySellRequest = asyncMiddleware(async (req, res) => {
+    var requestNumber = req.params.requestNumber;
+    var seller = req.params.seller;
+    var buyer = req.params.buyer;
+    var price = req.params.price;
+    var registrationType = req.params.registrationType;
+    var approver = req.params.approver;
+    var landNumber = req.params.landNumber;
+   
+    const userExists = await wallet.exists(approver);
+    if (!userExists) {
+        console.log('An identity for the user ' + approver + ' does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
+    const userExists = await wallet.exists(seller);
+    if (!userExists) {
+        console.log('An identity for the user ' + seller + ' does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
+    const userExists = await wallet.exists(buyer);
+    if (!userExists) {
+        console.log('An identity for the user ' + buyer + ' does not exist in the wallet');
+        console.log('Register user before retrying');
+    }
+
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {wallet, identity: approver, discovery: {enabled: true, asLocalhost: true}});
+
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork('mychannel');
+
+    // Get the contract from the network.
+    const contract = network.getContract('land');
+
+    if(registrationType == 'statutory') {
+        await contract.submitTransaction('createBuySellRequest', requestNumber, seller, buyer, price, registrationType, 'null', approver, landNumber);
+    }
+    else if(registrationType == 'customary') {
+        await contract.submitTransaction('createBuySellRequest', requestNumber, seller, buyer, price, registrationType, approver, 'null', landNumber);
+    }
+
+    // Disconnect from the gateway.
+    await gateway.disconnect();
+});
+
 module.exports = {
     putForSale,
     withdrawFromSale,
@@ -264,5 +312,6 @@ module.exports = {
     query,
     queryForSale,
     approve,
-    reject
+    reject,
+    createBuySellRequest
 };
