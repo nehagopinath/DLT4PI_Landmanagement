@@ -18,8 +18,8 @@ export class CLSService {
 
     queryRegistrationRequestsEndpoint = environment.apiEndpoint + '/getAllRegistrationRequestAwating';
     queryBuySellRequestsEndpoint = environment.apiEndpoint + '/getAllSellBuyRequestAwating';
-    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveRegistrationRequests';
-    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectRegistrationRequests';
+    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveregistrationrequest';
+    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectregistrationrequest';
     approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequests';
     rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequests';
     queryUserEndpoint = environment.apiEndpoint + '/getUser';
@@ -39,19 +39,19 @@ export class CLSService {
     // returns cls user
     getCLS() {
         const url = `${this.queryUserEndpoint}/cls`;
-        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        return this.http.get(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
             console.log(response);
             const cls = new CLS({
-                id: response.Identity,
+                id: response['user'],
                 name: 'cls'
             });
-            return this.getAllRegistrationRequestsAwatingCLS(response.Identity)
+            return this.getAllRegistrationRequestsAwatingCLS(response['user'])
             .then(requests => {
                 cls.incomingRegistrationRequests = requests;
-                return this.getAllBuySellRequestsAwatingCLS(response.Identity)
+                return this.getAllBuySellRequestsAwatingCLS(response['user'])
                 .then(bsrequests => {
                     cls.incomingBuySellRequests = bsrequests;
                     return cls;
@@ -93,7 +93,7 @@ export class CLSService {
     }
 
     approveRegistrationRequest(cls, request) {
-        const url = `${this.approveRegistrationRequestsEndpoint}/${cls.id}/${request.id}`;
+        const url = `${this.approveRegistrationRequestsEndpoint}/${request.Key}/${cls.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -107,7 +107,7 @@ export class CLSService {
     }
 
     rejectRegistrationRequest(cls, request) {
-        const url = `${this.rejectRegistrationRequestsEndpoint}/${cls.id}/${request.id}`;
+        const url = `${this.rejectRegistrationRequestsEndpoint}/${request.Key}/${cls.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {

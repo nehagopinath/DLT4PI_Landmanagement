@@ -13,8 +13,8 @@ import { RegistrationRequest } from 'src/models/registration-request';
 export class ChiefService {
 
     queryRegistrationRequestsEndpoint = environment.apiEndpoint + '/getAllRegistrationRequestAwating';
-    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveRegistrationRequests';
-    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectRegistrationRequests';
+    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveregistrationrequest';
+    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectregistrationrequest';
     queryUserEndpoint = environment.apiEndpoint + '/getUser';
 
     httpHeaders = new HttpHeaders()
@@ -74,7 +74,7 @@ export class ChiefService {
     }
 
     approveRegistrationRequest(chief, request) {
-        const url = `${this.approveRegistrationRequestsEndpoint}/${chief.id}/${request.Key}`;
+        const url = `${this.approveRegistrationRequestsEndpoint}/${request.Key}/${chief.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -88,7 +88,7 @@ export class ChiefService {
     }
 
     rejectRegistrationRequest(chief, request) {
-        const url = `${this.rejectRegistrationRequestsEndpoint}/${chief.id}/${request.Key}`;
+        const url = `${this.rejectRegistrationRequestsEndpoint}/${request.Key}/${chief.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {

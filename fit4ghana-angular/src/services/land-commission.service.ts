@@ -15,8 +15,8 @@ export class LandCommissionService {
 
     queryRegistrationRequestsEndpoint = environment.apiEndpoint + '/getAllRegistrationRequestAwating';
     queryBuySellRequestsEndpoint = environment.apiEndpoint + '/getAllSellBuyRequestAwating';
-    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveRegistrationRequests';
-    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectRegistrationRequests';
+    approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveregistrationrequest';
+    rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectregistrationrequest';
     approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequests';
     rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequests';
     queryUserEndpoint = environment.apiEndpoint + '/getUser';
@@ -42,19 +42,19 @@ export class LandCommissionService {
     // returns landCommission user
     getLandCommission() {
         const url = `${this.queryUserEndpoint}/landCommission`;
-        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        return this.http.get(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
             console.log(response);
             const landCommission = new LandCommission({
-                id: response.Identity,
+                id: response['user'],
                 name: 'landCommission'
             });
-            return this.getAllRegistrationRequestsAwatingLC(response.Identity)
+            return this.getAllRegistrationRequestsAwatingLC(response['user'])
             .then(requests => {
                 landCommission.incomingRegistrationRequests = requests;
-                return this.getAllBuySellRequestsAwatingLC(response.Identity)
+                return this.getAllBuySellRequestsAwatingLC(response['user'])
                 .then(bsrequests => {
                     landCommission.incomingBuySellRequests = bsrequests;
                     return landCommission;
@@ -95,7 +95,7 @@ export class LandCommissionService {
     }
 
     approveRegistrationRequest(landCommission, request) {
-        const url = `${this.approveRegistrationRequestsEndpoint}/${landCommission.id}/${request.id}`;
+        const url = `${this.approveRegistrationRequestsEndpoint}/${request.Key}/${landCommission.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -109,7 +109,7 @@ export class LandCommissionService {
     }
 
     rejectRegistrationRequest(landCommission, request) {
-        const url = `${this.rejectRegistrationRequestsEndpoint}/${landCommission.id}/${request.id}`;
+        const url = `${this.rejectRegistrationRequestsEndpoint}/${request.Key}/${landCommission.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {

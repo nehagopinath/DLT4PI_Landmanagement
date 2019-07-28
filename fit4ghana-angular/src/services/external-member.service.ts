@@ -32,13 +32,13 @@ export class ExternalMemberService {
     // returns external Member user
     getExternalMember() {
         const url = `${this.queryUserEndpoint}/externalMember`;
-        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        return this.http.get(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
             console.log(response);
             const externalMember = new ExternalMember({
-                id: response.Identity,
+                id: response['user'],
                 firstName: 'externalMember'
             });
             return this.queryUserLands(externalMember.id).then(lands => {
