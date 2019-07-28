@@ -15,7 +15,7 @@ export class LandService {
     registerLandEndpoint = environment.apiEndpoint + '/create';
     putForSaleEndpoint = environment.apiEndpoint + '/putForSale';
     withDrawLandFromSaleEndpoint = environment.apiEndpoint + '/withDrawLandFromSale';
-    requestLandTransactionEndpoint = environment.apiEndpoint + '/requestLandTransaction';
+    buysellLandEndpoint = environment.apiEndpoint + '/createBuySell';
     queryLandsForSaleEndpoint = environment.apiEndpoint + '/queryLandForSale';
     queryUserLandsEndpoint = environment.apiEndpoint + '/queryLand';
 
@@ -52,9 +52,15 @@ export class LandService {
     }
 
     // returns api to initiate a transaction request
+    // createBuySell/:seller/:buyer/:price/:registrationType/:approver/:landNumber
     requestLandTransaction(land: Land, seller, buyer, price: number) {
-        let url = `${this.requestLandTransactionEndpoint}/${land.Key}/${seller}`;
-        url = url + `/${buyer}/${price}`;
+        let approver;
+        if (land.Record.registrationType === 'statutory') {
+            approver = 'landCommission';
+        } else {
+            approver = 'cls';
+        }
+        let url = `${this.buysellLandEndpoint}/${seller}/${buyer}/${price}/${land.Record.registrationType}/${approver}/${land.Key}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {

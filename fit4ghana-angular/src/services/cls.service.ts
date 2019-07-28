@@ -20,8 +20,8 @@ export class CLSService {
     queryBuySellRequestsEndpoint = environment.apiEndpoint + '/getAllSellBuyRequestAwating';
     approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveregistrationrequest';
     rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectregistrationrequest';
-    approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequests';
-    rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequests';
+    approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequest';
+    rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequest';
     queryUserEndpoint = environment.apiEndpoint + '/getUser';
 
     httpHeaders = new HttpHeaders()
@@ -121,7 +121,7 @@ export class CLSService {
     }
 
     approveBuySellRequest(cls, request) {
-        const url = `${this.approveBuySellRequestsEndpoint}/${cls.id}/${request.id}`;
+        const url = `${this.approveBuySellRequestsEndpoint}/${request.Key}/${cls.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -135,7 +135,7 @@ export class CLSService {
     }
 
     rejectBuySellRequest(cls, request) {
-        const url = `${this.rejectBuySellRequestsEndpoint}/${cls.id}/${request.id}`;
+        const url = `${this.rejectBuySellRequestsEndpoint}/${request.Key}/${cls.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {

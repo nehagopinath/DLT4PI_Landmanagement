@@ -189,17 +189,8 @@ const queryForSale = asyncMiddleware(async (req, res) => {
     const contract = network.getContract('land');
 
     contract.evaluateTransaction('queryAllLandsForSale').then(result => {
-        let lands = [];
-
-        console.log('getting all lands for user for sale ' + user);
-        for(let land of result) {
-            if (land.Record.owner === user) {
-                lands.push(land);
-            }
-        }
-        console.log(lands);
-        res.send(lands);
-        console.log(`Transaction has been evaluated, result is: ${lands.toString()}`);
+        res.send(result);
+        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
     }); 
     
 });
@@ -258,7 +249,6 @@ const reject = asyncMiddleware(async (req, res) => {
 
 // Create BuySellRequest 
 const createBuySellRequest = asyncMiddleware(async (req, res) => {
-    var requestNumber = req.params.requestNumber;
     var seller = req.params.seller;
     var buyer = req.params.buyer;
     var price = req.params.price;
@@ -293,11 +283,16 @@ const createBuySellRequest = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
+    const brs = await contract.evaluateTransaction('queryAllBuySellRequests');  
+    console.log(brs);
+    var requestNumber = brs.length + 1;
+    var requestNumberString = 'BR' + requestNumber;
+
     if(registrationType == 'statutory') {
-        await contract.submitTransaction('createBuySellRequest', requestNumber, seller, buyer, price, registrationType, 'null', approver, landNumber);
+        await contract.submitTransaction('createBuySellRequest', requestNumberString, seller, buyer, price.toString(), registrationType, 'null', approver, landNumber);
     }
     else if(registrationType == 'customary') {
-        await contract.submitTransaction('createBuySellRequest', requestNumber, seller, buyer, price, registrationType, approver, 'null', landNumber);
+        await contract.submitTransaction('createBuySellRequest', requestNumberString, seller, buyer, price.toString(), registrationType, approver, 'null', landNumber);
     }
 
     // Disconnect from the gateway.

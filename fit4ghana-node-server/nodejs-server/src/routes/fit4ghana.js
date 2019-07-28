@@ -28,19 +28,19 @@ router.get('/queryLandForSale/:user', LandController.queryForSale);
 //Endpoint - Punt Land with given landnumber for sale
 router.post('/putForSale/:landNumber/:user', LandController.putForSale);
 //Endpoint - Withdraw Land with given landnumber from sale
-router.post('/withDrawLandFromSale/:landnumber/:user', LandController.withdrawFromSale);
+router.post('/withDrawLandFromSale/:landNumber/:user', LandController.withdrawFromSale);
 //Endpoint -  Finally Register land with landnumber as registrationtype to user
 // this should be called registerLand then and we don't need this here as registerLand transaction is invoked by the chaincode
 //router.post('/requestLandRegistration/:landnumber/:registrationType/:user', LandController.register);
 //Endpoint - Request Landtransaction of land with landnumber with seller, buyer and price
-router.post('/requestLandTransaction/:landnumber/:seller/:buyer/:price', LandController.transact);
+router.post('/requestLandTransaction/:landNumber/:seller/:buyer/:price', LandController.transact);
 //Endpoint - Approve Buy - Sell Request by approver
-router.post('/approveBuySellRequest/:requestnumber/:approver', LandController.approve);
+router.post('/approveBuySellRequest/:requestNumber/:approver', LandController.approve);
 //Endpoint - Reject Buy - Sell Request by approver 
-router.post('/rejectBuySellRequest/:requestnumber/:approver', LandController.reject)
+router.post('/rejectBuySellRequest/:requestNumber/:approver', LandController.reject)
 
 //Endpoint - Create BuySellRequest for  
-router.post('/create/:requestNumber/:seller/:buyer/:price/:registrationType/:approver/:landNumber', LandController.createBuySellRequest);
+router.post('/createBuySell/:seller/:buyer/:price/:registrationType/:approver/:landNumber', LandController.createBuySellRequest);
 
 //Endpoint to get user by name
 router.get('/getUser/:user', UserController.get)

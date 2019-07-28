@@ -558,7 +558,7 @@ class Land extends Contract {
         }
 
         if (request.status === 'approved') {
-            this.transactLand(ctx, landNumber, request.seller, request.buyer, request.price);
+            this.transactLand(ctx, request.landNumber, request.seller, request.buyer, request.price);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeBuySellRequestOwner ===========');
@@ -594,7 +594,7 @@ class Land extends Contract {
         }
 
         if (request.status === 'approved') {
-            this.transactLand(ctx, landNumber, request.seller, request.buyer, request.price);
+            this.transactLand(ctx, request.landNumber, request.seller, request.buyer, request.price);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeBuySellRequestOwner ===========');

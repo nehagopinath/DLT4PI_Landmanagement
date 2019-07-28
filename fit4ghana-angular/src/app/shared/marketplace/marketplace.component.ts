@@ -46,7 +46,7 @@ export class MarketplaceComponent implements OnInit {
 
   // request land service to withdraw land from sale
   withdrawLandFromSale(land: Land) {
-    this.landService.withdrawLandFromSale(land).then(r => {
+    this.landService.withdrawLandFromSale(land, this.currentMember).then(r => {
       console.log(r);
     });
   }

@@ -17,8 +17,8 @@ export class LandCommissionService {
     queryBuySellRequestsEndpoint = environment.apiEndpoint + '/getAllSellBuyRequestAwating';
     approveRegistrationRequestsEndpoint = environment.apiEndpoint + '/approveregistrationrequest';
     rejectRegistrationRequestsEndpoint = environment.apiEndpoint + '/rejectregistrationrequest';
-    approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequests';
-    rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequests';
+    approveBuySellRequestsEndpoint = environment.apiEndpoint + '/approveBuySellRequest';
+    rejectBuySellRequestsEndpoint = environment.apiEndpoint + '/rejectBuySellRequest';
     queryUserEndpoint = environment.apiEndpoint + '/getUser';
 
 
@@ -123,7 +123,7 @@ export class LandCommissionService {
     }
 
     approveBuySellRequest(landCommission, request) {
-        const url = `${this.approveBuySellRequestsEndpoint}/${landCommission.id}/${request.id}`;
+        const url = `${this.approveBuySellRequestsEndpoint}/${request.Key}/${landCommission.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -137,7 +137,7 @@ export class LandCommissionService {
     }
 
     rejectBuySellRequest(landCommission, request) {
-        const url = `${this.rejectBuySellRequestsEndpoint}/${landCommission.id}/${request.id}`;
+        const url = `${this.rejectBuySellRequestsEndpoint}/${request.Key}/${landCommission.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
