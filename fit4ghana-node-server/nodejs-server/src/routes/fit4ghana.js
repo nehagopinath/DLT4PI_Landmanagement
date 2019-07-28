@@ -39,6 +39,9 @@ router.post('/approveBuySellRequest/:requestnumber/:approver', LandController.ap
 //Endpoint - Reject Buy - Sell Request by approver 
 router.post('/rejectBuySellRequest/:requestnumber/:approver', LandController.reject)
 
+//Endpoint - Create BuySellRequest for  
+router.post('/create/:requestNumber/:seller/:buyer/:price/:registrationType/:approver/:landNumber', LandController.createBuySellRequest);
+
 //Endpoint to get user by name
 router.get('/getUser/:user', UserController.get)
 
