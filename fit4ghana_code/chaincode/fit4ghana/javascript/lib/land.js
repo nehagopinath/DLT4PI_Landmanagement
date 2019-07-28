@@ -147,7 +147,7 @@ class Land extends Contract {
         const allResults = [];
         while (true) {
             const res = await iterator.next();
-            if(res.value.value.isForSale == true) {
+            if(JSON.parse(res.value.value.toString('utf8')).isForSale == 'true') {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
 
@@ -194,7 +194,7 @@ class Land extends Contract {
             throw new Error(`${landNumber} does not exist`);
         }
         const land = JSON.parse(landAsBytes.toString());
-        land.isForSale = true;
+        land.isForSale = 'true';
 
         await ctx.stub.putState(landNumber, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Land up for sale ===========');
@@ -208,7 +208,7 @@ class Land extends Contract {
             throw new Error(`${landNumber} does not exist`);
         }
         const land = JSON.parse(landAsBytes.toString());
-        land.isForSale = false;
+        land.isForSale = 'false';
 
         await ctx.stub.putState(landNumber, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Land not anymore for sale ===========');
@@ -238,7 +238,7 @@ class Land extends Contract {
             throw new Error(`${landNumber} does not exist`);
         }
         const land = JSON.parse(landAsBytes.toString());
-        land.isForSale = false;
+        land.isForSale = 'false';
         land.owner = buyer;
 
         await ctx.stub.putState(landNumber, Buffer.from(JSON.stringify(land)));
@@ -261,7 +261,7 @@ class Land extends Contract {
                 docType: 'registrationrequest',
                 claimer,
                 registrationType,
-                currentlyAwaitingResponseFrom: 'LAND COMMISSION',
+                currentlyAwaitingResponseFrom: 'landCommission',
                 landCommission,
                 responseFromLandCommission: null,
                 status: 'pending',
@@ -272,7 +272,7 @@ class Land extends Contract {
                 docType: 'registrationrequest',
                 claimer,
                 registrationType,
-                currentlyAwaitingResponseFrom: 'CHIEF',
+                currentlyAwaitingResponseFrom: 'chief',
                 chief,
                 responseFromChief: null,
                 cls,
@@ -327,16 +327,16 @@ class Land extends Contract {
 
         // this means we allow somebody to approve only when the request 
         // is currently waiting his/her approval
-        if (request.currentlyAwaitingResponseFrom === 'CHIEF'
+        if (request.currentlyAwaitingResponseFrom === 'chief'
         && request.chief === approver) {
            request.responseFromChief = 'approved';
-           request.currentlyAwaitingResponseFrom = 'CLS';
-        } else if (request.currentlyAwaitingResponseFrom === 'CLS'
+           request.currentlyAwaitingResponseFrom = 'cls';
+        } else if (request.currentlyAwaitingResponseFrom === 'cls'
         && request.cls === approver) {
             request.responseFromCLS = 'approved';
             request.currentlyAwaitingResponseFrom = null;
             request.status = 'approved';  // approved for customary land
-        } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
+        } else if (request.currentlyAwaitingResponseFrom === 'landCommission'
          && request.landCommission === approver) {
             request.responseFromLandCommission = 'approved';
             request.currentlyAwaitingResponseFrom = null;
@@ -361,16 +361,16 @@ class Land extends Contract {
 
         // this means we allow somebody to approve only when the request 
         // is currently waiting his/her approval
-        if (request.currentlyAwaitingResponseFrom === 'CHIEF'
+        if (request.currentlyAwaitingResponseFrom === 'chief'
         && request.chief === approver) {
            request.responseFromChief = 'rejected';
-           request.currentlyAwaitingResponseFrom = 'CLS';
-        } else if (request.currentlyAwaitingResponseFrom === 'CLS'
+           request.currentlyAwaitingResponseFrom = 'cls';
+        } else if (request.currentlyAwaitingResponseFrom === 'cls'
         && request.cls === approver) {
             request.responseFromCLS = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
             request.status = 'approved';  // approved for customary land
-        } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
+        } else if (request.currentlyAwaitingResponseFrom === 'landCommission'
          && request.landCommission === approver) {
             request.responseFromLandCommission = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
@@ -403,7 +403,7 @@ class Land extends Contract {
                 buyer,
                 price,
                 registrationType,
-                currentlyAwaitingResponseFrom: 'LAND COMMISSION',
+                currentlyAwaitingResponseFrom: 'landCommission',
                 landCommission,
                 responseFromLandCommission: null,
                 status: 'pending',
@@ -416,7 +416,7 @@ class Land extends Contract {
                 buyer,
                 price,
                 registrationType,
-                currentlyAwaitingResponseFrom: 'CLS',
+                currentlyAwaitingResponseFrom: 'cls',
                 cls,
                 responseFromCLS: null,
                 status: 'pending',
@@ -469,7 +469,7 @@ class Land extends Contract {
         while (true) {
             const res = await iterator.next();
             console.info(res);
-            if (res.value.value.approver == approver) {
+            if (JSON.parse(res.value.value.toString('utf8')).currentlyAwaitingResponseFrom == approver) {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
     
@@ -503,7 +503,7 @@ class Land extends Contract {
         while (true) {
             const res = await iterator.next();
 
-            if(res.value.value.approver == approver) {
+            if(JSON.parse(res.value.value.toString('utf8')).currentlyAwaitingResponseFrom == approver) {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
 
@@ -545,12 +545,12 @@ class Land extends Contract {
         //     request.responseFromFamilyHead = 'approved';
         //     request.currentlyAwaitingResponseFrom = 'CLS';
         // } else 
-        if (request.currentlyAwaitingResponseFrom === 'CLS'
+        if (request.currentlyAwaitingResponseFrom === 'cls'
         && request.cls === approver) {
             request.responseFromCLS = 'approved';
             request.currentlyAwaitingResponseFrom = null;
             request.status = 'approved';  // approved for customary land
-        } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
+        } else if (request.currentlyAwaitingResponseFrom === 'landCommission'
         && request.landCommission === approver) {
             request.responseFromLandCommission = 'approved';
             request.currentlyAwaitingResponseFrom = null;
@@ -581,12 +581,12 @@ class Land extends Contract {
         //     request.responseFromFamilyHead = 'approved';
         //     request.currentlyAwaitingResponseFrom = 'CLS';
         // } else 
-        if (request.currentlyAwaitingResponseFrom === 'CLS'
+        if (request.currentlyAwaitingResponseFrom === 'cls'
         && request.cls === approver) {
             request.responseFromCLS = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
             request.status = 'rejected';  // approved for customary land
-        } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
+        } else if (request.currentlyAwaitingResponseFrom === 'landCommission'
         && request.landCommission === approver) {
             request.responseFromLandCommission = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
