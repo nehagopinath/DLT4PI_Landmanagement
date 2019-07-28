@@ -12,7 +12,7 @@ import { ExternalMember } from 'src/models/external-member';
 })
 export class MarketplaceComponent implements OnInit {
 
-  @Input() currentMember: FamilyMember | ExternalMember = null;
+  @Input() currentMember = null;
   @Input() userType: 'member' | 'chief' | 'cls' | 'lc';
 
   landsForSale = [];
@@ -27,6 +27,9 @@ export class MarketplaceComponent implements OnInit {
   // also to check if land can be withdrawn from sale by current member
   isLandOwnedByCurrentMember(land: Land) {
     if (!this.currentMember) {
+      return false;
+    }
+    if (this.userType != 'member') {
       return false;
     }
     return (this.currentMember.lands.map(l => l.Key)

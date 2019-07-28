@@ -11,7 +11,7 @@ import { RegistrationRequest } from 'src/models/registration-request';
 export class ChiefComponent implements OnInit {
 
   // chief: Chief = exampleChief;
-  chief: Chief;
+  chief;
   registrationRequestColumns: string[] = ['id', 'claimer', 'registrationType', 'actions'];
 
   constructor(public chiefService: ChiefService) {
@@ -25,6 +25,7 @@ export class ChiefComponent implements OnInit {
   // get chief
   getChief() {
     this.chiefService.getChief().then(m => {
+      console.log(m);
       this.chief = m;
     });
   }

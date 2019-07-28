@@ -37,18 +37,19 @@ export class ChiefService {
     // returns chief user
     getChief() {
         const url = `${this.queryUserEndpoint}/chief`;
-        return this.http.get<Indentity>(url, {headers: this.httpHeaders})
+        return this.http.get(url, {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
             console.log('response: ');
             console.log(response);
             const chief = new Chief({
-                id: response.Identity,
+                id: response['user'],
                 firstName: 'chief'
             });
-            return this.getAllRegistrationRequestsAwatingChief(response.Identity)
+            return this.getAllRegistrationRequestsAwatingChief(response['user'])
             .then(requests => {
                 chief.incomingRegistrationRequests = requests;
+                console.log(chief);
                 return chief;
             });
         }).catch(error => {
