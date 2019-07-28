@@ -111,7 +111,7 @@ class Land extends Contract {
         while (true) {
             const res = await iterator.next();
 
-            if(res.owner == owner) {
+            if(res.value.value.owner == owner) {
 
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
@@ -147,7 +147,7 @@ class Land extends Contract {
         const allResults = [];
         while (true) {
             const res = await iterator.next();
-            if(res.isForSale == true) {
+            if(res.value.value.isForSale == true) {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
 
@@ -503,7 +503,7 @@ class Land extends Contract {
         while (true) {
             const res = await iterator.next();
 
-            if(res.approver == approver) {
+            if(res.value.value.approver == approver) {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
 
