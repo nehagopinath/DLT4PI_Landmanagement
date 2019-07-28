@@ -49,6 +49,7 @@ const query = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
+    console.log(approver);
     const result = await contract.evaluateTransaction('queryRegistrationRequestsAwaiting', approver); 
     res.send(result);
     

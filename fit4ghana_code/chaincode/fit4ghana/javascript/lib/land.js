@@ -468,8 +468,8 @@ class Land extends Contract {
         const allResults = [];
         while (true) {
             const res = await iterator.next();
-
-            if (res.approver == approver) {
+            console.info(res);
+            if (res.value.value.approver == approver) {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
     
@@ -483,12 +483,12 @@ class Land extends Contract {
                     }
                     allResults.push({ Key, Record });
                 }
-                if (res.done) {
-                    console.log('end of data');
-                    await iterator.close();
-                    console.info(allResults);
-                    return JSON.stringify(allResults);
-                }
+            }
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
             }
         }
     }
@@ -517,12 +517,13 @@ class Land extends Contract {
                     }
                     allResults.push({ Key, Record });
                 }
-                if (res.done) {
-                    console.log('end of data');
-                    await iterator.close();
-                    console.info(allResults);
-                    return JSON.stringify(allResults);
-                }
+            }
+
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
             }
         }
     }

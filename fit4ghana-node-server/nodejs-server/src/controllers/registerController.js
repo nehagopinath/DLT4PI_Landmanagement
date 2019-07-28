@@ -98,6 +98,7 @@ const create = asyncMiddleware(async (req, res) => {
         console.log('Land needs to be either statutory or customary');
     }
     
+    res.send({result: 'done'});
     // Disconnect from the gateway.
     await gateway.disconnect();
 });
