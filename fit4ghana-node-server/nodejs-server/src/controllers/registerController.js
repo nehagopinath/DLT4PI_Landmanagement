@@ -38,8 +38,7 @@ const create = asyncMiddleware(async (req, res) => {
     var chief = req.params.chief;
     var coords = req.params.coords;
     var price = req.params.price;
-    var requestNumber = Math.random().toString(36).substr(2, 9).toString();
-    var landNumber = Math.random().toString(36).substr(2, 9).toString();
+
     
     let userExists = await wallet.exists(user);
     if (!userExists) {
@@ -68,36 +67,45 @@ const create = asyncMiddleware(async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract('land');
 
-    console.log('land will be created.');
-    console.log('land Number:' + landNumber);
-    console.log('land coords:' + coords);
-    console.log('land price:' + price.toString());
+    const rrs = await contract.evaluateTransaction('queryAllRegistrationRequests'); 
+    const lands = await contract.evaluateTransaction('queryAllLands'); 
+    var requestNumber = rrs.length + 1;
+    var requestNumberString = 'RR' + requestNumber;
+    var landNumber = lands.length + 1;
+    var landNumberString = 'LAND' + landNumber;
     
 
 
-    await contract.submitTransaction('createLand', landNumber, coords, 'false', price.toString());
+    console.log('land will be created.');
+    console.log('land Number:');
+    console.log('land coords:' + coords);
+    console.log('land price:' + price.toString());
+    
+    
+
+    await contract.submitTransaction('createLand', landNumberString, coords, 'false', price.toString());
 
     console.log('land created.');
 
     if (registrationType == 'statutory') {
         console.log('land is statutory.');
 
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        registrationType, chief, 'null', approver, landNumber);
+        await contract.submitTransaction('createRegistrationRequest', requestNumberString, user,
+        registrationType, chief, 'null', approver, landNumberString);
         console.log('done.');
 
         // res.end('done');
     }
     else if (registrationType == 'customary') {
         console.log('land is customary.');
-        await contract.submitTransaction('createRegistrationRequest', requestNumber, user,
-        registrationType, chief, approver, 'null', landNumber);
+        await contract.submitTransaction('createRegistrationRequest', requestNumberString, user,
+        registrationType, chief, approver, 'null', landNumberString);
         console.log('done.');
     }
     else {
         console.log('Land needs to be either statutory or customary');
     }
-    
+     
     res.send({result: 'done'});
     // Disconnect from the gateway.
     await gateway.disconnect();

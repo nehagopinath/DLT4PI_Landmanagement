@@ -286,8 +286,8 @@ class Land extends Contract {
         console.info('============= END : Create RegistrationRequest ===========');
     }
     async queryAllRegistrationRequests(ctx) {
-        const startKey = 'REQUEST0';
-        const endKey = 'REQUEST999';
+        const startKey = 'RR0';
+        const endKey = 'RR999';
 
         const iterator = await ctx.stub.getStateByRange(startKey, endKey);
 
@@ -335,16 +335,16 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = approved;  // approved for customary land
+            request.status = 'approved';  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
          && request.landCommission === approver) {
             request.responseFromLandCommission = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = approved;
+            request.status = 'approved';
         }
 
         if (request.status === 'approved') {
-            await Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
+            await this.registerLand(ctx, request.landNumber, request.claimer, request.registrationType);
             // land.registerLand(request.claimer, request.registrationType);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
@@ -369,16 +369,16 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = approved;  // approved for customary land
+            request.status = 'approved';  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
          && request.landCommission === approver) {
             request.responseFromLandCommission = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = approved;
+            request.status = 'approved';
         }
 
         if (request.status === 'approved') {
-            await Contract.submitTransaction('registerLand', request.landNumber, request.claimer, request.registrationType);
+            await this.registerLand(ctx, request.landNumber, request.claimer, request.registrationType);
             // land.registerLand(request.claimer, request.registrationType);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
@@ -428,8 +428,8 @@ class Land extends Contract {
         console.info('============= END : Create BuySellRequest ===========');
     }
     async queryAllBuySellRequests(ctx) {
-        const startKey = 'REQUEST0';
-        const endKey = 'REQUEST999';
+        const startKey = 'BR0';
+        const endKey = 'BR999';
 
         const iterator = await ctx.stub.getStateByRange(startKey, endKey);
 
@@ -460,8 +460,8 @@ class Land extends Contract {
     }
 
     async queryRegistrationRequestsAwaiting(ctx, approver) {
-        const startKey = 'REQUEST0';
-        const endKey = 'REQUEST999';
+        const startKey = 'RR0';
+        const endKey = 'RR999';
 
         const iterator = await ctx.stub.getStateByRange(startKey, endKey);
 
@@ -494,8 +494,8 @@ class Land extends Contract {
     }
 
     async queryAllBuySellRequestsAwaiting(ctx, approver) {
-        const startKey = 'REQUEST0';
-        const endKey = 'REQUEST999';
+        const startKey = 'BR0';
+        const endKey = 'BR999';
 
         const iterator = await ctx.stub.getStateByRange(startKey, endKey);
 
@@ -549,16 +549,16 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = approved;  // approved for customary land
+            request.status = 'approved';  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
         && request.landCommission === approver) {
             request.responseFromLandCommission = 'approved';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = approved;  // approved for statutory land
+            request.status = 'approved';  // approved for statutory land
         }
 
         if (request.status === 'approved') {
-            land.submitTransaction('transactLand', landNumber, request.seller, request.buyer, request.price);
+            this.transactLand(ctx, landNumber, request.seller, request.buyer, request.price);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeBuySellRequestOwner ===========');
@@ -585,16 +585,16 @@ class Land extends Contract {
         && request.cls === approver) {
             request.responseFromCLS = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = rejected;  // approved for customary land
+            request.status = 'rejected';  // approved for customary land
         } else if (request.currentlyAwaitingResponseFrom === 'LAND COMMISSION'
         && request.landCommission === approver) {
             request.responseFromLandCommission = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = rejected;  // approved for statutory land
+            request.status = 'rejected';  // approved for statutory land
         }
 
         if (request.status === 'approved') {
-            land.submitTransaction('transactLand', landNumber, request.seller, request.buyer, request.price);
+            this.transactLand(ctx, landNumber, request.seller, request.buyer, request.price);
         }
         await ctx.stub.putState(requestNumber, Buffer.from(JSON.stringify(request)));
         console.info('============= END : changeBuySellRequestOwner ===========');
