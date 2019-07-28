@@ -9,6 +9,10 @@ import { Land } from 'src/models/land';
 })
 export class RegisterLandComponent implements OnInit {
 
+  registrationType;
+  coords;
+  price;
+
   constructor(public landService: LandService) { }
 
   ngOnInit() {
@@ -16,9 +20,10 @@ export class RegisterLandComponent implements OnInit {
 
 
   // request LandService to initiate land registration
-  registerLand(registrationType = 'statutory', coords = '0.0.0', price = 0) {
-    this.landService.requestLandRegistration(registrationType, coords, price).then(r => {
+  registerLand() {
+    this.landService.requestLandRegistration(this.registrationType, this.coords, this.price).then(r => {
       console.log(r);
+      alert(r);
     });
   }
 }

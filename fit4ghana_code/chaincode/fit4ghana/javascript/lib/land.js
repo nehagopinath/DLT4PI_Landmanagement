@@ -126,12 +126,14 @@ class Land extends Contract {
                     }
                     allResults.push({ Key, Record });
                 }
-                if (res.done) {
-                    console.log('end of data');
-                    await iterator.close();
-                    console.info(allResults);
-                    return JSON.stringify(allResults);
-                }
+                
+            }
+
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
             }
         }
     }
@@ -159,12 +161,13 @@ class Land extends Contract {
                     }
                     allResults.push({ Key, Record });
                 }
-                if (res.done) {
-                    console.log('end of data');
-                    await iterator.close();
-                    console.info(allResults);
-                    return JSON.stringify(allResults);
-                }
+            }
+
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
             }
         }
     }

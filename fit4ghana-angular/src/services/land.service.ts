@@ -37,7 +37,7 @@ export class LandService {
         } else {
             approver = 'cls';
         }
-        const url = `${this.registerLandEndpoint}/familyMember/chief/${approver}/${coords}/${price}`;
+        const url = `${this.registerLandEndpoint}/familyMember/${registrationType}/chief/${approver}/${coords}/${price}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
