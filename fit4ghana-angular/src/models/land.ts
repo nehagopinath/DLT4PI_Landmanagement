@@ -11,7 +11,7 @@ export class Land {
         registered: boolean;
         registrationType: string;
         price: number;
-        isForSale: boolean;
+        isForSale: string;
         owner: string;
     };
 
@@ -20,12 +20,12 @@ export class Land {
         Record: {
             coords = '0.0.0', registered = false,
             registrationType = 'customary', price = 0,
-            isForSale = false, owner = ''
+            isForSale = 'false', owner = ''
         } = { coords: '0.0.0',
         registered: false,
         registrationType: '',
         price: 0,
-        isForSale: false,
+        isForSale: 'false',
         owner: ''}
     }) {
         this.Key = Key;

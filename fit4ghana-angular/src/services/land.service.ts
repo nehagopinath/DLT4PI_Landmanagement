@@ -69,8 +69,8 @@ export class LandService {
     }
 
     // returns api to put land for sale
-    putLandForSale(land: Land) {
-        const url = `${this.putForSaleEndpoint}/${land.Key}`;
+    putLandForSale(land: Land, user) {
+        const url = `${this.putForSaleEndpoint}/${land.Key}/${user.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {
@@ -84,8 +84,8 @@ export class LandService {
     }
 
     // returns api to withdraw land from sale
-    withdrawLandFromSale(land: Land) {
-        const url = `${this.withDrawLandFromSaleEndpoint}/${land.Key}`;
+    withdrawLandFromSale(land: Land, user) {
+        const url = `${this.withDrawLandFromSaleEndpoint}/${land.Key}/${user.id}`;
         return this.http.post(url, '', {headers: this.httpHeaders})
         .toPromise()
         .then(response => {

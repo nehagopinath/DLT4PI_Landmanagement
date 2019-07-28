@@ -16,7 +16,7 @@ class Land extends Contract {
                 owner: 'person1',
                 registrationType: 'statutory',
                 coords: '1.1.2.4',
-                isForSale: false,
+                isForSale: 'false',
                 price: 20000
             },
             {
@@ -24,7 +24,7 @@ class Land extends Contract {
                 owner: 'person2',
                 registrationType: 'statutory',
                 coords: '3.1.2.4',
-                isForSale: false,
+                isForSale: 'false',
                 price: 20000
             },
             {
@@ -32,7 +32,7 @@ class Land extends Contract {
                 owner: 'person3',
                 registrationType: 'customary',
                 coords: '2.1.2.4',
-                isForSale: false,
+                isForSale: 'true',
                 price: 20000
             }
         ];
@@ -111,7 +111,7 @@ class Land extends Contract {
         while (true) {
             const res = await iterator.next();
 
-            if (res.value && JSON.parse(res.value.value.toString('utf8')).owner == owner) {
+            if (res.value && res.value.value && JSON.parse(res.value.value.toString('utf8')).owner == owner) {
 
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
@@ -147,7 +147,7 @@ class Land extends Contract {
         const allResults = [];
         while (true) {
             const res = await iterator.next();
-            if(res.value && JSON.parse(res.value.value.toString('utf8')).isForSale == 'true') {
+            if(res.value && res.value.value && JSON.parse(res.value.value.toString('utf8')).isForSale == 'true') {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
 
@@ -469,7 +469,7 @@ class Land extends Contract {
         while (true) {
             const res = await iterator.next();
             console.info(res);
-            if (res.value && JSON.parse(res.value.value.toString('utf8')).currentlyAwaitingResponseFrom == approver) {
+            if (res.value && res.value.value && JSON.parse(res.value.value.toString('utf8')).currentlyAwaitingResponseFrom == approver) {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
     
@@ -503,7 +503,7 @@ class Land extends Contract {
         while (true) {
             const res = await iterator.next();
 
-            if(res.value && JSON.parse(res.value.value.toString('utf8')).currentlyAwaitingResponseFrom == approver) {
+            if(res.value && res.value.value && JSON.parse(res.value.value.toString('utf8')).currentlyAwaitingResponseFrom == approver) {
                 if (res.value && res.value.value.toString()) {
                     console.log(res.value.value.toString('utf8'));
 

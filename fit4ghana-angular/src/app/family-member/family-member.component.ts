@@ -41,14 +41,14 @@ export class FamilyMemberComponent implements OnInit {
 
   // request LandService to put this land for sale
   putLandForSale(land: Land) {
-    this.landService.putLandForSale(land).then(r => {
+    this.landService.putLandForSale(land, this.familyMember).then(r => {
       console.log(r);
     });
   }
 
   // request LandService to withdraw this land from sale
   withdrawLandFromSale(land: Land) {
-    this.landService.withdrawLandFromSale(land).then(r => {
+    this.landService.withdrawLandFromSale(land, this.familyMember).then(r => {
       console.log(r);
     });
   }

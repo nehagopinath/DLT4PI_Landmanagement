@@ -40,11 +40,11 @@
                         type="button" class="btn btn-info land-action">
                             Make Statutory</button> -->
                         
-                        <button *ngIf="!element.isForSale && element.registered" 
+                        <button *ngIf="element.Record.isForSale=='false'" 
                         (click)="putLandForSale(element)"
                         type="button" class="btn btn-primary land-action">Put up for sale</button>
                         
-                        <button *ngIf="element.isForSale" 
+                        <button *ngIf="element.Record.isForSale=='true'" 
                         (click)="withdrawLandFromSale(element)"
                         type="button" class="btn btn-danger land-action">Withdraw from sale</button>
                         &nbsp;

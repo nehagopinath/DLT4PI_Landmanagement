@@ -26,7 +26,7 @@ router.get('/queryLand/:user', LandController.query);
 //Endpoint - Query all LAnd which is for sale (don't necessarily belong to user)
 router.get('/queryLandForSale/:user', LandController.queryForSale);
 //Endpoint - Punt Land with given landnumber for sale
-router.post('/putForSale/:landnumber/:user', LandController.putForSale);
+router.post('/putForSale/:landNumber/:user', LandController.putForSale);
 //Endpoint - Withdraw Land with given landnumber from sale
 router.post('/withDrawLandFromSale/:landnumber/:user', LandController.withdrawFromSale);
 //Endpoint -  Finally Register land with landnumber as registrationtype to user

@@ -49,7 +49,7 @@ const putForSale = asyncMiddleware(async (req, res) => {
 
     // Get the contract from the network.
     const contract = network.getContract('land');
-
+    console.log(landNumber);
     await contract.submitTransaction('putLandUpForSale', landNumber);
     
     // Disconnect from the gateway.
@@ -266,19 +266,19 @@ const createBuySellRequest = asyncMiddleware(async (req, res) => {
     var approver = req.params.approver;
     var landNumber = req.params.landNumber;
    
-    const userExists = await wallet.exists(approver);
+    let userExists = await wallet.exists(approver);
     if (!userExists) {
         console.log('An identity for the user ' + approver + ' does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
-    const userExists = await wallet.exists(seller);
+    userExists = await wallet.exists(seller);
     if (!userExists) {
         console.log('An identity for the user ' + seller + ' does not exist in the wallet');
         console.log('Register user before retrying');
     }
 
-    const userExists = await wallet.exists(buyer);
+    userExists = await wallet.exists(buyer);
     if (!userExists) {
         console.log('An identity for the user ' + buyer + ' does not exist in the wallet');
         console.log('Register user before retrying');

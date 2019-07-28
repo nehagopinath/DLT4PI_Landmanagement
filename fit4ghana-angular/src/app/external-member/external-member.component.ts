@@ -29,14 +29,14 @@ export class ExternalMemberComponent implements OnInit {
 
   // request LandService to put this land for sale
   putLandForSale(land: Land) {
-    this.landService.putLandForSale(land).then(r => {
+    this.landService.putLandForSale(land, this.externalMember).then(r => {
       console.log(r);
     });
   }
 
   // request LandService to withdraw this land from sale
   withdrawLandFromSale(land: Land) {
-    this.landService.withdrawLandFromSale(land).then(r => {
+    this.landService.withdrawLandFromSale(land, this.externalMember).then(r => {
       console.log(r);
     });
   }
