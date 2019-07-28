@@ -374,7 +374,7 @@ class Land extends Contract {
          && request.landCommission === approver) {
             request.responseFromLandCommission = 'rejected';
             request.currentlyAwaitingResponseFrom = null;
-            request.status = 'approved';
+            request.status = 'rejected';
         }
 
         if (request.status === 'approved') {
