@@ -1,0 +1,98 @@
+<div class="cls-view">
+
+        <p>Welcome <b>{{ cls.name }}</b>!</p>
+        <br>
+        
+        <mat-tab-group>
+            <mat-tab label="Registration Requests">
+                <!-- <h2>Your Lands</h2> -->
+                <table matTable mat-table [dataSource]="cls.incomingRegistrationRequests" class="mat-elevation-z8">
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef> ID </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Key}} </td>
+                    </ng-container>
+                
+                    <!-- Coords Column -->
+                    <ng-container matColumnDef="claimer">
+                        <th mat-header-cell *matHeaderCellDef> Claimer </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Record.claimer }} </td>
+                    </ng-container>
+                
+                    <!-- Registration Type Column -->
+                    <ng-container matColumnDef="registrationType">
+                        <th mat-header-cell *matHeaderCellDef> Registration Type </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Record.registrationType}} </td>
+                    </ng-container>
+                
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let element">
+                            
+                            <button type="button" class="btn btn-success request-action"
+                            (click)="approveRegistrationRequest(element)">Approve</button>
+                            
+                            <button type="button" class="btn btn-danger request-action"
+                            (click)="approveRegistrationRequest(element)">Reject</button>
+
+                            &nbsp;
+                        </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="registrationRequestColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: registrationRequestColumns;" ></tr>
+                </table>
+            </mat-tab>
+            <mat-tab label="Transaction Requests">
+                <table matTable mat-table [dataSource]="cls.incomingBuySellRequests" class="mat-elevation-z8">
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef> ID </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Key}} </td>
+                    </ng-container>
+                
+                    <!-- Coords Column -->
+                    <ng-container matColumnDef="seller">
+                        <th mat-header-cell *matHeaderCellDef> Seller </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Record.seller }} </td>
+                    </ng-container>
+
+                    <!-- Coords Column -->
+                    <ng-container matColumnDef="buyer">
+                        <th mat-header-cell *matHeaderCellDef> Buyer </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Record.buyer }} </td>
+                    </ng-container>
+                
+                    <!-- Registration Type Column -->
+                    <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef> Price </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Record.price}} </td>
+                    </ng-container>
+                
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let element">
+                            
+                            <button type="button" class="btn btn-success request-action"
+                            (click)="approveBuySellRequest(element)">Approve</button>
+                            
+                            <button type="button" class="btn btn-danger request-action"
+                            (click)="rejectBuySellRequest(element)">Reject</button>
+
+                            &nbsp;
+                        </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="buysellRequestColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: buysellRequestColumns;" ></tr>
+                </table>
+            </mat-tab>
+            <mat-tab label="Marketplace">
+                <!-- <h2>Your Lands</h2> -->
+                <app-marketplace [currentMember]="cls" userType="cls"></app-marketplace>
+            </mat-tab>
+        </mat-tab-group>
+        
+    </div>

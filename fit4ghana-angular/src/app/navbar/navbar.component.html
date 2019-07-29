@@ -1,0 +1,20 @@
+<div class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="navbar-brand">
+        Fit4Ghana
+    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li routerLink="/family-member" class="nav-item nav-link">Family Member</li>
+            <li routerLink="/external-member" class="nav-item nav-link">External Member</li>
+            <li routerLink="/chief" class="nav-item nav-link">Chief</li>
+            <li routerLink="/cls" class="nav-item nav-link">CLS</li>
+            <li routerLink="/land-commission" class="nav-item nav-link">Land Commission</li>
+        </ul>
+    </div>
+    <button *ngIf="!userService.currentUser" type="submit" class="btn btn-primary navbar-btn login-btn">
+        Sign In
+    </button>
+    <button *ngIf="userService.currentUser" type="submit" class="btn btn-primary navbar-btn login-btn">
+        Sign Out
+    </button>
+</div>
