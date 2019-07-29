@@ -52,7 +52,8 @@ A Blockchain-based application for solving land conflicts in developing areas an
 
 **5. How to use the Frontend**
 
-Refer the Video for a short demo on how to use the front end : 
+Refer the Video for a short demo on how to use the front end.
+Navigate to the directory : /dlt4pi_landmanagement/01 Documentation 
 
 **6. System Architecture**
 
