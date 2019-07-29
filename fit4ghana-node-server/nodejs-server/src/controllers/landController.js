@@ -284,8 +284,9 @@ const createBuySellRequest = asyncMiddleware(async (req, res) => {
     const contract = network.getContract('land');
 
     const brs = await contract.evaluateTransaction('queryAllBuySellRequests');  
-    console.log(brs);
-    var requestNumber = brs.length + 1;
+    var brs_array = JSON.parse(brs);
+    var requestNumber = brs_array.length + 1;
+    console.log('buy sell request number'+requestNumber);
     var requestNumberString = 'BR' + requestNumber;
 
     if(registrationType == 'statutory') {

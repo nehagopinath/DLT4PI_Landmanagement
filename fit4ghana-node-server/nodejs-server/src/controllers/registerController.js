@@ -69,7 +69,8 @@ const create = asyncMiddleware(async (req, res) => {
 
     const rrs = await contract.evaluateTransaction('queryAllRegistrationRequests'); 
     const lands = await contract.evaluateTransaction('queryAllLands'); 
-    var requestNumber = rrs.length + 1;
+    var rrs_array = JSON.parse(rrs);
+    var requestNumber = rrs_array.length + 1;
     var requestNumberString = 'RR' + requestNumber;
     var landNumber = lands.length + 1;
     var landNumberString = 'LAND' + landNumber;
