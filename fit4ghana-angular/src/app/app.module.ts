@@ -11,7 +11,6 @@ import { ChiefComponent } from './chief/chief.component';
 import { ClsComponent } from './cls/cls.component';
 import { LandCommissionComponent } from './land-commission/land-commission.component';
 import { ExternalMemberComponent } from './external-member/external-member.component';
-import { LandComponent } from './shared/land/land.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MarketplaceComponent } from './shared/marketplace/marketplace.component';
 import { RegisterLandComponent } from './family-member/register-land/register-land.component';
@@ -33,7 +32,6 @@ import {
     ClsComponent,
     LandCommissionComponent,
     ExternalMemberComponent,
-    LandComponent,
     NavbarComponent,
     MarketplaceComponent,
     RegisterLandComponent

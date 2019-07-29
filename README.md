@@ -37,14 +37,14 @@ A Blockchain-based application for solving land conflicts in developing areas an
 2. Execute npm install to install the dependancies
 3. Run ng serve
 
-**4.Instructions to run the application**:
+**4. Instructions to run the application**:
 
 1. To use the Fit4ghana applications to interact with the deployed Fit4ghana contract
-2. Start by changing into the "javascript" directory:
-    cd javascript
+2. Start by changing into the "fit4ghana_code/fit4ghana_application/javascript" directory:
+    cd ./fit4ghana_code/fit4ghana_application/javascript
 3. Next, install all required packages:
     npm install
-4. Then run the following applications to enroll the admin user, and register new   users (chief, cls, lc, familyMember and ExternalMember)
+4. Then run the following applications to enroll the admin user, and register new users (chief, cls, lc, familyMember and ExternalMember)
   which will be used by the other applications to interact with the deployed
   contract:
     1. node enrollAdmin.js

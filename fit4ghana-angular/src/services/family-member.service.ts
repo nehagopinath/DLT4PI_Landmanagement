@@ -31,7 +31,6 @@ export class FamilyMemberService {
 
     // returns family Member user
     getFamilyMember() {
-        console.log('getting family member...');
         const url = `${this.queryUserEndpoint}/familyMember`;
         console.log(url);
         return this.http.get(url, {headers: this.httpHeaders})
