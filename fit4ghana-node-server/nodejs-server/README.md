@@ -10,7 +10,7 @@ the MRI backend application can be found [here](https://repobruegge.in.tum.de/pr
 
 Go to your project root folder via command line
 ```
-cd path/to/workspace/ios1819mri-server
+cd .../fit4ghane-node-server/nodejs-server
 ```
 
 **Install node dependencies**
